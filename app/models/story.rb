@@ -4,13 +4,22 @@ class Story < ApplicationRecord
   has_many :chapters
 
   def num_chapters
-    Chapter.where(story_id: id).count
+    # Chapter.where(story_id: id).count
+    chapters.size
   end
 
   def add_tags(new_tags)
     new_tags.each do |tag|
       tag = Tag.tr_to_sql(tag)
-      tags << Tag.new(name: tag) unless tags.exists?( name: tag )
+      tags << Tag.new(name: tag) unless tags.exists?(name: tag)
     end
+  end
+
+  def get_chapter(num)
+    chapters.find_by(number: num)
+  end
+
+  def get_chapters
+    chapters.order("number ASC")
   end
 end

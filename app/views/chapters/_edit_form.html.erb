@@ -1,0 +1,10 @@
+<%= form_for this_chapter, url: {action: action} do |f| %>
+  <%= f.label :title, "Chapter Title (optional):" %>
+  <%= f.text_field :title %>
+  <br>
+  <%= f.label(:body, "Chapter text:") %>
+  <%= f.text_area(:body) %>
+  <br>
+  <%= f.hidden_field(:number) %>
+  <%= f.submit("Submit") %>
+<% end %>

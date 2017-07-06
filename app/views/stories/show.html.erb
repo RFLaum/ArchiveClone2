@@ -13,7 +13,7 @@
 <h2 class="story-title"><%= @story.title %></h2>
 <h3 class="story-author"><%= @story.author %></h3>
 <% chapters.each do |chap| %>
-  <%= render "chapter_inner", chapter: chap %>
+  <%= render "chapter_display", chapter: chap %>
 <% end %>
 
 <!-- #todo: better way to handle this link -->

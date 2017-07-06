@@ -17,10 +17,12 @@ Rails.application.routes.draw do
   # match 'stories/:id/:chapter_num' => 'stories#update_chapter', via: %i[patch put]
   resources :stories
   get 'stories/:id' => 'stories#show'
-  get 'stories/:id/add' => 'chapters#new'
-  get 'stories/:id/edit_chapter/:chapter_num' => 'chapters#edit'
-  post 'stories/:id' => 'chapters#create'
-  match 'stories/:id/:chapter_num' => 'chapters#update', via: %i[patch put]
+  # get 'stories/:id', to: redirect('stories/%{id}/1')
+
+  get 'stories/:story_id/add' => 'chapters#new'
+  get 'stories/:story_id/edit_chapter/:chapter_num' => 'chapters#edit'
+  post 'stories/:story_id' => 'chapters#create'
+  match 'stories/:story_id/:chapter_num' => 'chapters#update', via: %i[patch put]
   # get 'stories/new' => 'stories#new'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
