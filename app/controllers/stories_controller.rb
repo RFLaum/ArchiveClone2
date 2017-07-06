@@ -1,7 +1,8 @@
 class StoriesController < ApplicationController
-  before_action :set_story, only: [:show, :edit, :update, :destroy,
-                                   :new_chapter, :edit_chapter, :showall,
-                                   :create_chapter]
+  before_action :set_story #, only: [:show, :edit, :update, :destroy,
+                          #         :new_chapter, :edit_chapter, :showall,
+                          #         :create_chapter]
+  skip_before_action :set_story, only: %i[index new create]
 
   # GET /stories
   # GET /stories.json
@@ -14,17 +15,20 @@ class StoriesController < ApplicationController
   # GET /stories/1.json
   def show
     chap_num = params.key?(:chapter_num) ? params[:chapter_num] : 1
-    chapters = [Chapter.find_by(story_id: @story.id,
-                                number: chap_num)]
+    # chapters = [Chapter.find_by(story_id: @story.id,
+    #                             number: chap_num)]
     # render :show, chapters: chapters
-    render :show, :locals => {:chapters => chapters}
+    # chapters = [@story.chapters.find_by(number: params[:chapter_num])]
+    # logger.debug "Chapter number: #{params[:chapter_num]}"
+    render :show, locals: { chapters: [@story.get_chapter(chap_num)] }
   end
 
   def showall
-    chapters = Chapter.where(story_id: @story.id).order("number")
+    # chapters = Chapter.where(story_id: @story.id).order("number")
     # render :show, chapters: chapters
-    logger.debug "got to showall"
-    render :show, :locals => {:chapters => chapters}
+    # logger.debug "got to showall"
+    # chapters = @story.chap
+    render :show, locals: { chapters: @story.get_chapters }
   end
 
   # GET /stories/new
@@ -40,14 +44,23 @@ class StoriesController < ApplicationController
   # POST /stories
   # POST /stories.json
   def create
+    # logger.debug "entered create"
     @story = Story.new(story_params)
+    # pars = story_params
+    # logger.debug "begin story creation logging"
+    # pars.each do |k,v|
+    #   logger.debug "#{k}\t#{v}"
+    # end
+    # @story = Story.new(pars)
     #placeholder
-    first_chapter = Chapter.new(story_id: @story.id, number: 1, title:'',
+    first_chapter = Chapter.new(story_id: @story.id, number: 1, title: '',
                                 body: "placeholder")
-
+    # logger.debug "made chapter object"
     respond_to do |format|
       if @story.save
+        # logger.debug "saved story"
         @story.chapters << first_chapter
+        # logger.debug "added chapter"
         format.html { redirect_to @story, notice: 'Story was successfully created.' }
         format.json { render :show, status: :created, location: @story }
       else
@@ -71,33 +84,33 @@ class StoriesController < ApplicationController
     end
   end
 
-  def create_chapter
-    # logger.debug "create log"
-    # params.each do |k,v|
-    #   logger.debug "#{k}\t#{v}"
-    # end
-    # params[:chapter].each do |k,v|
-    #   logger.debug "#{k}\t#{v}"
-    # end
-    # @story.chapters << Chapter.new(params[:chapter])
-    chapter_attributes = { story_id: @story.id }
-    params[:chapter].each do |k, v|
-      chapter_attributes[k.to_sym] = v
-    end
-    @story.chapters << Chapter.new(chapter_attributes)
-  end
+  # def create_chapter
+  #   # logger.debug "create log"
+  #   # params.each do |k,v|
+  #   #   logger.debug "#{k}\t#{v}"
+  #   # end
+  #   # params[:chapter].each do |k,v|
+  #   #   logger.debug "#{k}\t#{v}"
+  #   # end
+  #   # @story.chapters << Chapter.new(params[:chapter])
+  #   chapter_attributes = { story_id: @story.id }
+  #   params[:chapter].each do |k, v|
+  #     chapter_attributes[k.to_sym] = v
+  #   end
+  #   @story.chapters << Chapter.new(chapter_attributes)
+  # end
 
-  def new_chapter
-    # logger.debug "got to new chapter"
-    chapter = Chapter.new(story: @story, number: @story.num_chapters + 1)
-    # logger.debug "Controller log: #{chapter.class}"
-    render :new_chapter, locals: { chapter: chapter }
-  end
+  # def new_chapter
+  #   # logger.debug "got to new chapter"
+  #   chapter = Chapter.new(story: @story, number: @story.num_chapters + 1)
+  #   # logger.debug "Controller log: #{chapter.class}"
+  #   render :new_chapter, locals: { chapter: chapter }
+  # end
 
-  def edit_chapter
-    chapter = Chapter.find_by(story: @story, number: params[:chapter_num])
-    render :edit_chapter, locals: { chapter: chapter }
-  end
+  # def edit_chapter
+  #   chapter = Chapter.find_by(story: @story, number: params[:chapter_num])
+  #   render :edit_chapter, locals: { chapter: chapter }
+  # end
 
   # DELETE /stories/1
   # DELETE /stories/1.json

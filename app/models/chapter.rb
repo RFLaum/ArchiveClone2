@@ -1,8 +1,13 @@
 class Chapter < ApplicationRecord
   belongs_to :story
 
+  def get_title
+    title.to_s
+  end
+
   def tags
-    story.tags
+    # story.tags
+    ''
   end
 
   def tags=(tag_string)
