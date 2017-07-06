@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  book: false
+  celeb: false
+  music: false
+  theater: false
+  video_games: false
+  anime: false
+  comics: false
+  movies: false
+  misc: false
+  tv: false
+
+two:
+  name: MyString
+  book: false
+  celeb: false
+  music: false
+  theater: false
+  video_games: false
+  anime: false
+  comics: false
+  movies: false
+  misc: false
+  tv: false

@@ -1,0 +1,7 @@
+<h1>Find Tags</h1>
+
+<%= form_tag("find", method:"get") do %>
+<%= label_tag(:q, "Search tags") %>
+<%= text_field_tag(:q) %>
+<%= submit_tag("Search") %>
+<% end %>

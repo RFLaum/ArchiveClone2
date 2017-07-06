@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<!-- <p>
+  <strong>Title:</strong>
+  <%= @story.title %>
+</p>
+
+<p>
+  <strong>Author:</strong>
+  <%= @story.author %>
+</p> -->
+<%= render "header" %>
+<h2 class="story-title"><%= @story.title %></h2>
+<h3 class="story-author"><%= @story.author %></h3>
+<% chapters.each do |chap| %>
+  <%= render "chapter_inner", chapter: chap %>
+<% end %>
+
+<!-- #todo: better way to handle this link -->
+<%= link_to 'Add Chapter', "/stories/#{@story.id}/add" %>
+<%= link_to 'Edit', edit_story_path(@story) %> |
+<%= link_to 'Back', stories_path %>

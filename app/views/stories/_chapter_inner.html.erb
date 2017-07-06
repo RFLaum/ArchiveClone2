@@ -1,0 +1,9 @@
+  <% has_title = !chapter.title.empty? %>
+  <% if has_title || @story.num_chapters > 1 %>
+    <% chapter_heading = 'Chapter #{chapter.chapter_number}' %>
+    <% chapter_heading += ": #{chapter.title}" if has_title %>
+  <% end %>
+  <center><strong><%= chapter_heading %></strong></center>
+  <div class = "article">
+    <%= chapter.body %>
+  </div>

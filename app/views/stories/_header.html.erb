@@ -1,0 +1,17 @@
+<div class='storyheader'>
+  <dl>
+    <dt>Tags:</dt>
+    <dd>
+      <% unless @tags.empty? %>
+        <%= link_to @tags[0], tag_path(@tags[0]) %>
+      <% end %>
+      <% (1...@tags.length).each do |tag| %>
+        , <%= link_to tag, tag_path(tag) %>
+      <% end %>
+    </dd>
+    <dt>Summary:</dt>
+    <dd>
+      <%= @story.summary %>
+    </dd>
+  </dl>
+</div>
