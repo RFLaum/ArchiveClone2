@@ -4,7 +4,6 @@ class Story < ApplicationRecord
   has_many :chapters
 
   def num_chapters
-    # Chapter.where(story_id: id).count
     chapters.size
   end
 
