@@ -10,13 +10,15 @@ class ChaptersController < ApplicationController
     @chapter = Chapter.new(story_id: id, number: number)
   end
 
-  post 'stories/:story_id'
+  #post 'stories/:story_id'
   def create
     @chapter = @story.chapters.build(chapter_params)
     respond_to do |format|
       if @chapter.save
-        format.html { redirect_to @story, notice: 'Chapter was successfully created.' }
-        format.json { render :show, status: :created, location: @story }
+        # format.html { redirect_to @story, notice: 'Chapter was successfully created.' }
+        # format.json { render :show, status: :created, location: @story }
+        format.html { redirect_to @chapter, notice: 'Chapter was successfully created.' }
+        format.json { render :show, status: :created, location: @chapter }
       else
         format.html { render :new }
         format.json { render json: @chapter.errors, status: :unprocessable_entity }
@@ -35,6 +37,6 @@ class ChaptersController < ApplicationController
   end
 
   def chapter_params
-    params.require(:chapter).permit(:title, :body, :number)
+    params.require(:chapter).permit(:title, :body, :number, :chapter_title)
   end
 end

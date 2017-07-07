@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'tags/:name/edit' => 'tags#edit'
   match 'tags/:name' => 'tags#update', via: %i[patch put]
   delete 'tags/:name/delete' => 'tags#delete'
+  resources :tags
 
   get 'stories/:id/chapters/all' => 'stories#showall'
   get 'stories/:id/all' => 'stories#showall'
