@@ -40,11 +40,19 @@ class StoriesController < ApplicationController
   def create
     @story = Story.new(story_params)
     #placeholder
-    first_chapter = Chapter.new(story_id: @story.id, number: 1, title: '',
-                                body: "placeholder")
+    # first_chapter = Chapter.new(story_id: @story.id, number: 1, title: '',
+    #                             body: "placeholder")
+    # first_chapter = Chapter.new(params.require(story).permit(:chapter_title,:body))
+    # chapter_params = {
+    #   story_id: @story.id,
+    #   number: 1,
+    #   title: params[:story][:chapter_title],
+    #   body: params[:story][:body]
+    # }
+    # first_chapter = Chapter.new(chapter_params)
     respond_to do |format|
       if @story.save
-        @story.chapters << first_chapter
+        # @story.chapters << first_chapter
         format.html { redirect_to @story, notice: 'Story was successfully created.' }
         format.json { render :show, status: :created, location: @story }
       else
@@ -79,7 +87,7 @@ class StoriesController < ApplicationController
   end
 
   private
-  
+
   # todo: do we always need tags?
   def set_story
     @story = Story.find(params[:id])
@@ -87,6 +95,11 @@ class StoriesController < ApplicationController
   end
 
   def story_params
-    params.require(:story).permit(:title, :author)
+    params.require(:story).permit(:title, :author, :tags_public,
+                                  :chapter_title, :body)
   end
+
+  # def story_params_new
+  #   params.require(:story).permit(:title, :author, :chapter_title, :body)
+  # end
 end

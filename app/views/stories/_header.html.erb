@@ -2,12 +2,8 @@
   <dl>
     <dt>Tags:</dt>
     <dd>
-      <% unless @tags.empty? %>
-        <%= link_to @tags[0], tag_path(@tags[0]) %>
-      <% end %>
-      <% (1...@tags.length).each do |tag| %>
-        , <%= link_to tag, tag_path(tag) %>
-      <% end %>
+      <% tag_array = @tags.map { |tag| link_to(tag.name, tag) } %>
+      <%= raw tag_array.join(', ') %>
     </dd>
     <dt>Summary:</dt>
     <dd>

@@ -2,7 +2,15 @@ class Chapter < ApplicationRecord
   belongs_to :story
 
   def get_title
-    title.to_s
+    self.title.to_s
+  end
+
+  def chapter_title
+    get_title
+  end
+
+  def chapter_title=(new_title)
+    self.title = new_title
   end
 
   def tags
