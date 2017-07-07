@@ -13,14 +13,13 @@ class StoriesController < ApplicationController
 
   # GET /stories/1
   # GET /stories/1.json
-  def show
-    chap_num = params.key?(:chapter_num) ? params[:chapter_num] : 1
-    # chapters = [Chapter.find_by(story_id: @story.id,
-    #                             number: chap_num)]
-    # render :show, chapters: chapters
-    # chapters = [@story.chapters.find_by(number: params[:chapter_num])]
-    # logger.debug "Chapter number: #{params[:chapter_num]}"
+  def show_chapter
+    chap_num = params[:chapter_num]
     render :show, locals: { chapters: [@story.get_chapter(chap_num)] }
+  end
+
+  def show
+    redirect_to(url_for(@story) + '/chapters/1')
   end
 
   def showall

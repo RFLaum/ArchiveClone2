@@ -11,12 +11,14 @@ Rails.application.routes.draw do
   get 'stories/:id/chapters/all' => 'stories#showall'
   get 'stories/:id/all' => 'stories#showall'
   # get 'stories/:id/add' => 'stories#new_chapter'
-  get 'stories/:id/chapters/:chapter_num' => 'stories#show'
+  get 'stories/:id/chapters/:chapter_num' => 'stories#show_chapter'
   # get 'stories/:id/edit_chapter/:chapter_num' => 'stories#edit_chapter'
   # post 'stories/:id' => 'stories#create_chapter'
   # match 'stories/:id/:chapter_num' => 'stories#update_chapter', via: %i[patch put]
+  # get 'stories/:id' => 'stories#show_base'
   resources :stories
-  get 'stories/:id' => 'stories#show'
+  # get 'stories/:id' => 'stories#show'
+
   # get 'stories/:id', to: redirect('stories/%{id}/1')
 
   get 'stories/:story_id/add' => 'chapters#new'
