@@ -1,0 +1,17 @@
+<dl>
+  <dt>Name:</dt>
+  <dd><%= @user.name %></dd>
+  <% if @user.name == session[:user] %>
+    <dt>Email:</dt>
+    <dd><%= @user.email %></dd>
+  <% end %>
+  <dt>Joined</dt>
+  <dd><%= @user.created_at %></dd>
+</dl>
+
+<br>
+
+<h1>Stories:</h1>
+<% @user.stories.each do |story| %>
+  <%= render 'stories/summary', story: story %>
+<% end %>

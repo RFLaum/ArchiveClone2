@@ -9,7 +9,7 @@
   <strong>Author:</strong>
   <%= @story.author %>
 </p> -->
-<%= render "header" %>
+<%= render "header", story: @story %>
 <h2 class="story-title"><%= @story.title %></h2>
 <h3 class="story-author"><%= @story.author %></h3>
 <% chapters.each do |chap| %>

@@ -13,3 +13,15 @@
  *= require_tree .
  *= require_self
  */
+
+dt::after {
+  content: ":";
+}
+
+dt {
+  float: left;
+}
+
+.story-summary, .story-header {
+  box-shadow: 1px 1px 5px #aaa;
+}

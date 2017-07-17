@@ -29,7 +29,15 @@ class StoriesController < ApplicationController
 
   # GET /stories/new
   def new
-    @story = Story.new
+    if session[:user]
+      @story = Story.new
+      render "new"
+    else
+      # render "errors/generic_error", locals: {
+      #   message: "You must be logged in to post a story"
+      # }
+      anon_cant(request.fullpath)
+    end
   end
 
   # GET /stories/1/edit
@@ -50,16 +58,18 @@ class StoriesController < ApplicationController
     #   body: params[:story][:body]
     # }
     # first_chapter = Chapter.new(chapter_params)
-    respond_to do |format|
-      if @story.save
-        # @story.chapters << first_chapter
-        format.html { redirect_to @story, notice: 'Story was successfully created.' }
-        format.json { render :show, status: :created, location: @story }
-      else
-        format.html { render :new }
-        format.json { render json: @story.errors, status: :unprocessable_entity }
-      end
-    end
+    # respond_to do |format|
+    #   if @story.save
+    #     # @story.chapters << first_chapter
+    #     format.html { redirect_to @story, notice: 'Story was successfully created.' }
+    #     format.json { render :show, status: :created, location: @story }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @story.errors, status: :unprocessable_entity }
+    #   end
+    # end
+    User.find(session[:user]).stories << @story
+    redirect_to @story
   end
 
   # PATCH/PUT /stories/1

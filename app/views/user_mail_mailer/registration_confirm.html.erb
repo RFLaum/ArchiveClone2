@@ -1,0 +1,10 @@
+<!-- <!DOCTYPE html>
+<html>
+<head></head>
+<body> -->
+<% #don't need to include surrounding tags, because this is rendered into the
+#mailer layout %>
+<p>Thank you for registering, <%= @user.name %>! Before signing in, you must
+  <a href="<%= user_register_path(@user) %>">activate your account</a>.</p>
+<!-- </body>
+</html> -->

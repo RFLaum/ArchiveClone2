@@ -1,0 +1,12 @@
+<div>
+  <span class="user-header">
+    <% if session[:user] %>
+      Logged in as <%= link_to(session[:user], user_path(session[:user])) %>
+       (<%= link_to('Log out', 'logout') %>)
+    <% else %>
+      <%= link_to('Log In', '/login') %>
+       or
+      <%= link_to('Register', '/register') %>
+    <% end %>
+  </span>
+</div>

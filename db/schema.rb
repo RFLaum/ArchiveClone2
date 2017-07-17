@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170705202830) do
+ActiveRecord::Schema.define(version: 20170710181144) do
 
   create_table "chapters", force: :cascade do |t|
     t.integer  "story_id"
@@ -45,11 +45,12 @@ ActiveRecord::Schema.define(version: 20170705202830) do
   end
 
   create_table "stories", force: :cascade do |t|
-    t.string   "title",                  null: false
-    t.string   "author",                 null: false
-    t.text     "summary",    limit: 500
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "title",                      null: false
+    t.string   "author",                     null: false
+    t.text     "summary",        limit: 500
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "adult_override"
   end
 
   create_table "stories_tags", id: false, force: :cascade do |t|
@@ -69,6 +70,18 @@ ActiveRecord::Schema.define(version: 20170705202830) do
     t.boolean  "adult"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "users", id: false, force: :cascade do |t|
+    t.string   "name",                              null: false
+    t.string   "email",                             null: false
+    t.string   "password_digest"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "confirmation_hash"
+    t.boolean  "is_confirmed",      default: false
+    t.boolean  "adult"
+    t.index ["name"], name: "index_users_on_name", unique: true
   end
 
 end
