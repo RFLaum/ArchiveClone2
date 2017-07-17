@@ -1,5 +1,7 @@
-<div class='story-header'>
+<div class='story-summary'>
   <dl>
+    <dt>Title</dt>
+    <dd><%= story.title %>
     <dt>Tags</dt>
     <dd>
       <% tag_array = story.tags.map { |tag| link_to(tag.name, tag) } %>
@@ -7,7 +9,7 @@
     </dd>
     <dt>Summary</dt>
     <dd>
-      <%= story.summary %>
+      <%= story.summary || "This story has no blurb." %>
     </dd>
   </dl>
 </div>

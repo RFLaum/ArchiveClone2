@@ -2,6 +2,7 @@ class Story < ApplicationRecord
   has_and_belongs_to_many :sources
   has_and_belongs_to_many :tags
   has_many :chapters
+  belongs_to :user, foreign_key: 'author', primary_key: 'name'
 
   after_save :save_dummy
   # after_initialize :make_dummy
@@ -42,10 +43,11 @@ class Story < ApplicationRecord
   # end
 
   def dummy
-    if @dummy_chapter.nil?
-      @dummy_chapter = Chapter.new(story_id: id, number: 1, title: '', body: '')
-    end
-    @dummy_chapter
+    # if @dummy_chapter.nil?
+    #   @dummy_chapter = Chapter.new(story_id: id, number: 1, title: '', body: '')
+    # end
+    # @dummy_chapter
+    @dummy_chapter ||= Chapter.new(story_id: id, number: 1, title: '', body: '')
   end
 
   def first_chapter
