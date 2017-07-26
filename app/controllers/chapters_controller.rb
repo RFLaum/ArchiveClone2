@@ -5,13 +5,18 @@ class ChaptersController < ApplicationController
 
   #get 'stories/:story_id/add'
   def new
-    id = params[:story_id]
-    number = @story.num_chapters + 1
-    @chapter = Chapter.new(story_id: id, number: number)
+    # id = params[:story_id]
+    if is_correct_user?(@story.author)
+      number = @story.num_chapters + 1
+      @chapter = Chapter.new(story_id: @story.id, number: number)
+    else
+      wrong_user(@story.author)
+    end
   end
 
   #post 'stories/:story_id'
   def create
+    wrong_user(@story.author) && return unless is_correct_user?(@story.author)
     @chapter = @story.chapters.build(chapter_params)
     respond_to do |format|
       if @chapter.save
@@ -26,6 +31,27 @@ class ChaptersController < ApplicationController
     end
   end
 
+  def show
+    # @chapter = render 'stories/show', locals: { chapters: [@chapter] }
+    @next_chapter = @prev_chapter = nil
+    if @chapter.number > 1
+      @prev_chapter = @story.get_chapter(@chapter.number - 1)
+    end
+    if @story.chapters.size > @chapter.number
+      @next_chapter = @story.get_chapter(@chapter.number + 1)
+    end
+  end
+
+  def edit; end
+
+  def update
+    if @chapter.update(chapter_params)
+      redirect_to @chapter, notice: 'Chapter was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
   private
 
   def set_story
@@ -33,7 +59,9 @@ class ChaptersController < ApplicationController
   end
 
   def get_row
-    @chapter = Chapter.find(story_id: params[:id], number: params[:chapter_num])
+    # @chapter = Chapter.find_by([params[:story_id], params[:id]])
+    # @chapter = Chapter.find(params[:id])
+    @chapter = Chapter.find([params[:story_id], params[:id]])
   end
 
   def chapter_params

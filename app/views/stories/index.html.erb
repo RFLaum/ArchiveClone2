@@ -12,13 +12,19 @@
   </thead>
 
   <tbody>
+    <% usr = current_user_or_guest %>
     <% @stories.each do |story| %>
+      <% permissions = usr.story_permissions(story) %>
       <tr>
         <td><%= story.title %></td>
         <td><%= story.author %></td>
-        <td><%= link_to 'Show', story %></td>
-        <td><%= link_to 'Edit', edit_story_path(story) %></td>
-        <td><%= link_to 'Destroy', story, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><% if permissions[:read] %>
+          <%= link_to 'Show', story %><% end %></td>
+        <td><% if permissions[:edit] %>
+          <%= link_to 'Edit', edit_story_path(story) %> <% end %></td>
+        <td><% if permissions[:delete] %>
+          <%= link_to 'Destroy', story, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% end %></td>
       </tr>
     <% end %>
   </tbody>

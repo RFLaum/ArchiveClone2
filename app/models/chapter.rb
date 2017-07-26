@@ -1,5 +1,6 @@
 class Chapter < ApplicationRecord
-  belongs_to :story
+  self.primary_keys = :story_id, :number
+  belongs_to :story, dependent: :destroy
 
   def get_title
     self.title.to_s

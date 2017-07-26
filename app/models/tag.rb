@@ -1,5 +1,6 @@
 class Tag < ApplicationRecord
-  has_and_belongs_to_many :stories
+  self.primary_key = :name
+  has_and_belongs_to_many :stories, foreign_key: 'name'
 
   #translates a user-input tag to the form used by the database
   #todo

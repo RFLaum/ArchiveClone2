@@ -1,0 +1,12 @@
+<div class = "next-prev">
+  <% #logger.debug prev_obj.class %>
+  <% #logger.debug next_obj.class %>
+  <% if prev_obj %>
+    <% logger.debug "entered prev" %>
+    <%= link_to '< Previous', prev_obj %>
+  <% end %>
+  <% if next_obj %>
+    <% logger.debug "entered next" %>
+    <%= link_to 'Next >', next_obj %>
+  <% end %>
+</div>

@@ -1,8 +1,8 @@
 class Story < ApplicationRecord
-  has_and_belongs_to_many :sources
-  has_and_belongs_to_many :tags
-  has_many :chapters
-  belongs_to :user, foreign_key: 'author', primary_key: 'name'
+  # has_and_belongs_to_many :sources
+  has_and_belongs_to_many :tags, association_foreign_key: 'name'
+  has_many :chapters, dependent: :destroy
+  belongs_to :user, foreign_key: 'author', primary_key: 'name' #, dependent: :destroy
 
   after_save :save_dummy
   # after_initialize :make_dummy
@@ -14,7 +14,7 @@ class Story < ApplicationRecord
   def add_tags(new_tags)
     new_tags.each do |tag|
       tag = Tag.tr_to_sql(tag)
-      tags << Tag.new(name: tag) unless tags.exists?(name: tag)
+      tags << Tag.find_or_initialize_by(name: tag) unless tags.exists?(name: tag)
     end
   end
 
@@ -87,5 +87,11 @@ class Story < ApplicationRecord
     # logger.debug "dummy title: #{@dummy_chapter.title}"
     self.chapters << dummy #@dummy_chapter
     # logger.debug "saved"
+  end
+
+  def is_adult?
+    return true if adult_override
+    return true if tags.exists?(adult: true)
+    false
   end
 end

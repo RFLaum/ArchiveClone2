@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Newsposts</h1>
+
+<div class = "posts-container">
+  <% @newsposts.each do |post| %>
+    <div class = "newspost" >
+      <center>
+        <%= link_to post.title, post %>
+      </center>
+      <dl>
+        <dt>Published</dt>
+        <dd><%= post.created_at %></dd>
+        <% if post.created_at != post.updated_at %>
+          <dt>Edited</dt>
+          <dd><%= post.updated_at %></dd>
+        <% end %>
+        <dt>Tags</dt>
+        <% tag_array = post.newstags.map { |tag| link_to(tag.name, tag) } %>
+        <dd><%= raw tag_array.join(', ') %></dd>
+      </dl>
+      <div class='news-body'>
+        <%= post.content %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<br>
+
+<% #link_to 'New Newspost', new_newspost_path %>
+<%= will_paginate @newsposts %>

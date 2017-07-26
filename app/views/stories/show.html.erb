@@ -10,13 +10,12 @@
   <%= @story.author %>
 </p> -->
 <%= render "header", story: @story %>
-<h2 class="story-title"><%= @story.title %></h2>
-<h3 class="story-author"><%= @story.author %></h3>
 <% chapters.each do |chap| %>
-  <%= render "chapter_display", chapter: chap %>
+  <%= render "chapters/chapter_display", chapter: chap %>
 <% end %>
 
-<!-- #todo: better way to handle this link -->
-<%= link_to 'Add Chapter', "/stories/#{@story.id}/add" %>
+<% if current_user_or_guest.story_permissions(@story)[:edit] %>
+<%= link_to 'Add Chapter', new_story_chapter_path(@story) %>
 <%= link_to 'Edit', edit_story_path(@story) %> |
+<% end %>
 <%= link_to 'Back', stories_path %>
