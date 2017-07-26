@@ -1,4 +1,4 @@
-<%= form_for this_chapter, url: {action: action} do |f| %>
+<%= form_for [@story, this_chapter] do |f| %>
   <%= render 'chapter_body_edit', f: f %>
   <% #todo: add tags %>
   <%= f.hidden_field(:number) %>

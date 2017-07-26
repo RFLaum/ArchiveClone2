@@ -9,16 +9,17 @@ class StoriesController < ApplicationController
   end
 
   # GET stories/1/chapters/1
-  def show_chapter
-    chap_num = params[:chapter_num]
-    render :show, locals: { chapters: [@story.get_chapter(chap_num)] }
-  end
+  # def show_chapter
+  #   chap_num = params[:chapter_num]
+  #   render :show, locals: { chapters: [@story.get_chapter(chap_num)] }
+  # end
 
   # GET /stories/1
   # GET /stories/1.json
   def show
     #there's got to be a better way of doing this
-    redirect_to(url_for(@story) + '/chapters/1')
+    # redirect_to(url_for(@story) + '/chapters/1')
+    redirect_to @story.first_chapter
   end
 
   # GET /stories/1/chapters/all
@@ -29,7 +30,8 @@ class StoriesController < ApplicationController
 
   # GET /stories/new
   def new
-    if session[:user]
+    if
+      logged_in? #session[:user]
       @story = Story.new
       render "new"
     else

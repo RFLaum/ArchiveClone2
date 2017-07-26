@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   include ApplicationHelper
   # rescue_from ActiveRecord::RecordNotFound with: user_not_found
+  before_action :set_user, only: %i[show destroy]
 
   def register
     @user = User.new
@@ -11,13 +12,17 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id])
     # @stories = @user.stories
   end
 
   def create
     @user = User.new(params.require(:user).permit(:name, :email, :password,
                                                   :password_confirmation))
+    if BannedAddress.is_banned?(@user.email)
+      render('errors/generic_error',
+             locals: { message: "That email is banned." }) && return
+    end
     @user.confirmation_hash = generate_hash
     if @user.save
       UserMailMailer.registration_confirm(@user).deliver_now
@@ -77,9 +82,33 @@ class UsersController < ApplicationController
     session[:user] = nil
   end
 
+  def destroy
+    if is_correct_user?(@user)
+      unregister
+    elsif is_admin?
+      ban
+    else
+      wrong_user(@user, true)
+    end
+  end
+
   private
 
-  # def generate_hash
+  def ban
+    @user_name = @user.name
+    BannedAddress.add_email(@user.email)
+    UserMailMailer.ban_notification(@user).deliver_now
+    @user.destroy
+    render :banned
+  end
+
+  def unregister
+    @user_name = @user.name
+    UserMailMailer.unregistration(@user).deliver_now
+    logger.debug "Stories of user #{@user.name}: #{@user.stories.size}"
+    @user.destroy
+    render :unregistered
+  end
 
   def login_internal
     session[:user] = @user.name
@@ -96,5 +125,9 @@ class UsersController < ApplicationController
     else
       redirect_to login_page, notice: "Incorrect password"
     end
+  end
+
+  def set_user
+    @user = User.find(params[:id])
   end
 end

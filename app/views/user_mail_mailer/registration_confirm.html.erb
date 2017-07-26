@@ -5,6 +5,6 @@
 <% #don't need to include surrounding tags, because this is rendered into the
 #mailer layout %>
 <p>Thank you for registering, <%= @user.name %>! Before signing in, you must
-  <a href="<%= user_register_path(@user) %>">activate your account</a>.</p>
+  <a href="<%= @register_path %>">activate your account</a>.</p>
 <!-- </body>
 </html> -->

@@ -1,0 +1,5 @@
+<p>Sorry, only <%= link_to(@target_user.name, @target_user) %>
+  <% if @admin_can %>
+  or an administrator
+  <% end %>
+  can do that.</p>
