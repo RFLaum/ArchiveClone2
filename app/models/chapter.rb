@@ -21,7 +21,8 @@ class Chapter < ApplicationRecord
 
   # todo: does this work if the story's being newly created?
   def tags=(tag_string)
-    tag_array = tag_string.split(/,\s*/)
-    story.add_tags(tag_array)
+    # tag_array = tag_string.split(/,\s*/)
+    # story.add_tags(tag_array)
+    story.set_tag_string(tag_string)
   end
 end

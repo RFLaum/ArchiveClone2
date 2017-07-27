@@ -6,7 +6,7 @@ class NewspostsController < ApplicationController
   def index
     # @newsposts = Newspost.all
     if params[:tag]
-      @tag = NewsTag.find(params[:tag])
+      @tag = NewsTag.find_by_name(params[:tag])
       @newsposts = @tag.newsposts if @tag
     else
       @newsposts = Newspost.all
@@ -48,7 +48,9 @@ class NewspostsController < ApplicationController
   # POST /newsposts
   # POST /newsposts.json
   def create
+    render 'errors/not_admin' && return unless is_admin?
     @newspost = Newspost.new(newspost_params)
+    @newspost.admin = current_user.name
 
     respond_to do |format|
       if @newspost.save
@@ -93,6 +95,6 @@ class NewspostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def newspost_params
-      params.require(:newspost).permit(:admin_name, :title, :content)
+      params.require(:newspost).permit(:admin_name, :title, :content, :tags_public)
     end
 end

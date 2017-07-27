@@ -1,4 +1,5 @@
 class Story < ApplicationRecord
+  include Taggable
   # has_and_belongs_to_many :sources
   has_and_belongs_to_many :tags, association_foreign_key: 'name'
   has_many :chapters, dependent: :destroy
@@ -6,6 +7,8 @@ class Story < ApplicationRecord
 
   after_save :save_dummy
   # after_initialize :make_dummy
+  @tags = tags
+  @tag_class = Tag
 
   def num_chapters
     chapters.size
@@ -24,14 +27,6 @@ class Story < ApplicationRecord
 
   def get_chapters
     chapters.order("number ASC")
-  end
-
-  def tags_public
-    tags.map(&:name).join(", ")
-  end
-
-  def tags_public=(new_tags_string)
-    add_tags(new_tags_string.split(/,\s*/))
   end
 
   # def initialize(*params)
@@ -93,5 +88,14 @@ class Story < ApplicationRecord
     return true if adult_override
     return true if tags.exists?(adult: true)
     false
+  end
+
+  private
+
+  def get_tags
+    tags
+  end
+  def tag_class
+    Tag
   end
 end

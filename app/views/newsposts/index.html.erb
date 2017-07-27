@@ -2,6 +2,12 @@
 
 <h1>Newsposts</h1>
 
+<% if is_admin? %>
+  <%= link_to 'New Newspost', new_newspost_path %>
+<% end %>
+
+<p>Number of tags: <%= NewsTag.count %> </p>
+
 <div class = "posts-container">
   <% @newsposts.each do |post| %>
     <div class = "newspost" >
@@ -16,7 +22,7 @@
           <dd><%= post.updated_at %></dd>
         <% end %>
         <dt>Tags</dt>
-        <% tag_array = post.newstags.map { |tag| link_to(tag.name, tag) } %>
+        <% tag_array = post.news_tags.map { |tag| link_to(tag.name, tag) } %>
         <dd><%= raw tag_array.join(', ') %></dd>
       </dl>
       <div class='news-body'>

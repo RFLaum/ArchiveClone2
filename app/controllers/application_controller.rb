@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :current_user_or_guest
   helper_method :chapters_path
+  helper_method :is_admin?
   protect_from_forgery with: :exception
 
   # def default_url_options
