@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_or_guest
   helper_method :chapters_path
   helper_method :is_admin?
+  helper_method :is_correct_user?
   protect_from_forgery with: :exception
 
   # def default_url_options
@@ -68,12 +69,20 @@ class ApplicationController < ActionController::Base
     User.find(session[:user])
   end
 
+  def current_user_name
+    logged_in? ? session[:user] : nil
+  end
+
   def current_user_or_guest
     answer = current_user
     unless answer
       answer = User.new(name: 'guest', adult: false)
     end
     answer
+  end
+
+  def current_user_or_guest_name
+    logged_in? ? session[:user] : 'guest'
   end
 
 end

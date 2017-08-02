@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   # get 'stories/:id/chapters/:chapter_num' => 'stories#show_chapter'
   resources :stories do
     resources :chapters
+    resources :comments
   end
 
   # get 'stories/:story_id/add' => 'chapters#new'
@@ -30,4 +31,8 @@ Rails.application.routes.draw do
   get 'register' => 'users#register'
   get 'logout' => 'users#logout'
   resources :users, except: [:new]
+
+  if rails.env.development?
+    get 'comments' => 'comments#index_all'
+  end
 end

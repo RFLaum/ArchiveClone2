@@ -14,14 +14,30 @@
  *= require_self
  */
 
+dl {
+  /*border:1px solid #ccc;*/
+  clear: right;
+  /*padding: 1.286em .75em;*/
+  position: relative;
+  overflow: hidden;
+}
+
 dt::after {
   content: ":";
 }
 
 dt {
+  width: 25%;
   float: left;
+  clear: left;
 }
 
-.story-summary, .story-header {
-  box-shadow: 1px 1px 5px #aaa;
+dd {
+  width: 72.5%;
+  float: left;
+  margin: 0 0  .643em;
+}
+
+.right-box {
+  float:right;
 }

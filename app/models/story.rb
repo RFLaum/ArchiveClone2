@@ -3,12 +3,10 @@ class Story < ApplicationRecord
   # has_and_belongs_to_many :sources
   has_and_belongs_to_many :tags, association_foreign_key: 'name'
   has_many :chapters, dependent: :destroy
+  has_many :comments, dependent: :destroy
   belongs_to :user, foreign_key: 'author', primary_key: 'name' #, dependent: :destroy
 
   after_save :save_dummy
-  # after_initialize :make_dummy
-  @tags = tags
-  @tag_class = Tag
 
   def num_chapters
     chapters.size
@@ -27,6 +25,14 @@ class Story < ApplicationRecord
 
   def get_chapters
     chapters.order("number ASC")
+  end
+
+  def get_comments
+    comments.order("created_at ASC")
+  end
+
+  def get_dummy_comment(author)
+    comments.build(author: author)
   end
 
   # def initialize(*params)
@@ -95,6 +101,7 @@ class Story < ApplicationRecord
   def get_tags
     tags
   end
+
   def tag_class
     Tag
   end

@@ -1,3 +1,5 @@
 class SpecialPagesController < ApplicationController
-  def home; end
+  def home
+    @page_title = "Home"
+  end
 end
