@@ -1,0 +1,22 @@
+<li class="comment", id="comment_<%= comment.id %>">
+  <h4 class="comment-heading">
+    <%= link_to(comment.author, comment.user) %>
+    <div class = "right-box">
+      <div class = "comment-date">Posted at: &emsp; <%= comment.created_at %></div>
+      <% if comment.updated? %>
+        <div class="comment-date">
+          Last edited: &emsp; <%= comment.updated_at %>
+        </div>
+      <% end %>
+    </div>
+  </h4>
+  <div class="comment-body">
+    <%= raw comment.content %>
+  </div>
+  <% if is_correct_user?(comment.user, true) %>
+    <span class="comment-administration">
+      <%= link_to "Edit", edit_story_comment_path(@story, comment) %>
+      <%= link_to "Delete", [@story, comment], method: :delete %>
+    </span>
+  <% end %>
+</li>

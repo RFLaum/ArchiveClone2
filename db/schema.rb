@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170727175326) do
+ActiveRecord::Schema.define(version: 20170728174117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,16 @@ ActiveRecord::Schema.define(version: 20170727175326) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["source_id"], name: "index_characters_on_source_id", using: :btree
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string   "author",     null: false
+    t.integer  "story_id",   null: false
+    t.text     "content",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author"], name: "index_comments_on_author", using: :btree
+    t.index ["story_id"], name: "index_comments_on_story_id", using: :btree
   end
 
   create_table "news_tags", force: :cascade do |t|
@@ -117,6 +127,8 @@ ActiveRecord::Schema.define(version: 20170727175326) do
 
   add_foreign_key "chapters", "stories", on_delete: :cascade
   add_foreign_key "characters", "sources"
+  add_foreign_key "comments", "stories"
+  add_foreign_key "comments", "users", column: "author", primary_key: "name"
   add_foreign_key "newsposts", "users", column: "admin", primary_key: "name"
   add_foreign_key "stories", "users", column: "author", primary_key: "name", on_delete: :cascade
 end

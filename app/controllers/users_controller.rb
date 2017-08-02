@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   include ApplicationHelper
-  # rescue_from ActiveRecord::RecordNotFound with: user_not_found
   before_action :set_user, only: %i[show destroy]
 
   def register
@@ -11,10 +10,7 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
-  def show
-    # @user = User.find(params[:id])
-    # @stories = @user.stories
-  end
+  def show; end
 
   def create
     @user = User.new(params.require(:user).permit(:name, :email, :password,
@@ -29,7 +25,7 @@ class UsersController < ApplicationController
       # redirect_to action: index
       render 'signup_made'
     else
-      @title = "Sign Up"
+      @page_title = "Sign Up"
       render 'register'
     end
   end
@@ -56,22 +52,11 @@ class UsersController < ApplicationController
   end
 
   def login_receiver
-    # message = ''
-    # @user = User.find(params[:user][:name])
-    # logger.debug "login_receiver"
-    # params.each do |k,v|
-    #   logger.debug "#{k}\t#{v}"
-    # end
     @user = User.find(params[:user_name])
     if !@user
-      # message = 'Invalid Username'
       render :login, locals: { error_message: 'Invalid username' }
-    # elsif @user.password == params[:user][:password]
-    # elsif @user.password == params[:password]
     elsif @user.authenticate(params[:password])
       login_internal
-      # render :show
-      # redirect_to @user
       redirect_override(@user)
     else
       render :login, locals: { error_message: 'Invalid password' }

@@ -1,0 +1,7 @@
+<% logger.debug "comment_form" %>
+<% logger.debug @story.class %>
+<% logger.debug comment.class %>
+<%= form_for([@story, comment]) do |f| %>
+  <%= f.text_area :content %>
+  <%= f.submit 'Submit Comment' %>
+<% end %>

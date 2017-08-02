@@ -14,8 +14,4 @@
   <%= render "chapters/chapter_display", chapter: chap %>
 <% end %>
 
-<% if current_user_or_guest.story_permissions(@story)[:edit] %>
-<%= link_to 'Add Chapter', new_story_chapter_path(@story) %>
-<%= link_to 'Edit', edit_story_path(@story) %> |
-<% end %>
-<%= link_to 'Back', stories_path %>
+<%= render partial: "stories/story_footer" %>

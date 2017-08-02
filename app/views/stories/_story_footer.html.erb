@@ -1,0 +1,12 @@
+<% if current_user_or_guest.story_permissions(@story)[:edit] %>
+  <%= link_to 'Add Chapter', new_story_chapter_path(@story) %>
+  <% if defined? @chapter %>
+    <%= link_to 'Edit Chapter', edit_story_chapter_path(@chapter) %>
+  <% end %>
+  <%= link_to 'Edit Story', edit_story_path(@story) %>
+<% end %>
+<%= link_to 'Back', stories_path %>
+<% if logged_in? %>
+  <%= render partial: 'comments/comment_add_wrapper' %>
+<% end %>
+<%= render partial: "comments/all_comments", locals: { comments: @story.get_comments } %>

@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ArchiveClone2</title>
+    <title>
+      <% if defined? @page_title %>
+        <%= @page_title %> |
+      <% end %>
+      Archive of Our Clone
+    </title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
