@@ -1,7 +1,7 @@
 <div>
   <span class="user-header">
     <% if logged_in? %>
-      Logged in as <%= link_to(session[:user], user_path(session[:user])) %>
+      Logged in as <%= name_link current_user %>
        (<%= link_to('Log out', '/logout') %>)
     <% else %>
       <%= link_to('Log In', '/login') %>

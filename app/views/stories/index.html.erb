@@ -15,11 +15,10 @@
     <% usr = current_user_or_guest %>
     <% @stories.each do |story| %>
       <% permissions = usr.story_permissions(story) %>
+      <% next unless permissions[:read] %>
       <tr>
-        <td><%= story.title %></td>
-        <td><%= story.author %></td>
-        <td><% if permissions[:read] %>
-          <%= link_to 'Show', story %><% end %></td>
+        <td><%= name_link story %></td>
+        <td><%= name_link story.user %></td>
         <td><% if permissions[:edit] %>
           <%= link_to 'Edit', edit_story_path(story) %> <% end %></td>
         <td><% if permissions[:delete] %>

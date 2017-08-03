@@ -12,7 +12,7 @@
   <% @newsposts.each do |post| %>
     <div class = "newspost" >
       <center>
-        <%= link_to post.title, post %>
+        <%= name_link post %>
       </center>
       <dl>
         <dt>Published</dt>
@@ -22,7 +22,7 @@
           <dd><%= post.updated_at %></dd>
         <% end %>
         <dt>Tags</dt>
-        <% tag_array = post.news_tags.map { |tag| link_to(tag.name, tag) } %>
+        <% tag_array = post.news_tags.map { |tag| name_link tag } %>
         <dd><%= raw tag_array.join(', ') %></dd>
       </dl>
       <div class='news-body'>

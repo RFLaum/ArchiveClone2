@@ -1,6 +1,6 @@
 <li class="comment", id="comment_<%= comment.id %>">
   <h4 class="comment-heading">
-    <%= link_to(comment.author, comment.user) %>
+    <%= name_link(comment.user) %>
     <div class = "right-box">
       <div class = "comment-date">Posted at: &emsp; <%= comment.created_at %></div>
       <% if comment.updated? %>
