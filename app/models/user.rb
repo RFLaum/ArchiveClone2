@@ -2,6 +2,7 @@ class User < ApplicationRecord
   self.primary_key = :name
   has_many :stories, foreign_key: 'author', primary_key: 'name', dependent: :destroy
   has_many :comments, foreign_key: 'author', primary_key: 'name', dependent: :destroy
+  has_many :newsposts, foreign_key: 'admin', primary_key: 'name', dependent: :destroy
 
   before_save { self.email = email.downcase }
   validates :name,

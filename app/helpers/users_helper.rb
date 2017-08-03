@@ -12,4 +12,8 @@ module UsersHelper
   #   # ApplicationController.logged_in?
   #   User.exists?(session[:user])
   # end
+
+  # def user_link(user)
+  #   link_to(user.name, user)
+  # end
 end

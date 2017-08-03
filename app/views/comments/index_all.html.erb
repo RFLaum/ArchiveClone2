@@ -5,8 +5,7 @@
     <dt>Author</dt>
     <dd><%= comment.author %></dd>
     <dt>Story</dt>
-    <% story = comment.story %>
-    <dd><%= link_to(story.title, story) %></dd>
+    <dd><%= name_link(comment.story) %></dd>
     <dt>Content</dt>
     <dd><%= comment.content %></dd>
     <dt>Created</dt>

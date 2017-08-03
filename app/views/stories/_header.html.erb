@@ -2,14 +2,18 @@
   <dl>
     <dt>Tags</dt>
     <dd>
-      <% tag_array = story.tags.map { |tag| link_to(tag.name, tag) } %>
+      <% tag_array = story.tags.map { |tag| name_link tag } %>
       <%= raw tag_array.join(', ') %>
     </dd>
     <dt>Summary</dt>
     <dd>
       <%= story.summary %>
     </dd>
+    <% story.attributes.keys.each do |k| %>
+      <dt><%= k %></dt>
+      <dd><%= k.class %></dd>
+    <% end %>
   </dl>
 </div>
 <h2 class="story-title"><%= @story.title %></h2>
-<h3 class="story-author">By <%= @story.author %></h3>
+<h3 class="story-author">By <%= name_link @story.user %></h3>

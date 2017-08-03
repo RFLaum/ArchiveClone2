@@ -1,5 +1,6 @@
 class Newspost < ApplicationRecord
   include Taggable
+  belongs_to :user, foreign_key: 'admin', primary_key: 'name'
   has_and_belongs_to_many :news_tags
 
   # after_initialize do |post|

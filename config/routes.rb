@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   get 'logout' => 'users#logout'
   resources :users, except: [:new]
 
-  if rails.env.development?
+  if Rails.env.development?
     get 'comments' => 'comments#index_all'
   end
 end
