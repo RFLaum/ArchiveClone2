@@ -15,7 +15,7 @@ class User < ApplicationRecord
                     format: { with: EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
   has_secure_password
-  validates :password, length: { minimum: 8 }
+  # validates :password, length: { minimum: 8 }
 
   def story_permissions(story)
     # answer = { read: false, edit: false, delete: false }
@@ -32,6 +32,19 @@ class User < ApplicationRecord
       answer[:read] = false
     end
     answer
+  end
+
+  def can_post?
+    self.is_confirmed && !(self.deactivated)
+  end
+
+  def self.valid_user?(username)
+    return false unless self.exists?(username)
+    self.find(username).can_post?
+  end
+
+  def self.find_email_by_regex(re_str)
+    self.where("email ~* ?", re_str)
   end
 
 end

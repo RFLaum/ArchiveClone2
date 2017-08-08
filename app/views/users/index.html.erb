@@ -21,6 +21,11 @@
         <td><%= link_to 'Show', user %></td>
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
         <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if is_correct_user?(user) && !user.deactivated %>
+        <td>
+          <%= button_to 'Deactivate', {action: 'deactivate', id: user.name}, method: 'patch' %>
+        </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

@@ -1,5 +1,7 @@
 class NewspostsController < ApplicationController
-  before_action :set_newspost, only: [:show, :edit, :update, :destroy]
+  before_action :check_admin
+  before_action :set_newspost, only: %i[show edit update destroy]
+  skip_before_action :check_admin, only: %i[index show]
 
   # GET /newsposts
   # GET /newsposts.json
@@ -21,34 +23,23 @@ class NewspostsController < ApplicationController
 
   # GET /newsposts/new
   def new
-    # @newspost = Newspost.new
-    # if session[:admin]
-    # @newspost = Newspost.new
-    # render 'new'
-    # else
-    # non_admin_cant
-    if is_admin?
-      @newspost = Newspost.new
-      render 'new'
-    else
-      non_admin_cant(request.fullpath)
-    end
+    @newspost = Newspost.new
   end
 
   # GET /newsposts/1/edit
   def edit
-    if is_admin?
-      @newspost = Newspost.find(params[:id])
-      render 'edit'
-    else
-      non_admin_cant(request.fullpath)
-    end
+    # if is_admin?
+    #   @newspost = Newspost.find(params[:id])
+    #   render 'edit'
+    # else
+    #   non_admin_cant(request.fullpath)
+    # end
   end
 
   # POST /newsposts
   # POST /newsposts.json
   def create
-    render 'errors/not_admin' && return unless is_admin?
+    # render 'errors/not_admin' && return unless is_admin?
     @newspost = Newspost.new(newspost_params)
     @newspost.admin = current_user.name
 
@@ -89,12 +80,11 @@ class NewspostsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_newspost
-      @newspost = Newspost.find(params[:id])
-    end
+  def set_newspost
+    @newspost = Newspost.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def newspost_params
-      params.require(:newspost).permit(:admin_name, :title, :content, :tags_public)
-    end
+  def newspost_params
+    params.require(:newspost).permit(:admin_name, :title, :content, :tags_public)
+  end
 end

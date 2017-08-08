@@ -2,21 +2,19 @@ class ChaptersController < ApplicationController
   before_action :set_story
   before_action :get_row
   skip_before_action :get_row, only: %i[new create]
+  before_action :check_user, only: %i[new create edit update]
 
   #get 'stories/:story_id/add'
   def new
-    # id = params[:story_id]
-    if is_correct_user?(@story.author)
-      number = @story.num_chapters + 1
-      @chapter = Chapter.new(story_id: @story.id, number: number)
-    else
-      wrong_user(@story.author)
-    end
+    number = @story.num_chapters + 1
+    # @chapter = Chapter.new(story_id: @story.id, number: number)
+    @chapter = @story.chapters.build(number: number)
   end
 
   #post 'stories/:story_id'
   def create
-    wrong_user(@story.author) && return unless is_correct_user?(@story.author)
+    # wrong_user(@story.author) && return unless is_correct_user?(@story.author)
+    # return unless check_user(@story.user)
     @chapter = @story.chapters.build(chapter_params)
     respond_to do |format|
       if @chapter.save
@@ -42,9 +40,12 @@ class ChaptersController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    # return unless check_user(@story.user)
+  end
 
   def update
+    # return unless check_user(@story.user)
     if @chapter.update(chapter_params)
       redirect_to @chapter, notice: 'Chapter was successfully updated.'
     else
@@ -66,5 +67,9 @@ class ChaptersController < ApplicationController
 
   def chapter_params
     params.require(:chapter).permit(:title, :body, :number, :chapter_title)
+  end
+
+  def check_user
+    super(@story.user)
   end
 end

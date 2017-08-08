@@ -25,12 +25,22 @@ Rails.application.routes.draw do
   # match 'stories/:story_id/:chapter_num' => 'chapters#update', via: %i[patch put]
 
   # get '/user_confirm/:user_name/auth=:hash' => 'users#confirm'
-  get 'users/:user_name/auth=:hash' => 'users#confirm'
+  get 'users/:id/auth=:hash' => 'users#confirm'
   get 'login' => 'users#login'
   post 'login' => 'users#login_receiver'
   get 'register' => 'users#register'
   get 'logout' => 'users#logout'
-  resources :users, except: [:new]
+  match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put]
+  resources :users, except: [:new] do
+    member do
+      get 'send_confirmation'
+    end
+  end
+
+  namespace :admin do
+    resources :banned_addresses, only: %i[index destroy],
+                                 constraints: { id: /[^\/]+/ }
+  end
 
   if Rails.env.development?
     get 'comments' => 'comments#index_all'
