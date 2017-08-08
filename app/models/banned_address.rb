@@ -16,14 +16,27 @@ class BannedAddress < ApplicationRecord
     exists?(clean_email(email))
   end
 
+  def self.destroy_users_matching(email)
+    User.find_email_by_regex(make_regex_str(email)).each(&:destroy)
+  end
+
   #assumes raw_address is a valid email address
   def self.clean_email(raw_address)
     raw_address = raw_address.downcase
-    at_loc = raw_address.index('@')
-    plus_loc = raw_address.index('+')
-    first_end = (plus_loc && plus_loc < at_loc) ? plus_loc : at_loc
-    raw_address[0...first_end] + raw_address[at_loc..-1]
+    raw_address.sub(/\+[^@]*@/, '@')
+    # at_loc = raw_address.index('@')
+    # plus_loc = raw_address.index('+')
+    # first_end = (plus_loc && plus_loc < at_loc) ? plus_loc : at_loc
+    # raw_address[0...first_end] + raw_address[at_loc..-1]
   end
 
-  private_class_method :clean_email
+  #assumes that raw_address is already downcased, stripped of whitespace, etc.
+  def self.make_regex_str(raw_address)
+    # raw_address.sub(/^([^\+@]+)((\+[^@]*)?@)(.*$)/, '$1(\)')
+    first_part = raw_address[0...raw_address.index(/[@\+]/)]
+    second_part = raw_address[raw_address.index('@')..-1]
+    first_part + '(\+[^@]*)?' + second_part
+  end
+
+  private_class_method :clean_email, :make_regex_str
 end

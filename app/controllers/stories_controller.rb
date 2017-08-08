@@ -1,6 +1,9 @@
 class StoriesController < ApplicationController
   before_action :set_story
   skip_before_action :set_story, only: %i[index new create]
+  before_action :check_logged_in, only: %i[new create]
+  before_action :check_user, only: %i[edit update]
+  before_action :check_user_or_admin, only: %i[destroy]
 
   # GET /stories
   # GET /stories.json
@@ -8,17 +11,9 @@ class StoriesController < ApplicationController
     @stories = Story.all
   end
 
-  # GET stories/1/chapters/1
-  # def show_chapter
-  #   chap_num = params[:chapter_num]
-  #   render :show, locals: { chapters: [@story.get_chapter(chap_num)] }
-  # end
-
   # GET /stories/1
   # GET /stories/1.json
   def show
-    #there's got to be a better way of doing this
-    # redirect_to(url_for(@story) + '/chapters/1')
     redirect_to @story.first_chapter
   end
 
@@ -30,16 +25,7 @@ class StoriesController < ApplicationController
 
   # GET /stories/new
   def new
-    if
-      logged_in? #session[:user]
-      @story = Story.new
-      render "new"
-    else
-      # render "errors/generic_error", locals: {
-      #   message: "You must be logged in to post a story"
-      # }
-      anon_cant(request.fullpath)
-    end
+    @story = Story.new
   end
 
   # GET /stories/1/edit
@@ -49,7 +35,7 @@ class StoriesController < ApplicationController
   # POST /stories.json
   def create
     @story = Story.new(story_params)
-    User.find(session[:user]).stories << @story
+    current_user.stories << @story
     redirect_to @story
   end
 
@@ -90,7 +76,13 @@ class StoriesController < ApplicationController
                                   :chapter_title, :body, :summary)
   end
 
-  # def story_params_new
-  #   params.require(:story).permit(:title, :author, :chapter_title, :body)
-  # end
+  alias :super_check_user :check_user
+
+  def check_user
+    super(@story.user)
+  end
+
+  def check_user_or_admin
+    super_check_user(@story.user, true)
+  end
 end

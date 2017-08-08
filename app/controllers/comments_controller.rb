@@ -3,11 +3,12 @@ class CommentsController < ApplicationController
   before_action :load_comment
   skip_before_action :load_comment, only: %i[new create index index_all]
   skip_before_action :set_story, only: %i[index_all]
+  before_action :check_user, only: %i[edit update destroy]
 
   def create
     # @comment = @story.comments.build(comment_params)
     unless logged_in?
-      anon_cant(story_path(@story) + '#comment-add-wrapper') && return
+      anon_cant(story_path(@story) + '#comments') && return
     end
     @comment = @story.comments.build(comment_params)
     # @comment.author = current_user_name
@@ -33,9 +34,15 @@ class CommentsController < ApplicationController
     @comments = Comment.all
   end
 
-  def edit; end
+  def edit
+    # unless logged_in?
+    #   anon_cant(story_path(@story) + '#comments') && return
+    # end
+    # check_user(@comment.user)
+  end
 
   def update
+    # return unless check_user(@comment.user)
     if @comment.update(comment_params)
       redirect_to [@story, @comment], notice: 'Comment updated.'
     else
@@ -44,6 +51,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    # return unless check_user(@comment.user, true)
     @comment.destroy
     redirect_to @story, notice: 'Comment deleted.'
   end
@@ -60,5 +68,9 @@ class CommentsController < ApplicationController
 
   def load_comment
     @comment = Comment.find(params[:id])
+  end
+
+  def check_user
+    super(@comment.user, true)
   end
 end

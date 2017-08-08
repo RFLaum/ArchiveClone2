@@ -35,11 +35,21 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def resumable_error(attempted_action, error_page)
+    session[:left_off] = attempted_action
+    render 'errors/' + error_page, status: :forbidden
+  end
+
   #call when a non-logged-in user tries to do something only a logged-in user
   #can do
   def anon_cant(attempted_action)
-    session[:left_off] = attempted_action
-    render 'errors/not_logged_in', status: :forbidden
+    # session[:left_off] = attempted_action
+    # render 'errors/not_logged_in', status: :forbidden
+    resumable_error(attempted_action, 'not_logged_in')
+  end
+
+  def non_admin_cant(attempted_action)
+    resumable_error(attempted_action, 'not_admin')
   end
 
   def wrong_user(correct_user, admin_can = false)
@@ -50,7 +60,8 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
-    User.exists?(session[:user])
+    # User.exists?(session[:user])
+    User.valid_user?(session[:user])
     # UsersHelper::logged_in?
   end
 
@@ -74,15 +85,41 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user_or_guest
-    answer = current_user
-    unless answer
-      answer = User.new(name: 'guest', adult: false)
-    end
-    answer
+    # answer = current_user
+    # unless answer
+    #   answer = User.new(name: 'guest', adult: false)
+    # end
+    # answer
+
+    current_user || User.new(name: 'guest', adult: false)
   end
 
   def current_user_or_guest_name
     logged_in? ? session[:user] : 'guest'
+  end
+
+  #filter to keep non-admins from doing things they're not supposed to.
+  #call this with before_action
+  def check_admin
+    non_admin_cant(request.fullpath) unless is_admin?
+  end
+
+  def check_user(target_user, admin_can = false)
+    # success = is_correct_user?(target_user, admin_can)
+    # wrong_user(target_user, admin_can) unless success
+    # success
+    # if is_correct_user?(target_user, admin_can)
+    #   yield
+    # else
+    #   wrong_user(target_user, admin_can)
+    # end
+    unless is_correct_user?(target_user, admin_can)
+      wrong_user(target_user, admin_can)
+    end
+  end
+
+  def check_logged_in
+    anon_cant(request.fullpath) unless logged_in?
   end
 
 end

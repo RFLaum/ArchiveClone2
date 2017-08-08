@@ -10,6 +10,9 @@
 </dl>
 
 <br>
+<% if @user.deactivated %>
+<p>This user is no longer active.</p>
+<% end %>
 
 <h1>Stories:</h1>
 <% @user.stories.each do |story| %>
