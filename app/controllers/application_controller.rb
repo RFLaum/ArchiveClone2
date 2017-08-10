@@ -105,14 +105,6 @@ class ApplicationController < ActionController::Base
   end
 
   def check_user(target_user, admin_can = false)
-    # success = is_correct_user?(target_user, admin_can)
-    # wrong_user(target_user, admin_can) unless success
-    # success
-    # if is_correct_user?(target_user, admin_can)
-    #   yield
-    # else
-    #   wrong_user(target_user, admin_can)
-    # end
     unless is_correct_user?(target_user, admin_can)
       wrong_user(target_user, admin_can)
     end

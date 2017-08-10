@@ -1,6 +1,4 @@
-<% if defined? error_message %>
-  <span class="error"><%= error_message %></span>
-<% end %>
+<%= render partial: 'misc/error_header' %>
 
 <% #todo:https %>
 <%= form_tag('login', method: :post) do %>

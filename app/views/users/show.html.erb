@@ -1,3 +1,7 @@
+<% if is_correct_user?(@user) %>
+  <div><%= link_to 'Edit My Profile', edit_user_path(@user) %></div>
+<% end %>
+<%= image_tag @user.avatar.url %>
 <dl>
   <dt>Name:</dt>
   <dd><%= @user.name %></dd>

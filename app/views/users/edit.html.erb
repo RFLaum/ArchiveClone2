@@ -1,0 +1,20 @@
+<%= render partial: 'misc/error_header' %>
+
+<%= javascript_include_tag "edit_user", "data-turbolinks-track" => "reload" %>
+
+<%= simple_form_for @user do |f| %>
+  <%= f.input :adult, label: 'See adult works' %>
+  <% #have to use exists? rather than present? in case there were errors
+  #submitting the form the first time
+  %>
+  <% if @user.avatar.exists? %>
+    <%= image_tag @user.avatar.url %>
+    <%= f.input :delete_avatar, label:'Delete avatar?', as: :boolean %>
+  <% end %>
+  <%= f.input :avatar, as: :file %>
+  <%= f.input :password, label: 'New password', required: false %>
+  <%= f.input :password_confirmation, label: 'Confirm new password',
+    required: false %>
+  <%= f.input :old_password, label: 'Old password', required: false %>
+  <%= f.button :submit %>
+<% end %>

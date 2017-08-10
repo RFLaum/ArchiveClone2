@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   include ApplicationHelper
   before_action :set_user #, only: %i[show destroy send_confirmation]
   skip_before_action :set_user, only: %i[register index create logout login]
-  before_action :check_user, only: %i[deactivate]
+  before_action :check_user, only: %i[deactivate edit update]
 
   def register
     @user = User.new
@@ -14,9 +14,31 @@ class UsersController < ApplicationController
 
   def show; end
 
+  def edit; end
+
+  def update
+    pars = params_for_edit
+
+    if pars[:password].size + pars[:password_confirmation].size > 0
+      unless @user.authenticate(pars[:old_password])
+        @error_message = 'Incorrect password'
+      end
+    end
+
+    if defined? @error_message
+      render :edit #, locals: {error_message: error_message}
+    else
+      pars.delete(:old_password)
+      if @user.update(pars)
+        redirect_to @user
+      else
+        render :edit
+      end
+    end
+  end
+
   def create
-    @user = User.new(params.require(:user).permit(:name, :email, :password,
-                                                  :password_confirmation))
+    @user = User.new(params_for_create)
     if BannedAddress.is_banned?(@user.email)
       render('errors/generic_error',
              locals: { message: "That email is banned." }) && return
@@ -62,9 +84,11 @@ class UsersController < ApplicationController
   def login_receiver
     # @user = User.find(params[:user_name])
     if !@user
-      render :login, locals: { error_message: 'Invalid username' }
+      @error_message = 'Invalid username'
+      render :login #, locals: { error_message: 'Invalid username' }
     elsif !@user.authenticate(params[:password])
-      render :login, locals: { error_message: 'Invalid password' }
+      @error_message = 'Invalid password'
+      render :login #, locals: { error_message: 'Invalid password' }
     elsif !@user.is_confirmed
       render "not_confirmed"
     elsif @user.deactivated
@@ -125,19 +149,6 @@ class UsersController < ApplicationController
     session[:user] = @user.name
   end
 
-  # def try_login(user_name, password)
-  #   @user = User.find(user_name)
-  #   unless user
-  #     redirect_to login_page, notice: "Incorrect username"
-  #   end
-  #   if @user.password == password
-  #     login_internal
-  #     redirect_to @user
-  #   else
-  #     redirect_to login_page, notice: "Incorrect password"
-  #   end
-  # end
-
   def set_user
     @user = User.find(params[:id])
     @was_set_user_called = true
@@ -145,5 +156,15 @@ class UsersController < ApplicationController
 
   def check_user
     super(@user)
+  end
+
+  def params_for_create
+    params.require(:user).permit(:name, :email, :password,
+                                 :password_confirmation)
+  end
+
+  def params_for_edit
+    params.require(:user).permit(:adult, :avatar, :password, :delete_avatar,
+                                 :password_confirmation, :old_password)
   end
 end

@@ -61,3 +61,5 @@ gem 'simple_form'
 gem 'will_paginate', '>=3.0.2'
 
 gem 'composite_primary_keys', '~> 9.0', '>= 9.0.7'
+
+gem 'paperclip', '~> 5.1'
