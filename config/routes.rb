@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   get 'register' => 'users#register'
   get 'logout' => 'users#logout'
   match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put]
-  resources :users, except: [:new] do
+  resources :users, except: [:new], constraints: { id: /[^\/]+/ } do
     member do
       get 'send_confirmation'
     end

@@ -16,12 +16,23 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   has_secure_password
   # validates :password, length: { minimum: 8 }
+  has_attached_file :avatar,
+                    styles: { original: "100x100>" },
+                    default_url: "avatars/default_avatar.jpg"
+
+  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
+  validates_attachment_size :avatar, less_than: 200.kilobytes
+
+  def delete_avatar=(del)
+    self.avatar = nil if del.to_i == 1
+  end
+
+  def delete_avatar
+    false
+  end
 
   def story_permissions(story)
-    # answer = { read: false, edit: false, delete: false }
     if story.user == self
-      # answer[:read] = answer[:edit] = answer[:delete] = true
-      # return answer
       return { read: true, edit: true, delete: true }
     end
     if self.admin

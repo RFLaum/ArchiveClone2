@@ -41,3 +41,7 @@ dd {
 .right-box {
   float:right;
 }
+
+.disabled {
+  color: gray;
+}

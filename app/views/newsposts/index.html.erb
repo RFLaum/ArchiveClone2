@@ -6,8 +6,6 @@
   <%= link_to 'New Newspost', new_newspost_path %>
 <% end %>
 
-<p>Number of tags: <%= NewsTag.count %> </p>
-
 <div class = "posts-container">
   <% @newsposts.each do |post| %>
     <div class = "newspost" >
