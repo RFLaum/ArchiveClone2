@@ -1,0 +1,34 @@
+<div id='main-header'>
+  <div class='full-width'>
+    <a href='<% root_path %>'>
+      <%= image_tag(CLONE_CONFIG['LOGO_PATH'], id:'logo') %>
+      <%= CLONE_CONFIG['SITE_NAME'] %>
+    </a>
+    <span id='user-header'>
+      <% if logged_in? %>
+        <!-- Logged in as <%= name_link current_user %> -->
+         <!-- (<%= link_to('Log out', '/logout') %>) -->
+         <div class='dropdown'>
+           <%= name_link current_user %>
+           <ul class='dropdown-hidden'>
+             <li><%= link_to('Settings', edit_user_path(current_user)) %></li>
+             <li><%= link_to('Post new story', new_story_path) %></li>
+             <li><%= link_to('Log out', '/logout') %></li>
+           </ul>
+         </div>
+      <% else %>
+        <%= link_to('Log In', '/login') %>
+         or
+        <%= link_to('Register', '/register') %>
+      <% end %>
+    </span>
+  </div>
+  <div class='full-width'>
+    <%= link_to "Home", root_path %>
+    <%= link_to 'Users', users_path %>
+    <%= link_to 'Stories', stories_path %>
+    <% if is_admin? %>
+      <%= link_to 'Banned Addresses', admin_banned_addresses_path %>
+    <% end %>
+  </div>
+</div>

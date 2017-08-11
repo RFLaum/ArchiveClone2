@@ -1,0 +1,14 @@
+#main-header {
+  border: 1px solid black;
+  a:not(:hover) {
+    text-decoration: none;
+  }
+}
+
+#user-header {
+  // float: right;
+}
+
+img#logo {
+  height: 1.7em;
+}

@@ -1,0 +1,11 @@
+.dropdown-hidden {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background-color: silver;
+  list-style: none;
+}
+
+.dropdown:hover .dropdown-hidden {
+  display: block;
+}
