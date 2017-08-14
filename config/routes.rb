@@ -3,13 +3,15 @@ Rails.application.routes.draw do
   resources :newsposts
   get 'tags/search' => 'tags#search'
   get 'tags/find' => 'tags#find'
-  get 'tags/new' => 'tags#new'
-  post 'tags' => 'tags#create'
-  get 'tags/:name/works' => 'tags#show'
-  get 'tags/:name/edit' => 'tags#edit'
-  match 'tags/:name' => 'tags#update', via: %i[patch put]
-  delete 'tags/:name/delete' => 'tags#delete'
-  resources :tags
+  # get 'tags/new' => 'tags#new'
+  # post 'tags' => 'tags#create'
+  # get 'tags/:id/stories' => 'tags#show_stories'
+  # get 'tags/:id/edit' => 'tags#edit'
+  # match 'tags/:id' => 'tags#update', via: %i[patch put]
+  # delete 'tags/:id/delete' => 'tags#delete'
+  resources :tags do
+    resources :stories, only: %i[index]
+  end
 
   get 'stories/:id/chapters/all' => 'stories#showall'
   get 'stories/:id/all' => 'stories#showall'
