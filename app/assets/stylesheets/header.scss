@@ -1,0 +1,22 @@
+#main-header {
+  // border: 1px solid black;
+  a:not(:hover) {
+    text-decoration: none;
+  }
+}
+
+#user-header {
+  float: right;
+}
+
+img#logo {
+  height: 1.7em;
+}
+
+#navbar {
+  // background-color: #900;
+  background: linear-gradient(#900 70%, #600 100%);
+  > a:first-of-type {
+    margin-left: 2em;
+  }
+}

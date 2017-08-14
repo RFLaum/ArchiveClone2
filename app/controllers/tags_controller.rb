@@ -1,6 +1,7 @@
 class TagsController < ApplicationController
   before_action :find_tags, only: [:find]
-  before_action :set_tag, only: %i[show edit update destroy]
+  before_action :set_tag #, only: %i[show edit update destroy]
+  skip_before_action :set_tag, only: %i[index new create]
 
   # GET /tags
   # GET /tags.json
@@ -11,6 +12,10 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.json
   def show; end
+
+  # def show_stories
+    # @stories = @tag.stories
+  # end
 
   # GET /tags/new
   def new
@@ -63,7 +68,7 @@ class TagsController < ApplicationController
   private
 
   def set_tag
-    @tag = Tag.find_by(name: params[:name])
+    @tag = Tag.find_by(name: params[:id])
   end
 
   def tag_params

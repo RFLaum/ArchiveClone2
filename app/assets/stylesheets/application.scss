@@ -9,15 +9,18 @@
  * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
  */
 
+// @import "bootstrap-sprockets";
+// @import "bootstrap_custom";
+@import "*";
+
+body {
+  margin: 0px;
+}
+
 dl {
-  /*border:1px solid #ccc;*/
   clear: right;
-  /*padding: 1.286em .75em;*/
   position: relative;
   overflow: hidden;
 }
@@ -44,4 +47,12 @@ dd {
 
 .disabled {
   color: gray;
+}
+
+.full-width {
+  width: 100%;
+}
+
+a > img {
+  vertical-align: middle;
 }

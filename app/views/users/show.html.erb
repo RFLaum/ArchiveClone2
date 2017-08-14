@@ -3,10 +3,10 @@
 <% end %>
 <%= image_tag @user.avatar.url %>
 <dl>
-  <dt>Name:</dt>
+  <dt>Name</dt>
   <dd><%= @user.name %></dd>
   <% if @user.name == session[:user] %>
-    <dt>Email:</dt>
+    <dt>Email</dt>
     <dd><%= @user.email %></dd>
   <% end %>
   <dt>Joined</dt>

@@ -8,7 +8,12 @@ class StoriesController < ApplicationController
   # GET /stories
   # GET /stories.json
   def index
-    @stories = Story.all
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+      @stories = @tag.stories
+    else
+      @stories = Story.all
+    end
   end
 
   # GET /stories/1
