@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root 'special_pages#home'
   resources :newsposts
   get 'tags/search' => 'tags#search'
-  get 'tags/find' => 'tags#find'
+  get 'tags/find' => 'tags#search_results'
   # get 'tags/new' => 'tags#new'
   # post 'tags' => 'tags#create'
   # get 'tags/:id/stories' => 'tags#show_stories'

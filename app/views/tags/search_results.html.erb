@@ -1,0 +1,8 @@
+<% if @results.empty? %>
+  No tags found.
+<% end %>
+<table>
+  <% @results.each do |tag| %>
+    <tr><td><%= name_link tag %></td></tr>
+  <% end %>
+</table>
