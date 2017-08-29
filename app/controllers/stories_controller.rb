@@ -1,6 +1,6 @@
 class StoriesController < ApplicationController
   before_action :set_story
-  skip_before_action :set_story, only: %i[index new create]
+  skip_before_action :set_story, only: %i[index new create search search_results]
   before_action :check_logged_in, only: %i[new create]
   before_action :check_user, only: %i[edit update]
   before_action :check_user_or_admin, only: %i[destroy]
@@ -68,6 +68,18 @@ class StoriesController < ApplicationController
     end
   end
 
+  def search
+    render 'full_search_form'
+  end
+
+  def search_results
+    @pars = search_params
+    if !(@pars[:show_adult] || @pars[:show_non_adult])
+      @error = "You have chosen to show neither adult nor non-adult stories."
+    end
+    @results = Story.search(@pars) #.records
+  end
+
   private
 
   # todo: do we always need tags?
@@ -89,5 +101,10 @@ class StoriesController < ApplicationController
 
   def check_user_or_admin
     super_check_user(@story.user, true)
+  end
+
+  def search_params
+    params.permit(:title, :author, :updated, :created, :show_adult, :show_non_adult, :tags,
+                  :sort_by, :sort_direction)
   end
 end

@@ -68,3 +68,4 @@ gem 'paperclip', '~> 5.1'
 
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
+gem 'elasticsearch-dsl'

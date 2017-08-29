@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   root 'special_pages#home'
   resources :newsposts
-  get 'tags/search' => 'tags#search'
-  get 'tags/find' => 'tags#search_results'
+  # get 'tags/search' => 'tags#search'
+  # get 'tags/find' => 'tags#search_results'
   # get 'tags/new' => 'tags#new'
   # post 'tags' => 'tags#create'
   # get 'tags/:id/stories' => 'tags#show_stories'
@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   get 'stories/:id/chapters/all' => 'stories#showall'
   get 'stories/:id/all' => 'stories#showall'
   # get 'stories/:id/chapters/:chapter_num' => 'stories#show_chapter'
+  get 'stories/search' => 'stories#search'
+  post 'stories/search_results' => 'stories#search_results'
+  get 'stories/search_results' => 'stories#search_results'
   resources :stories do
     resources :chapters
     resources :comments
@@ -47,4 +50,7 @@ Rails.application.routes.draw do
   if Rails.env.development?
     get 'comments' => 'comments#index_all'
   end
+
+  get 'search' => 'search#full_form'
+  get 'results' => 'search#results'
 end

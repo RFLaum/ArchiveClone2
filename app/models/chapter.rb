@@ -1,6 +1,6 @@
 class Chapter < ApplicationRecord
   self.primary_keys = :story_id, :number
-  belongs_to :story #, dependent: :destroy
+  belongs_to :story, touch: true
 
   def get_title
     self.title.to_s

@@ -26,5 +26,5 @@ class Tag < ApplicationRecord
 
 end
 
-Tag.import
+# Tag.import
 # Tag.__elasticsearch__.create_index! force: true
