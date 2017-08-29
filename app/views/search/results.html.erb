@@ -1,0 +1,8 @@
+<% if @results.empty? %>
+  No results.
+<% end %>
+<table>
+  <% @results.each do |result| %>
+    <tr><td><%= name_link result %></td></tr>
+  <% end %>
+</table>

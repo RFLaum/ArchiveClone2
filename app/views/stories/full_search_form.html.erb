@@ -1,0 +1,74 @@
+<%= form_tag(stories_path + '/search_results', class: 'search-form', method: :get) do %>
+  <fieldset>
+    <legend>Work Info</legend>
+    <p class='submit'><%= submit_tag 'Search' %></p>
+    <dl>
+      <dt>
+        <%= label_tag(:title, 'Title') %>
+      </dt>
+      <dd>
+        <%= text_field_tag(:title) %>
+      </dd>
+      <dt>
+        <%= label_tag(:author, 'Author') %>
+      </dt>
+      <dd>
+        <%= text_field_tag(:author) %>
+      </dd>
+      <dt>
+        <%= label_tag(:created, 'Date Created') %>
+      </dt>
+      <dd>
+        <%= text_field_tag(:created) %>
+      </dd>
+      <dt>
+        <%= label_tag(:updated, 'Date Updated') %>
+      </dt>
+      <dd>
+        <%= text_field_tag(:updated) %>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+    <legend>Tags</legend>
+    <dl>
+      <dt>
+        Adult
+      </dt>
+      <dd>
+        <ul>
+          <li>
+            <%= check_box_tag(:show_adult) %>
+            <%= label_tag(:show_adult, 'Show adult works') %>
+          </li>
+          <li>
+            <%= check_box_tag(:show_non_adult, true) %>
+            <%= label_tag(:show_non_adult, 'Show general audience works') %>
+          </li>
+        </ul>
+      </dd>
+      <dt>
+        <%= label_tag(:tags, 'Tags') %>
+      </dt>
+      <dd>
+        <%= text_field_tag(:tags) %>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+    <legend>Search</legend>
+    <dl>
+      <dt><%= label_tag(:sort_by, 'Sort by') %></dt>
+      <dd>
+        <%= select_tag(:sort_by, options_for_select(Story::SORT_COLUMNS)) %>
+      </dd>
+      <dt><%= label_tag(:sort_direction, 'Sort direction') %></dt>
+      <dd>
+        <%= select_tag(:sort_direction,
+        options_for_select([['Ascending', 'asc'], ['Descending', 'desc']])) %>
+      </dd>
+    </dl>
+  </fieldset>
+<% end %>

@@ -1,4 +1,9 @@
+require 'elasticsearch/model'
+
 class User < ApplicationRecord
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   self.primary_key = :name
   has_many :stories, foreign_key: 'author', primary_key: 'name', dependent: :destroy
   has_many :comments, foreign_key: 'author', primary_key: 'name', dependent: :destroy
@@ -58,4 +63,17 @@ class User < ApplicationRecord
     self.where("email ~* ?", re_str)
   end
 
+  def self.search(query)
+    __elasticsearch__.search query: {
+      query_string: {
+        default_field: 'name',
+        default_operator: 'AND',
+        query: query
+      }
+    }
+  end
+
 end
+
+# User.__elasticsearch__.create_index! force: true
+# User.import

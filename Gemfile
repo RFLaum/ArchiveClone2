@@ -65,3 +65,7 @@ gem 'composite_primary_keys', '~> 9.0', '>= 9.0.7'
 gem 'paperclip', '~> 5.1'
 
 # gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
+
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
+gem 'elasticsearch-dsl'

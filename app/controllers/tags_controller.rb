@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
-  before_action :find_tags, only: [:find]
+  # before_action :find_tags, only: [:find]
   before_action :set_tag #, only: %i[show edit update destroy]
-  skip_before_action :set_tag, only: %i[index new create]
+  skip_before_action :set_tag, only: %i[index new create search search_results]
 
   # GET /tags
   # GET /tags.json
@@ -12,10 +12,6 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.json
   def show; end
-
-  # def show_stories
-    # @stories = @tag.stories
-  # end
 
   # GET /tags/new
   def new
@@ -65,6 +61,12 @@ class TagsController < ApplicationController
     end
   end
 
+  def search; end
+
+  def search_results
+    @results = Tag.search(params[:q]).records
+  end
+
   private
 
   def set_tag
@@ -76,24 +78,24 @@ class TagsController < ApplicationController
   end
 
   # todo: validate search query, make this safer
-  def finder(search_string, tbl, field)
-    input_query = search_string.downcase.squeeze(' ').strip
-    chunks = input_query.scan(/"[^"]+"|\-|\||\w+/)
-    query_arr = ['']
-    until chunks.empty?
-      holder = chunks.shift
-      unless query_arr[0].empty?
-        query_arr[0] += holder == '|' ? ' or ' : ' and '
-      end
-      query_arr[0] += field
-      query_arr[0] += holder == '-' ? ' not like ?' : ' like ?'
-      holder = chunks.shift if '-|'.include?(holder)
-      query_arr << '%' + holder.delete('"').tr('*', '%') + '%'
-    end
-    tbl.where(query_arr)
-  end
-
-  def find_tags
-    @results = finder(params[:q], Tag, 'name')
-  end
+  # def finder(search_string, tbl, field)
+  #   input_query = search_string.downcase.squeeze(' ').strip
+  #   chunks = input_query.scan(/"[^"]+"|\-|\||\w+/)
+  #   query_arr = ['']
+  #   until chunks.empty?
+  #     holder = chunks.shift
+  #     unless query_arr[0].empty?
+  #       query_arr[0] += holder == '|' ? ' or ' : ' and '
+  #     end
+  #     query_arr[0] += field
+  #     query_arr[0] += holder == '-' ? ' not like ?' : ' like ?'
+  #     holder = chunks.shift if '-|'.include?(holder)
+  #     query_arr << '%' + holder.delete('"').tr('*', '%') + '%'
+  #   end
+  #   tbl.where(query_arr)
+  # end
+  #
+  # def find_tags
+  #   @results = finder(params[:q], Tag, 'name')
+  # end
 end

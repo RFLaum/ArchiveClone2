@@ -1,0 +1,11 @@
+<% if @error.present? %>
+<p>Error: <%= @error %></p>
+<% else %>
+  <% if @results.empty? %>
+  <p>No stories found.</p>
+  <% end %>
+
+  <% @results.each do |record| %>
+    <%= render 'stories/summary', story: record %>
+  <% end %>
+<% end %>
