@@ -25,6 +25,7 @@ class StoriesController < ApplicationController
   # GET /stories/1/chapters/all
   # GET /stories/1/all
   def showall
+    @page_title = @story.title
     render :show, locals: { chapters: @story.get_chapters }
   end
 
@@ -47,8 +48,10 @@ class StoriesController < ApplicationController
   # PATCH/PUT /stories/1
   # PATCH/PUT /stories/1.json
   def update
+    pars = params.permit(:title, :author, :tags_add, :chapter_title, :body,
+                         :summary, deleted_tags: [])
     respond_to do |format|
-      if @story.update(story_params)
+      if @story.update(pars)
         format.html { redirect_to @story, notice: 'Story was successfully updated.' }
         format.json { render :show, status: :ok, location: @story }
       else
@@ -89,8 +92,8 @@ class StoriesController < ApplicationController
   end
 
   def story_params
-    params.require(:story).permit(:title, :author, :tags_public,
-                                  :chapter_title, :body, :summary)
+    params.require(:story).permit(:title, :author, :tags_public, :chapter_title,
+                                  :body, :summary) #, deleted_tags: [])
   end
 
   alias :super_check_user :check_user
@@ -104,7 +107,7 @@ class StoriesController < ApplicationController
   end
 
   def search_params
-    params.permit(:title, :author, :updated, :created, :show_adult, :show_non_adult, :tags,
-                  :sort_by, :sort_direction)
+    params.permit(:title, :author, :updated, :created, :show_adult,
+                  :show_non_adult, :tags, :sort_by, :sort_direction)
   end
 end

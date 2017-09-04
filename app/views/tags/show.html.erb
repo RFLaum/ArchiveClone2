@@ -9,6 +9,15 @@
   <strong>Adult:</strong>
   <%= @tag.adult %>
 </p>
+<p>
+  <strong>Implications:</strong>
+  <%= tags_links(@tag.implied_tags, false) %>
+</p>
+<p>
+  <strong>Impliers:</strong>
+  <%= tags_links(@tag.implying_tags, false) %>
+</p>
 
+<%= link_to 'Stories', tag_stories_path(@tag) %>
 <%= link_to 'Edit', edit_tag_path(@tag) %> |
 <%= link_to 'Back', tags_path %>

@@ -1,4 +1,5 @@
-<%= form_for(story) do |f| %>
+<% #form_for(story) do |f| %>
+<%= form_tag(story_path(story), method: :put) do %>
   <% if story.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(story.errors.count, "error") %> prohibited this story from being saved:</h2>
@@ -12,21 +13,42 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %>
-    <%= f.text_field :title %>
+    <%# f.label :title %>
+    <%# f.text_field :title %>
+    <%= label_tag(:title, 'Title') %>
+    <%= text_field_tag(:title, story.title) %>
   </div>
 
   <div class = "field">
-    <%= f.label :summary %>
-    <%= f.text_area :summary %>
+    <%# f.label :summary %>
+    <%# f.text_area :summary %>
+    <%= label_tag(:summary, 'Summary') %>
+    <%= text_area_tag(:summary, story.summary) %>
   </div>
 
-  <!-- <div class="field">
-    <%= f.label :author %>
-    <%= f.text_field :author %>
-  </div> -->
+  <div class='field'>
+    <%= label_tag(:tags_add, 'New tags') %>
+    <%= text_field_tag(:tags_add) %>
+  </div>
+
+  <table>
+    <tr>
+      <th>Tag</th>
+      <th>Delete?</th>
+    </tr>
+    <% story.tags.each do |tag| %>
+      <tr>
+        <td><%= tag.name %></td>
+        <td>
+          <%# f.check_box('deleted_tags[]', {value: tag.name}) %>
+          <%= check_box_tag('deleted_tags[]', tag.name) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
 
   <div class="actions">
-    <%= f.submit %>
+    <%# f.submit %>
+    <%= submit_tag 'Submit' %>
   </div>
 <% end %>
