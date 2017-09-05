@@ -8,11 +8,9 @@ class Tag < ApplicationRecord
 
   self.primary_key = :name
   has_and_belongs_to_many :stories, foreign_key: 'name'
-  # has_many :implications, foreign_key: 'implier', primary_key: 'name',
-  #                         dependent: :destroy
-  # has_many :implications, foreign_key: 'implied', primary_key: 'name',
-  #                         dependent: :destroy
-  # has_many :implieds, through: :implications, class_name: 'Tag',
+  # has_many :aliases, class_name: 'Tag', foreign_key: 'aliased_to'
+  # belongs_to :base_tag, class_name: 'Tag'
+
   has_many :implieds, class_name: 'Implication', foreign_key: 'implier',
                       primary_key: 'name'
   has_many :implied_tags, through: :implieds, source: :gen_tag
