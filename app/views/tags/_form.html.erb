@@ -1,3 +1,6 @@
+<%
+=begin
+%>
 <%= form_for(tag) do |f| %>
   <% if tag.errors.any? %>
     <div id="error_explanation">
@@ -24,4 +27,18 @@
   <div class="actions">
     <%= f.submit %>
   </div>
+<% end %>
+<%
+=end
+%>
+<%= form_tag(@tag, method: :put) do %>
+  <dl>
+    <dt><%= label_tag(:adult, 'Adult') %></dt>
+    <dd><%= check_box_tag(:adult, 1, @tag.adult) %></dd>
+    <dt><%= label_tag(:implications, "New Implications") %></dt>
+    <dd><%= text_field_tag(:implications) %></dd>
+    <dt><%= label_tag(:delete, 'Delete?') %></dt>
+    <dd><%= check_box_tag(:delete) %></dd>
+  </dl>
+  <%= submit_tag 'Update' %>
 <% end %>

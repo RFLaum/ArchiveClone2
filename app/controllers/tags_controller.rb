@@ -40,15 +40,22 @@ class TagsController < ApplicationController
   # PATCH/PUT /tags/1
   # PATCH/PUT /tags/1.json
   def update
-    respond_to do |format|
-      if @tag.update(tag_params)
-        format.html { redirect_to @tag, notice: 'Tag was successfully updated.' }
-        format.json { render :show, status: :ok, location: @tag }
-      else
-        format.html { render :edit }
-        format.json { render json: @tag.errors, status: :unprocessable_entity }
-      end
+    pars = params.permit(:adult, :implications, :delete)
+    if pars[:delete].present?
+      destroy && return
     end
+    @tag.adult = pars[:adult].present?
+    # @tag.set_adult(pars[:adult].present?)
+    if pars[:implications].present?
+      failed_imps = @tag.add_imps_by_name(pars[:implications])
+    end
+    @tag.save
+    notice = ''
+    if failed_imps.present?
+      notice = 'Error: could not add implications for the following tag(s): '
+      notice += failed_imps.join(', ')
+    end
+    redirect_to @tag, notice: notice
   end
 
   # DELETE /tags/1

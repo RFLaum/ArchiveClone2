@@ -28,6 +28,9 @@ dl {
 dt::after {
   content: ":";
 }
+form dt::after {
+  content: none;
+}
 
 dt {
   width: 25%;

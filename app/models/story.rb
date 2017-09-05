@@ -10,20 +10,24 @@ class Story < ApplicationRecord
   has_and_belongs_to_many :tags, association_foreign_key: 'name'
   has_many :chapters, dependent: :destroy
   has_many :comments, dependent: :destroy
-  belongs_to :user, foreign_key: 'author', primary_key: 'name' #, dependent: :destroy
+  belongs_to :user, foreign_key: 'author', primary_key: 'name'
 
   after_save :save_dummy
 
   def num_chapters
     chapters.size
   end
-
-  def add_tags(new_tags)
-    new_tags.each do |tag|
-      tag = Tag.tr_to_sql(tag)
-      tags << Tag.find_or_initialize_by(name: tag) unless tags.exists?(name: tag)
-    end
-  end
+  #
+  # def add_tags(new_tags)
+  #   new_tags.each do |tag|
+  #     tag = Tag.tr_to_sql(tag)
+  #     unless tags.exists?(name: tag)
+  #       this_tag = Tag.find_or_initialize_by(name: tag)
+  #       tags << this_tag
+  #       new_tags << this_tag.implied_tags
+  #     end
+  #   end
+  # end
 
   def get_chapter(num)
     chapters.find_by(number: num)
@@ -58,12 +62,6 @@ class Story < ApplicationRecord
   end
 
   def first_chapter
-    # return @dummy_chapter if chapters.empty?
-    # get_chapter(1)
-    # return get_chapter(1) unless chapters.empty?
-    # chapters.empty? ? @dummy_chapter : get_chapter(1)
-    # logger.debug "entered first_chapter"
-    # logger.debug "dummy class: #{@dummy_chapter.class}"
     dummy_saved? ? get_chapter(1) : dummy
   end
 
@@ -185,13 +183,10 @@ class Story < ApplicationRecord
     if query_params[:sort_by].present?
       order_clause = query_params[:sort_by]
       if order_clause == 'num_comments'
-        query = query.left_outer_joins(:comments) #.distinct
-        # query = query.select('stories.*, COUNT(comments.*) AS com_count')
-        # query = query.group('stories.id').order('com_count')
+        query = query.left_outer_joins(:comments)
         query = query.select('stories.*, COUNT(comments.*)')
-        query = query.group('stories.id') #.order('COUNT(comments.*)')
+        query = query.group('stories.id')
         order_clause = 'COUNT(comments.*)'
-        # logger.debug "sort_query: #{query.to_sql}"
       end
       query = query.order(order_clause + ' ' + query_params[:sort_direction])
     end

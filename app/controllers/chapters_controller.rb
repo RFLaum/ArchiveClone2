@@ -31,6 +31,7 @@ class ChaptersController < ApplicationController
 
   def show
     # @chapter = render 'stories/show', locals: { chapters: [@chapter] }
+    @page_title = @story.title
     @next_chapter = @prev_chapter = nil
     if @chapter.number > 1
       @prev_chapter = @story.get_chapter(@chapter.number - 1)
