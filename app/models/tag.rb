@@ -117,13 +117,24 @@ class Tag < ApplicationRecord
 
   def self.search(query)
     # __elasticsearch__.search query: { wildcard: { name: query } }
-    __elasticsearch__.search query: {
-      query_string: {
-        default_field: 'name',
-        default_operator: 'AND',
-        query: query
+    __elasticsearch__.search(
+      sort: [
+        { stories_count: { order: 'desc' } }
+      ],
+      query: {
+        query_string: {
+          default_field: 'name',
+          default_operator: 'AND',
+          query: query
+        }
       }
-    }
+    )
+  end
+
+  def self.reset_stories_count
+    Tag.find_each do |tag|
+      tag.update_attributes(stories_count: tag.stories.size)
+    end
   end
 
 end

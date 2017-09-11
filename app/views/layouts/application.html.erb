@@ -9,8 +9,10 @@
     </title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= stylesheet_link_tag    'application', 'token-input', media: 'all' %>
+    <%# stylesheet_link_tag    'token-input' %>
     <%= javascript_include_tag 'application' %>
+    <%= javascript_include_tag 'jquery.tokeninput' %>
   </head>
   <body>
     <%= render partial: 'misc/header' %>

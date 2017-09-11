@@ -13,3 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+$(function(){
+  $('.tag-input').tokenInput('/autocomplete/tag.json', {
+    tokenValue: 'name',
+    preventDuplicates: true,
+  });
+});
