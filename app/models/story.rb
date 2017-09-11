@@ -7,27 +7,33 @@ class Story < ApplicationRecord
   # include Elasticsearch::Model
   # include Elasticsearch::Model::Callbacks
   # has_and_belongs_to_many :sources
-  has_and_belongs_to_many :tags, association_foreign_key: 'name'
+  has_and_belongs_to_many :tags, association_foreign_key: 'name',
+                                 after_add: :increment_count,
+                                 after_remove: :decrement_count
   has_many :chapters, dependent: :destroy
   has_many :comments, dependent: :destroy
   belongs_to :user, foreign_key: 'author', primary_key: 'name'
 
   after_save :save_dummy
+  before_destroy :decrement_counts
+
+  def decrement_counts
+    tags.each do |tag|
+      tag.decrement!(:stories_count)
+    end
+  end
+
+  def increment_count(tag)
+    tag.increment!(:stories_count)
+  end
+
+  def decrement_count(tag)
+    tag.decrement!(:stories_count)
+  end
 
   def num_chapters
     chapters.size
   end
-  #
-  # def add_tags(new_tags)
-  #   new_tags.each do |tag|
-  #     tag = Tag.tr_to_sql(tag)
-  #     unless tags.exists?(name: tag)
-  #       this_tag = Tag.find_or_initialize_by(name: tag)
-  #       tags << this_tag
-  #       new_tags << this_tag.implied_tags
-  #     end
-  #   end
-  # end
 
   def get_chapter(num)
     chapters.find_by(number: num)
@@ -45,19 +51,7 @@ class Story < ApplicationRecord
     comments.build(author: author)
   end
 
-  # def initialize(*params)
-    # super(params)
-  # def make_dummy
-  #   logger.debug "entered make_dummy"
-  #   @dummy_chapter = Chapter.new(story_id: self.id, number: 1,
-  #                                title: '', body: '')
-  # end
-
   def dummy
-    # if @dummy_chapter.nil?
-    #   @dummy_chapter = Chapter.new(story_id: id, number: 1, title: '', body: '')
-    # end
-    # @dummy_chapter
     @dummy_chapter ||= Chapter.new(story_id: id, number: 1, title: '', body: '')
   end
 

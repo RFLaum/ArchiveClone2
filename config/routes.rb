@@ -53,4 +53,7 @@ Rails.application.routes.draw do
 
   get 'search' => 'search#full_form'
   get 'results' => 'search#results'
+
+  get 'autocomplete/tag' => 'auto_complete#tag'
+
 end
