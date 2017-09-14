@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   helper_method :chapters_path
   helper_method :is_admin?
   helper_method :is_correct_user?
+  helper_method :can_see_adult?
   protect_from_forgery with: :exception
 
   # def default_url_options
@@ -67,6 +68,10 @@ class ApplicationController < ActionController::Base
 
   def is_admin?
     logged_in? && User.find(session[:user]).admin
+  end
+
+  def can_see_adult?
+    logged_in? && User.find(session[:user]).adult
   end
 
   def is_correct_user?(target_user, admin_can_do = false)

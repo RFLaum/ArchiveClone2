@@ -5,6 +5,9 @@
   <p>No stories found.</p>
   <% end %>
 
+  <%= will_paginate @results %>
+  <%= page_entries_info(@results) %>
+
   <% @results.each do |record| %>
     <%= render 'stories/summary', story: record %>
   <% end %>

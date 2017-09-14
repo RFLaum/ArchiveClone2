@@ -21,3 +21,11 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    models:
+      story:
+        one: story
+        other: stories
+      newspost:
+        one: newspost
+        other: newsposts

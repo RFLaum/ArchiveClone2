@@ -19,8 +19,10 @@
         <td><%= tag.adult %></td>
         <td><%= tag.stories_count %></td>
         <td><%= link_to 'Show', tag %></td>
+        <% if is_admin? %>
         <td><%= link_to 'Edit', edit_tag_path(tag) %></td>
         <td><%= link_to 'Destroy', tag, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

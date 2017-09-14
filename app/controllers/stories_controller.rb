@@ -14,6 +14,10 @@ class StoriesController < ApplicationController
     else
       @stories = Story.all
     end
+    unless can_see_adult?
+      @stories = @stories.reject(&:is_adult?)
+    end
+    @stories = @stories.paginate(page: (params[:page] || 1))
   end
 
   # GET /stories/1
@@ -76,11 +80,14 @@ class StoriesController < ApplicationController
   end
 
   def search_results
+    @page_title = "Search Results"
     @pars = search_params
     if !(@pars[:show_adult] || @pars[:show_non_adult])
       @error = "You have chosen to show neither adult nor non-adult stories."
+    else
+      @results = Story.search(@pars) #.records
+      @results = @results.paginate(page: (params[:page] || 1))
     end
-    @results = Story.search(@pars) #.records
   end
 
   private

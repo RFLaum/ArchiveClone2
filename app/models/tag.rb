@@ -109,6 +109,14 @@ class Tag < ApplicationRecord
     stories
   end
 
+  # def story_count
+  #   if can_see_adult?
+  #     return stories.size
+  #   else
+  #     return stories.count { |s| !s.is_adult? }
+  #   end
+  # end
+
   #translates a user-input tag to the form used by the database
   #todo
   def self.tr_to_sql(dirty)
