@@ -18,6 +18,8 @@
   <%= tags_links(@tag.implying_tags, false) %>
 </p>
 
-<%= link_to 'Stories', tag_stories_path(@tag) %>
+<%= link_to 'Stories', tag_stories_path(@tag) %> |
+<% if is_admin? %>
 <%= link_to 'Edit', edit_tag_path(@tag) %> |
+<% end %>
 <%= link_to 'Back', tags_path %>

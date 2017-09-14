@@ -17,6 +17,10 @@ class Story < ApplicationRecord
   after_save :save_dummy
   before_destroy :decrement_counts
 
+  # scope :adults, -> {
+  #   where(adult_override: true).or
+  # }
+
   def decrement_counts
     tags.each do |tag|
       tag.decrement!(:stories_count)

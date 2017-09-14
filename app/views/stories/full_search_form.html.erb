@@ -1,3 +1,11 @@
+<% unless can_see_adult? %>
+  <script>
+    $(document).ready(function(){
+      inputToggle($('#show_adult'), true);
+    });
+  </script>
+<% end %>
+
 <%= form_tag(stories_path + '/search_results', class: 'search-form', method: :get) do %>
   <fieldset>
     <legend>Work Info</legend>
@@ -43,7 +51,7 @@
             <%= label_tag(:show_adult, 'Show adult works') %>
           </li>
           <li>
-            <%= check_box_tag(:show_non_adult, true) %>
+            <%= check_box_tag(:show_non_adult, 1, true) %>
             <%= label_tag(:show_non_adult, 'Show general audience works') %>
           </li>
         </ul>

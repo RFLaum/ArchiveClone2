@@ -6,7 +6,11 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.json
   def index
-    @tags = Tag.all
+    if can_see_adult?
+      @tags = Tag.all
+    else
+      @tags = Tag.where(adult: false)
+    end
   end
 
   # GET /tags/1

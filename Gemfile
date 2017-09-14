@@ -58,7 +58,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'simple_form'
-gem 'will_paginate', '>=3.0.2'
+gem 'will_paginate', '~> 3.1', '>= 3.1.6'
 
 gem 'composite_primary_keys', '~> 9.0', '>= 9.0.7'
 

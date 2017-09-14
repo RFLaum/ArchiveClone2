@@ -13,7 +13,8 @@ class NewspostsController < ApplicationController
     else
       @newsposts = Newspost.all
     end
-    @newsposts = @newsposts.order(created_at: :desc).paginate(page: params[:page])
+    page_num = params[:page] || 1
+    @newsposts = @newsposts.order(created_at: :desc).paginate(page: page_num)
   end
 
   # GET /newsposts/1
