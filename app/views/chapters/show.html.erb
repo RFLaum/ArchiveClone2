@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
-<%= render "stories/header", story: @story %>
-<%= render "misc/prev_next", next_obj: @next_chapter, prev_obj: @prev_chapter %>
+<%= render partial: "stories/header" %>
+<%# render "misc/prev_next", next_obj: @next_chapter, prev_obj: @prev_chapter %>
 <%= render "chapter_display", chapter: @chapter %>
 
 <% #if current_user_or_guest.story_permissions(@story)[:edit] %>

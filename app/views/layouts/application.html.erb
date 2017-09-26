@@ -13,11 +13,18 @@
     <%# stylesheet_link_tag    'token-input' %>
     <%= javascript_include_tag 'application' %>
     <%= javascript_include_tag 'jquery.tokeninput' %>
+    <%= javascript_include_tag 'https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=nmt5qoq2f4jdv69kb2t56uieru16lmjujzx8d70brl31fam6' %>
+    <script>
+    tinymce.init({
+      selector: '.wysiwyg'
+    });
+    </script>
   </head>
   <body>
     <%= render partial: 'misc/header' %>
     <div class='main-body'>
       <%= yield %>
     </div>
+    <%= render partial: 'misc/footer' %>
   </body>
 </html>

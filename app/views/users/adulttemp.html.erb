@@ -1,0 +1,8 @@
+<p class='warning'>This story has adult content. View it anyway?</p>
+<div class='button-row'>
+  <%= link_to 'View Story', url_for(params.permit!.merge(adult: true)) %>
+  <%= link_to 'Go Back', :back %>
+  <% if logged_in? %>
+    <%= link_to 'Edit My Preferences', edit_user_path(current_user) %>
+  <% end %>
+</div>

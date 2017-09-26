@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Bookmarks</h1>
+
+<%= will_paginate @bookmarks %>
+<%= page_entries_info(@bookmarks) %>
+
+<%
+=begin
+%>
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Story</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bookmarks.each do |mark| %>
+      <tr>
+        <td><%= mark.user_name %></td>
+        <td><%= mark.story_id %></td>
+        <td><%= mark.user_notes %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%
+=end
+%>
+
+<% usr = current_user %>
+<% @bookmarks.each do |mark| %>
+  <% description = (render partial: 'bookmarks/summary', locals: {mark: mark, usr: usr}) %>
+  <% if @show_summaries %>
+    <%= render 'stories/summary', story: mark.story, extra_content: description %>
+  <% else %>
+    <%= description %>
+  <% end %>
+<%
+=begin
+%>
+  <div class = 'bookmark-summary'>
+    Bookmarked by <%= name_link mark.user %> at <%= mark.created_at %>.
+    <% if mark.user_notes.present? %>
+      <br> Notes: <%= mark.user_notes %>
+    <% end %>
+    <% if mark.user == usr %>
+      <br>
+      <% if @user.present? %>
+        <%= link_to 'Edit', edit_user_bookmark_path(usr, mark) %>
+      <% elsif @story.present? %>
+        <%= link_to 'Edit', edit_story_bookmark_path(@story, mark) %>
+      <% end %>
+    <% end %>
+  </div>
+<%
+=end
+%>
+<% end %>
+
+<br>

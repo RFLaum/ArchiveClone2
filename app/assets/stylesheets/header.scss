@@ -19,4 +19,16 @@ img#logo {
   > a:first-of-type {
     margin-left: 2em;
   }
+  a {
+    color: white;
+  }
+}
+
+//
+// #navbar a {
+//   color: white;
+// }
+
+a.logo-link {
+  color: darkred;
 }

@@ -26,6 +26,15 @@ class ApplicationController < ActionController::Base
   #   story_chapters_path(chapter.story)
   # end
 
+  def save_location(path)
+    session[:left_off] = path
+  end
+
+  def clear_saved_location
+    session[:left_off] = nil
+  end
+
+  #path is default dest to redirect to if there's no saved location
   def redirect_override(path)
     other_dest = session[:left_off]
     session.delete(:left_off)
@@ -71,12 +80,20 @@ class ApplicationController < ActionController::Base
   end
 
   def can_see_adult?
-    logged_in? && User.find(session[:user]).adult
+    # logged_in? && (User.find(session[:user]).adult || session[:adult])
+    session[:adult] || (logged_in? && User.find(session[:user]).adult)
   end
 
   def is_correct_user?(target_user, admin_can_do = false)
+    # return false unless logged_in?
+    # return true if session[:user] == target_user.name
+    # admin_can_do && is_admin?
+    is_correct_user_name?(target_user.name, admin_can_do)
+  end
+
+  def is_correct_user_name?(target_name, admin_can_do = false)
     return false unless logged_in?
-    return true if session[:user] == target_user.name
+    return true if session[:user] == target_name
     admin_can_do && is_admin?
   end
 

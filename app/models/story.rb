@@ -14,6 +14,9 @@ class Story < ApplicationRecord
   has_many :comments, dependent: :destroy
   belongs_to :user, foreign_key: 'author', primary_key: 'name'
 
+  has_many :bookmarks, dependent: :destroy
+  has_many :favers, through: :bookmarks, source: :user
+
   after_save :save_dummy
   before_destroy :decrement_counts
 

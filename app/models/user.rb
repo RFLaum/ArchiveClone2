@@ -5,9 +5,15 @@ class User < ApplicationRecord
   include Elasticsearch::Model::Callbacks
 
   self.primary_key = :name
-  has_many :stories, foreign_key: 'author', primary_key: 'name', dependent: :destroy
-  has_many :comments, foreign_key: 'author', primary_key: 'name', dependent: :destroy
-  has_many :newsposts, foreign_key: 'admin', primary_key: 'name', dependent: :destroy
+  has_many :stories,   foreign_key: 'author', primary_key: 'name',
+                       dependent: :destroy
+  has_many :comments,  foreign_key: 'author', primary_key: 'name',
+                       dependent: :destroy
+  has_many :newsposts, foreign_key: 'admin', primary_key: 'name',
+                       dependent: :destroy
+  has_many :bookmarks, foreign_key: 'user_name', primary_key: 'name',
+                       dependent: :destroy
+  has_many :faves, through: :bookmarks, source: :story
 
   before_save { self.email = email.downcase }
   validates :name,
@@ -44,6 +50,7 @@ class User < ApplicationRecord
       return { read: true, edit: false, delete: true }
     end
     answer = { read: true, edit: false, delete: false }
+    #todo: handle this correctly when session[:adult] is true
     if story.is_adult? && !self.adult
       answer[:read] = false
     end
@@ -52,6 +59,10 @@ class User < ApplicationRecord
 
   def can_post?
     self.is_confirmed && !(self.deactivated)
+  end
+
+  def num_bookmarks(can_see_private)
+    can_see_private ? bookmarks.count : bookmarks.where(private: false).count
   end
 
   def self.valid_user?(username)
