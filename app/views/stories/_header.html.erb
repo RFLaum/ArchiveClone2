@@ -1,20 +1,78 @@
+<%
+=begin
+%>
+<div class='button-row'>
+  <% if @story.num_chapters > 1 %>
+    <% if chapters.size > 1 %>
+      <%= link_to 'Chapter by Chapter', @story.first_chapter %>
+    <% else %>
+      <%= link_to 'Entire Work', story_all(@story) %>
+      <% chap_num = chapters.first.number %>
+      <% unless chap_num == 1 %>
+        <%= link_to '&larr; Previous Chapter', @story.get_chapter(chap_num - 1) %>
+      <% end %>
+      <% unless chap_num == @story.num_chapters %>
+        <%= link_to 'Previous Chapter &rarr;', @story.get_chapter(chap_num + 1) %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= link_to 'Comments', '#comment-add-wrapper' %>
+</div>
+<%
+=end
+%>
+<div class = 'button-row'>
+  <% if @story.num_chapters > 1 %>
+    <% if @chapter.present? %>
+      <%= link_to 'Entire Work', story_all(@story) %>
+      <% if @prev_chapter.present? %>
+        <%= link_to raw('&larr; Previous Chapter'), @prev_chapter %>
+      <% end %>
+      <% if @next_chapter.present? %>
+        <%= link_to raw('Next Chapter &rarr;'), @next_chapter %>
+      <% end %>
+      <%= link_to 'Chapter Index', url_for(@story) + '/navigate' %>
+    <% else %>
+      <%= link_to 'Chapter by Chapter', @story.first_chapter %>
+    <% end %>
+  <% end %>
+  <%= link_to 'Comments', '#comment-add-wrapper' %>
+  <%# if logged_in? %>
+  <% if (usr = current_user) %>
+    <%# link_to 'Add Bookmark', story_bookmark(@story) %>
+    <% permissions = usr.story_permissions(@story) %>
+    <% if permissions[:edit] %>
+      <%= link_to 'Edit', edit_story_path(@story) %>
+    <% end %>
+    <% if permissions[:delete] %>
+      <%= link_to 'Destroy', @story, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+    <% if usr.faves.include?(@story) %>
+      <%= link_to 'Edit Bookmark', edit_story_bookmark_path(@story) %>
+    <% else %>
+      <%= link_to 'Add Bookmark', new_story_bookmark_path(@story) %>
+    <% end %>
+  <% end %>
+  <%= link_to 'Show Bookmarks', story_bookmarks_path(@story) %>
+</div>
+
 <div class='story-header'>
   <dl>
     <dt>Tags</dt>
     <dd>
-      <% tag_array = story.tags.map do |tag|
+      <% tag_array = @story.tags.map do |tag|
         link_to(tag.name, tag_stories_path(tag) )
       end %>
       <%= raw tag_array.join(', ') %>
     </dd>
     <dt>Summary</dt>
     <dd>
-      <%= story.summary %>
+      <%= @story.summary %>
     </dd>
     <dt>Created</dt>
-    <dd><%= story.created_at %> </dd>
+    <dd><%= @story.created_at %> </dd>
     <dt>Updated</dt>
-    <dd><%= story.updated_at %></dd>
+    <dd><%= @story.updated_at %></dd>
   </dl>
 </div>
 <h2 class="story-title"><%= @story.title %></h2>

@@ -1,0 +1,14 @@
+<div class = 'bookmark-summary'>
+  Bookmarked by <%= name_link mark.user %> at <%= mark.created_at %>.
+  <% if mark.user_notes.present? %>
+    <br> Notes: <%= mark.user_notes %>
+  <% end %>
+  <% if mark.user == usr %>
+    <br>
+    <% if @user.present? %>
+      <%= link_to 'Edit', edit_user_bookmark_path(usr, mark) %>
+    <% elsif @story.present? %>
+      <%= link_to 'Edit', edit_story_bookmark_path(@story, mark) %>
+    <% end %>
+  <% end %>
+</div>

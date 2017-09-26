@@ -5,12 +5,16 @@
 <dl>
   <dt>Name</dt>
   <dd><%= @user.name %></dd>
-  <% if @user.name == session[:user] %>
+  <%# if @user.name == session[:user] %>
+  <% is_self = is_correct_user?(@user) %>
+  <% if is_self %>
     <dt>Email</dt>
     <dd><%= @user.email %></dd>
   <% end %>
   <dt>Joined</dt>
   <dd><%= @user.created_at %></dd>
+  <dt><%= link_to 'Bookmarks', user_bookmarks_path(@user) %></dt>
+  <dd><%= @user.num_bookmarks(is_self) %></dd>
 </dl>
 
 <br>

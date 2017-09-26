@@ -30,14 +30,19 @@ class ChaptersController < ApplicationController
   end
 
   def show
-    # @chapter = render 'stories/show', locals: { chapters: [@chapter] }
-    @page_title = @story.title
-    @next_chapter = @prev_chapter = nil
-    if @chapter.number > 1
-      @prev_chapter = @story.get_chapter(@chapter.number - 1)
-    end
-    if @story.chapters.size > @chapter.number
-      @next_chapter = @story.get_chapter(@chapter.number + 1)
+    session[:adult] = true if params[:adult]
+    if @story.is_adult? && !can_see_adult?
+      @page_title = 'Warning'
+      render 'users/adulttemp'
+    else
+      @page_title = @story.title
+      @next_chapter = @prev_chapter = nil
+      if @chapter.number > 1
+        @prev_chapter = @story.get_chapter(@chapter.number - 1)
+      end
+      if @story.chapters.size > @chapter.number
+        @next_chapter = @story.get_chapter(@chapter.number + 1)
+      end
     end
   end
 

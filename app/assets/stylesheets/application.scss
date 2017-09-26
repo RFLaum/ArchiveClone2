@@ -15,14 +15,25 @@
 // @import "bootstrap_custom";
 @import "*";
 
+html {
+  height: 100%;
+}
+
 body {
   margin: 0px;
+  position: relative;
+  //this is to ensure that there's enough space for the footer; may have to
+  //change this number later
+  padding-bottom: 80px;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
 dl {
   clear: right;
   position: relative;
   overflow: hidden;
+  // margin-bottom: 0;
 }
 
 dt::after {
@@ -58,4 +69,51 @@ dd {
 
 a > img {
   vertical-align: middle;
+}
+
+a.button-appearance, .button-row > a {
+  text-decoration: none;
+  background: #eee linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
+  border: 1px solid #bbb;
+  border-radius: 0.25em;
+  padding: 0.25em 0.75em;
+  color: black;
+  display: inline-block;
+}
+
+.button-row {
+  margin-bottom: 1em;
+  float: right;
+  clear: both;
+}
+
+.warning {
+  background-color: yellow;
+  border: 1px solid orange;
+  box-shadow: inset 1px 1px 2px;
+  border-radius: 0.25em
+}
+
+.no-dec {
+  list-style-type: none;
+}
+
+#footer {
+  background-color: DarkRed;
+  color: white;
+  width: 100%;
+  overflow: auto;
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 16px;
+}
+
+//maybe do this with table-layout:fixed instead?
+#footer li {
+  width: 50%;
+}
+
+.horizontal-list > li {
+  float: left;
+  text-align: left;
 }

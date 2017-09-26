@@ -14,6 +14,7 @@
     <tr>
       <th>Title</th>
       <th>Author</th>
+      <th>Chapters</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -22,10 +23,12 @@
     <% usr = current_user_or_guest %>
     <% @stories.each do |story| %>
       <% permissions = usr.story_permissions(story) %>
-      <% next unless permissions[:read] %>
+      <% #don't need this b/c adult stories are filtered out in controller %>
+      <% #next unless permissions[:read] %>
       <tr>
         <td><%= name_link story %></td>
         <td><%= name_link story.user %></td>
+        <td><%= story.num_chapters %></td>
         <td><% if permissions[:edit] %>
           <%= link_to 'Edit', edit_story_path(story) %> <% end %></td>
         <td><% if permissions[:delete] %>

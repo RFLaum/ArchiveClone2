@@ -1,7 +1,7 @@
 <div class='story-summary'>
   <dl>
     <dt>Title</dt>
-    <dd><%= story.title %>
+    <dd><%= name_link story%>
     <dt>Tags</dt>
     <dd>
 <%
@@ -28,4 +28,7 @@
     <dt>Updated</dt>
     <dd><%= story.updated_at %>
   </dl>
+  <% if defined? extra_content %>
+    <%= extra_content %>
+  <% end %>
 </div>

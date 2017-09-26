@@ -15,14 +15,18 @@ Rails.application.routes.draw do
 
   get 'stories/:id/chapters/all' => 'stories#showall'
   get 'stories/:id/all' => 'stories#showall'
+  get 'stories/:id/navigate' => 'stories#navigate'
   # get 'stories/:id/chapters/:chapter_num' => 'stories#show_chapter'
+  # get 'stories/:id/add_bookmark' => 'bookmarks#new'
   get 'stories/search' => 'stories#search'
   post 'stories/search_results' => 'stories#search_results'
   get 'stories/search_results' => 'stories#search_results'
   resources :stories do
     resources :chapters
     resources :comments
+    resources :bookmarks, except: [:show]
   end
+  resources :bookmarks, only: [:index]
 
   # get 'stories/:story_id/add' => 'chapters#new'
   # get 'stories/:story_id/edit_chapter/:chapter_num' => 'chapters#edit'
@@ -40,7 +44,9 @@ Rails.application.routes.draw do
     member do
       get 'send_confirmation'
     end
+    resources :bookmarks, except: %i[new create show]
   end
+  # resources :bookmarks
 
   namespace :admin do
     resources :banned_addresses, only: %i[index destroy],

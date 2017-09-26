@@ -1,0 +1,8 @@
+<h2>Chapter Index for <%= name_link @story %> by <%= name_link @story.user %></h2>
+<ul class='no-dec'>
+  <% @chapters.each do |chapter| %>
+    <li>
+      <%= link_to chapter.heading, chapter %>
+    </li>
+  <% end %>
+</ul>

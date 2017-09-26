@@ -150,8 +150,10 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    @user = User.find(params[:id])
-    @was_set_user_called = true
+    #do this as find_by rather than find in order to better handle the case
+    #where an incorrect username is submitted
+    @user = User.find_by(name: params[:id])
+    # @was_set_user_called = true
   end
 
   def check_user

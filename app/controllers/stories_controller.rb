@@ -29,8 +29,14 @@ class StoriesController < ApplicationController
   # GET /stories/1/chapters/all
   # GET /stories/1/all
   def showall
-    @page_title = @story.title
-    render :show, locals: { chapters: @story.get_chapters }
+    session[:adult] = true if params[:adult]
+    if @story.is_adult? && !can_see_adult?
+      @page_title = 'Warning'
+      render 'users/adulttemp'
+    else
+      @page_title = @story.title
+      render :show, locals: { chapters: @story.get_chapters }
+    end
   end
 
   # GET /stories/new
@@ -88,6 +94,10 @@ class StoriesController < ApplicationController
       @results = Story.search(@pars) #.records
       @results = @results.paginate(page: (params[:page] || 1))
     end
+  end
+
+  def navigate
+    @chapters = @story.get_chapters
   end
 
   private

@@ -25,4 +25,10 @@ class Chapter < ApplicationRecord
     # story.add_tags(tag_array)
     story.set_tag_string(tag_string)
   end
+
+  def heading
+    answer = "Chapter #{number}"
+    answer += ": #{title}" unless title.empty?
+    answer
+  end
 end

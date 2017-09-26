@@ -29,3 +29,6 @@ en:
       newspost:
         one: newspost
         other: newsposts
+      bookmark:
+        one: bookmark
+        other: bookmarks
