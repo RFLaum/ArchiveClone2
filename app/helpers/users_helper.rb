@@ -16,4 +16,8 @@ module UsersHelper
   # def user_link(user)
   #   link_to(user.name, user)
   # end
+
+  def time_format(twz)
+    raw "<span class='time'>#{l current_user_or_guest.time_to_local(twz)}</span>"
+  end
 end

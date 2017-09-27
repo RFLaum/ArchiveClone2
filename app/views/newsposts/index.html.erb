@@ -17,10 +17,10 @@
       </center>
       <dl>
         <dt>Published</dt>
-        <dd><%= post.created_at %></dd>
+        <dd><%= time_format(post.created_at) %></dd>
         <% if post.created_at != post.updated_at %>
           <dt>Edited</dt>
-          <dd><%= post.updated_at %></dd>
+          <dd><%= time_format(post.updated_at) %></dd>
         <% end %>
         <dt>Tags</dt>
         <% tag_array = post.news_tags.map { |tag| name_link tag } %>

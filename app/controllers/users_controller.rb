@@ -167,6 +167,7 @@ class UsersController < ApplicationController
 
   def params_for_edit
     params.require(:user).permit(:adult, :avatar, :password, :delete_avatar,
-                                 :password_confirmation, :old_password)
+                                 :password_confirmation, :old_password,
+                                 :time_zone)
   end
 end

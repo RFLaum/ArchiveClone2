@@ -84,6 +84,15 @@ class User < ApplicationRecord
     }
   end
 
+  def get_zone
+    ActiveSupport::TimeZone.new(time_zone)
+  end
+
+  #paramater is a TimeWithZone
+  def time_to_local(twz)
+    twz.in_time_zone(get_zone)
+  end
+
 end
 
 # User.__elasticsearch__.create_index! force: true

@@ -70,9 +70,9 @@
       <%= @story.summary %>
     </dd>
     <dt>Created</dt>
-    <dd><%= @story.created_at %> </dd>
+    <dd><%= time_format(@story.created_at) %> </dd>
     <dt>Updated</dt>
-    <dd><%= @story.updated_at %></dd>
+    <dd><%= time_format(@story.updated_at) %></dd>
   </dl>
 </div>
 <h2 class="story-title"><%= @story.title %></h2>
