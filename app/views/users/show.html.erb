@@ -12,7 +12,7 @@
     <dd><%= @user.email %></dd>
   <% end %>
   <dt>Joined</dt>
-  <dd><%= @user.created_at %></dd>
+  <dd><%= time_format(@user.created_at) %></dd>
   <dt><%= link_to 'Bookmarks', user_bookmarks_path(@user) %></dt>
   <dd><%= @user.num_bookmarks(is_self) %></dd>
 </dl>

@@ -8,3 +8,6 @@
 <li><%= link_to 'Search', '/search' %></li>
 <li><%= link_to 'Story search', '/stories/search' %></li>
 </ul>
+
+<p><%= current_user_or_guest.time_zone %></p>
+<p><%= current_user_or_guest.get_zone.name %></p>

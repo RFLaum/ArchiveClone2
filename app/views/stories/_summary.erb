@@ -24,9 +24,9 @@
     <dt>Author</dt>
     <dd><%= name_link(story.user) %></dd>
     <dt>Created</dt>
-    <dd><%= story.created_at %> </dd>
+    <dd><%= time_format(story.created_at) %> </dd>
     <dt>Updated</dt>
-    <dd><%= story.updated_at %>
+    <dd><%= time_format(story.updated_at) %>
   </dl>
   <% if defined? extra_content %>
     <%= extra_content %>

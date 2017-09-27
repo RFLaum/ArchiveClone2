@@ -9,8 +9,8 @@
     <dt>Content</dt>
     <dd><%= comment.content %></dd>
     <dt>Created</dt>
-    <dd><%= comment.created_at %></dd>
+    <dd><%= time_format(comment.created_at) %></dd>
     <dt>Updated</dt>
-    <dd><%= comment.updated_at %></dd>
+    <dd><%= time_format(comment.updated_at) %></dd>
   </dl>
 <% end %>
