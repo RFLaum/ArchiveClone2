@@ -2,6 +2,6 @@
   <%= label_tag(:q, "Search") %>
   <%= text_field_tag(:q) %><br>
   <%= label_tag(:type, "Search Type") %>
-  <%= select_tag(:type, options_for_select(['Tag', 'User'])) %>
+  <%= select_tag(:type, options_for_select(['Tag', 'User', 'Source'])) %>
   <%= submit_tag("Search") %>
 <% end %>

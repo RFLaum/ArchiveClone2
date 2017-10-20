@@ -9,3 +9,6 @@
 User.create(name: 'admin', email: 'zzedar+admin@gmail.com',
             password: 'adminpassword', password_confirmation: 'adminpassword',
             is_confirmed: true, adult: true, admin: true)
+Source.create(name: 'Foundation', book: true)
+Source.create(name: 'The Matrix', movies: true)
+Source.create(name: 'The Identity Matrix', book: true)

@@ -8,6 +8,8 @@
       <th>Name</th>
       <th>Adult</th>
       <th>Count</th>
+      <th>Parents</th>
+      <th>Children</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,6 +20,8 @@
         <td><%= tag.name %></td>
         <td><%= tag.adult %></td>
         <td><%= tag.stories_count %></td>
+        <td><%= tag.implying_tags.count %></td>
+        <td><%= tag.implied_tags.count %></td>
         <td><%= link_to 'Show', tag %></td>
         <% if is_admin? %>
         <td><%= link_to 'Edit', edit_tag_path(tag) %></td>

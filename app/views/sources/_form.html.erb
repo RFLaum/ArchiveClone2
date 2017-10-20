@@ -1,0 +1,10 @@
+<%= render 'special_pages/autocomplete_script', sing: 'character', coll: @source.characters %>
+
+<%= simple_form_for(@source) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :chars_public, label: 'Characters', input_html: {class: 'character-input'} %>
+  <% Source.source_singulars.each do |k,v| %>
+    <%= f.input k, label: v %>
+  <% end %>
+  <%= f.button :submit %>
+<% end %>

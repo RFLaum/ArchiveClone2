@@ -14,10 +14,10 @@ class Newspost < ApplicationRecord
 
   private
 
-  def get_tags
+  def get_tags(type = nil)
     news_tags
   end
-  def tag_class
+  def tag_class(type = nil)
     NewsTag
   end
 end

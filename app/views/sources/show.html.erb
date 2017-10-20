@@ -1,0 +1,17 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @source.name %>
+</p>
+
+<p>
+  <strong>Characters:</strong>
+  <%= tagesque_links(@source.characters, 'character', false) %>
+</p>
+
+<%= link_to 'Stories', source_stories_path(@source) %> |
+<% if is_admin? %>
+<%= link_to 'Edit', edit_source_path(@source) %> |
+<% end %>
+<%= link_to 'Back', sources_path %>

@@ -1,5 +1,9 @@
 <h1>New Story</h1>
 
+<%# render 'special_pages/autocomplete_script', sing: 'tag', coll: @story.tags %>
+<%# render 'special_pages/autocomplete_script', sing: 'source', coll: @story.sources %>
+<%= render partial: 'autocompletes' %>
+
 <%= form_for(@story) do |f| %>
   <%= render 'story_meta', f: f %>
   <%= render 'chapters/chapter_body_edit', f: f %>

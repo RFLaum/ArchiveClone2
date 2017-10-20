@@ -58,12 +58,13 @@
 
 <div class='story-header'>
   <dl>
+    <dt>Sources</dt>
+    <dd>
+      <%= @story.sources.map(&:name).join(', ') %>
+    </dd>
     <dt>Tags</dt>
     <dd>
-      <% tag_array = @story.tags.map do |tag|
-        link_to(tag.name, tag_stories_path(tag) )
-      end %>
-      <%= raw tag_array.join(', ') %>
+      <%= tags_links(@story.tags, true) %>
     </dd>
     <dt>Summary</dt>
     <dd>

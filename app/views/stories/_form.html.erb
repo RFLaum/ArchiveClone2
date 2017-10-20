@@ -26,11 +26,33 @@
     <%= text_area_tag(:summary, story.summary) %>
   </div>
 
+  <div class='field script-only'>
+    <%= label_tag :tags_public, "Tags" %>
+    <%= text_field_tag :tags_public, nil, class: 'tag-input' %>
+  </div>
+
+  <div class='field script-only'>
+    <%= label_tag :sources_public, "Sources" %>
+    <%= text_field_tag :sources_public, nil, class: 'source-input' %>
+  </div>
+
+  <div class='field'>
+    <%= label_tag :chars_public, "Characters" %>
+    <%= text_field_tag :chars_public, nil, class: 'character-input' %>
+  </div>
+
+<noscript>
   <div class='field'>
     <%= label_tag(:tags_add, 'New tags') %>
     <%= text_field_tag(:tags_add, nil, class: 'tag-input') %>
   </div>
 
+  <div class='field'>
+    <%= label_tag(:srcs_add, 'New sources') %>
+    <%= text_field_tag(:srcs_add, nil, class: 'source-input') %>
+  </div>
+
+  <% unless story.tags.empty? %>
   <table>
     <tr>
       <th>Tag</th>
@@ -46,6 +68,42 @@
       </tr>
     <% end %>
   </table>
+  <% end %>
+
+  <% unless story.characters.empty? %>
+  <table>
+    <tr>
+      <th>Character</th>
+      <th>Delete?</th>
+    </tr>
+    <% story.characters.each do |char| %>
+      <tr>
+        <td><%= char.name %></td>
+        <td>
+          <%= check_box_tag('deleted_chars[]', char.id) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <% end %>
+
+  <% unless story.sources.empty? %>
+  <table>
+    <tr>
+      <th>Source</th>
+      <th>Delete?</th>
+    </tr>
+    <% story.sources.each do |src| %>
+      <tr>
+        <td><%= src.name %></td>
+        <td>
+          <%= check_box_tag('deleted_sources[]', src.id) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <% end %>
+</noscript>
 
   <div class="actions">
     <%# f.submit %>

@@ -1,5 +1,8 @@
 <% if @results.empty? %>
   No results.
+<% else %>
+  <%= will_paginate @results %>
+  <%= page_entries_info(@results) %>
 <% end %>
 <table>
   <% @results.each do |result| %>

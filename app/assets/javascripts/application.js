@@ -14,9 +14,21 @@
 //= require jquery_ujs
 //= require_tree .
 
+// $(function(){
+//   $('.tag-input').tokenInput('/autocomplete/tag.json', {
+//     tokenValue: 'name',
+//     preventDuplicates: true,
+//   });
+// });
 $(function(){
-  $('.tag-input').tokenInput('/autocomplete/tag.json', {
-    tokenValue: 'name',
-    preventDuplicates: true,
-  });
+  $('.script-only').removeClass('script-only');
 });
+//
+// $(function(){
+//   $('.source-input').tokenInput('/autocomplete/source.json', {
+//     //use name rather than id because otherwise we have trouble handling newly
+//     //created tags
+//     tokenValue: 'name',
+//     preventDuplicates: true
+//   });
+// });

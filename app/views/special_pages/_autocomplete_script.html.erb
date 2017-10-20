@@ -1,0 +1,15 @@
+<script>
+  <% class_sel = ".#{sing}-input" %>
+  <% address = "/autocomplete/#{sing}.json" %>
+  $(function(){
+    $('<%= class_sel %>').tokenInput('<%= address %>', {
+      tokenValue: 'name',
+      preventDuplicates: true,
+      prePopulate: [
+        <% coll.each do |obj| %>
+          {name: "<%= obj.name %>"},
+        <% end %>
+      ]
+    });
+  });
+</script>

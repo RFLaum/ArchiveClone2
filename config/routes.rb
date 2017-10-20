@@ -12,10 +12,17 @@ Rails.application.routes.draw do
   resources :tags do
     resources :stories, only: %i[index]
   end
+  resources :characters do
+    resources :stories, only: %i[index]
+  end
+  resources :sources do
+    resources :stories, only: %i[index]
+  end
 
   get 'stories/:id/chapters/all' => 'stories#showall'
   get 'stories/:id/all' => 'stories#showall'
   get 'stories/:id/navigate' => 'stories#navigate'
+  # get 'stories/:id/tags' => 'stories#tag_list', constraints: lambda { |req| req.format == :json }
   # get 'stories/:id/chapters/:chapter_num' => 'stories#show_chapter'
   # get 'stories/:id/add_bookmark' => 'bookmarks#new'
   get 'stories/search' => 'stories#search'
@@ -61,5 +68,11 @@ Rails.application.routes.draw do
   get 'results' => 'search#results'
 
   get 'autocomplete/tag' => 'auto_complete#tag'
+  get 'autocomplete/source' => 'auto_complete#source'
+  get 'autocomplete/character' => 'auto_complete#character'
+
+  get 'sources/search' => 'sources#search_form'
+  get 'sources/results' => 'sources#search_results'
+  resources :sources
 
 end
