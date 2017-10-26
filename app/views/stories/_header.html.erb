@@ -60,7 +60,11 @@
   <dl>
     <dt>Sources</dt>
     <dd>
-      <%= @story.sources.map(&:name).join(', ') %>
+      <%= tagesque_links(@story.sources, 'source', true) %>
+    </dd>
+    <dt>Characters</dt>
+    <dd>
+      <%= tagesque_links(@story.characters, 'character', true) %>
     </dd>
     <dt>Tags</dt>
     <dd>

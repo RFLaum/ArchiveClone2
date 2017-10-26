@@ -59,8 +59,13 @@ class StoriesController < ApplicationController
   # POST /stories.json
   def create
     @story = Story.new(story_params)
-    current_user.stories << @story
-    redirect_to @story
+    if @story.valid?
+      current_user.stories << @story
+      redirect_to @story
+    else
+      # @errors = @story.errors.messages
+      render :new
+    end
   end
 
   # PATCH/PUT /stories/1
@@ -75,10 +80,11 @@ class StoriesController < ApplicationController
       old_holder[assoc] = @story.send((assoc + '_ids').to_sym).sort
     end
 
-    pars = params.permit(:title, :author, :tags_add, :srcs_add, :tags_public,
-                         :sources_public, :chars_public, :chapter_title, :body,
-                         :summary, deleted_tags: [], deleted_chars: [],
-                         deleted_sources: [])
+    # pars = params.permit(:title, :author, :tags_add, :srcs_add, :tags_public,
+    #                      :sources_public, :chars_public, :chapter_title, :body,
+    #                      :summary, deleted_tags: [], deleted_characters: [],
+    #                      deleted_sources: [])
+    pars = story_params
     if @story.update(pars)
       assocs.each do |assoc|
         #need to do this to force Rails to refresh from the DB
@@ -135,8 +141,11 @@ class StoriesController < ApplicationController
   end
 
   def story_params
-    params.require(:story).permit(:title, :author, :tags_public, :chapter_title,
-                                  :body, :summary, :sources_public)
+    params.require(:story)
+          .permit(:title, :author, :tags_add, :srcs_add, :tags_public,
+                  :sources_public, :chars_public, :chapter_title, :body,
+                  :summary, deleted_tags: [], deleted_characters: [],
+                  deleted_sources: [])
   end
 
   alias :super_check_user :check_user

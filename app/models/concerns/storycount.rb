@@ -6,6 +6,7 @@ module Storycount
   module ClassMethods
 
     def search(query)
+      # logger.debug "storycount search"
       # __elasticsearch__.search query: { wildcard: { name: query } }
       __elasticsearch__.search(
         sort: [

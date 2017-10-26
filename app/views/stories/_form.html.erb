@@ -1,4 +1,10 @@
-<% #form_for(story) do |f| %>
+<%= form_for(story) do |f| %>
+  <%= render 'story_meta', f: f, errors: story.errors.messages, story: story %>
+  <%= f.submit 'Submit' %>
+<% end %>
+<%
+=begin
+%>
 <%= form_tag(story_path(story), method: :put) do %>
   <% if story.errors.any? %>
     <div id="error_explanation">
@@ -11,6 +17,7 @@
       </ul>
     </div>
   <% end %>
+
 
   <div class="field">
     <%# f.label :title %>
@@ -110,3 +117,6 @@
     <%= submit_tag 'Submit' %>
   </div>
 <% end %>
+<%
+=end
+%>

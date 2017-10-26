@@ -146,6 +146,10 @@ class Tag < ApplicationRecord
   #   end
   # end
 
+  def display_name
+    name
+  end
+  
 end
 
 # Tag.import

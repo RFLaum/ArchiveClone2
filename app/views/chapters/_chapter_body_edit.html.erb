@@ -1,6 +1,18 @@
+<%
+=begin
+%>
 <%= f.label :chapter_title, "Chapter Title (optional):" %>
 <%= f.text_field :chapter_title %>
 <br>
 <%= f.label :body, "Chapter Text:" %>
 <%= f.text_area :body, class: 'wysiwyg' %>
 <br>
+<%
+=end
+%>
+
+<%= render 'special_pages/form_helper_errors', f: f, meth: :chapter_title,
+disp: 'Chapter title', type: :text_field, errors: errors %>
+<%= render 'special_pages/form_helper_errors', f: f, meth: :body,
+disp: 'Chapter text', type: :text_area, errors: errors,
+options: {class: 'wysiwyg'} %>

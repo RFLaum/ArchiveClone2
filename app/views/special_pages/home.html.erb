@@ -9,10 +9,12 @@
 <li><%= link_to 'Search', '/search' %></li>
 <li><%= link_to 'Story search', '/stories/search' %></li>
 <li><%= link_to 'Source search', '/sources/search' %></li>
+<li><%= link_to 'Characters', characters_path %></li>
 </ul>
 
 <% #TODO: remove this for production %>
 <% [Tag, Source, Character].each do |klass| %>
+  <%# klass.reset_stories_count %>
   <% klass.find_each do |obj| %>
     <% if obj.stories_count != obj.stories.count %>
       <%= name_link obj %> <%= obj.stories.count %> <%= obj.stories_count %><br>

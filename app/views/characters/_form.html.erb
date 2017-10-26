@@ -1,0 +1,10 @@
+<% src_arr = [] %>
+<% src_arr << @character.source if @character.source %>
+
+<%= render 'special_pages/autocomplete_script', sing: 'source', coll: src_arr, is_sing: true%>
+
+<%= simple_form_for(@character) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :source_name, input_html: {class: 'source-input'} %>
+  <%= f.button :submit %>
+<% end %>

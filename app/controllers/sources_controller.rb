@@ -24,7 +24,7 @@ class SourcesController < SuperSearchController
 
   def index
     @page_title = 'Sources'
-    @sources = Source.all
+    @sources = Source.all.paginate(page: params[:page])
   end
 
   def new
@@ -34,6 +34,7 @@ class SourcesController < SuperSearchController
 
   def create
     @source = Source.new(source_params)
+    @source.save
     redirect_to @source
   end
 
@@ -48,6 +49,7 @@ class SourcesController < SuperSearchController
 
   def destroy
     @source.destroy
+    redirect_to sources_url
   end
 
   private

@@ -108,4 +108,8 @@ class Source < ApplicationRecord
       characters << Character.find_or_initialize_by(name: char)
     end
   end
+
+  def display_name
+    name
+  end
 end

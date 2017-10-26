@@ -1,4 +1,7 @@
 <% #form elements for altering the story's metadata %>
+<%
+=begin
+%>
 <%= f.label :title, "Story Title:" %>
 <%= f.text_field :title %>
 <br>
@@ -11,3 +14,59 @@
 <%= f.label :summary, "Blurb:" %>
 <%= f.text_area :summary %>
 <br>
+<%
+=end
+%>
+
+<%= render 'special_pages/form_helper_errors', f: f, meth: :title,
+disp: 'Story title', type: :text_field, errors: errors %>
+<%= render 'special_pages/form_helper_errors', f: f, meth: :tags_public,
+disp: 'Tags', type: :text_field, options: {class: 'tag-input'},
+errors: errors, div_class: 'script-only' %>
+<%= render 'special_pages/form_helper_errors', f: f, meth: :sources_public,
+disp: 'Sources', type: :text_field, options: {class: 'source-input'},
+errors: errors, div_class: 'script-only' %>
+<%= render 'special_pages/form_helper_errors', f: f, meth: :chars_public,
+disp: 'Characters', type: :text_field, options: {class: 'character-input'},
+errors: errors, div_class: 'script-only' %>
+<%= render 'special_pages/form_helper_errors', f: f, meth: :summary,
+disp: 'Blurb', type: :text_area, errors: errors %>
+<noscript>
+  <%= render 'special_pages/form_helper_errors', f: f, meth: :tags_add,
+  disp: 'New tags', type: :text_field, errors: errors %>
+  <%= render 'special_pages/form_helper_errors', f: f, meth: :srcs_add,
+  disp: 'New sources', type: :text_field, errors: errors %>
+  <%= render 'special_pages/form_helper_errors', f: f, meth: :chars_add,
+  disp: 'New characters', type: :text_field, errors: errors %>
+
+  <% [
+    [story.tags, Tag],
+    [story.sources, Source],
+    [story.characters, Character],
+  ].each do |arr| %>
+    <% unless arr[0].empty? %>
+      <% class_name = arr[1].to_s %>
+      <% base_name = "deleted_#{class_name.downcase}s" %>
+      <% check_id = "story[#{base_name}][]" %>
+      <% prim_key = arr[1].primary_key.to_sym %>
+      <table>
+        <tr>
+          <th><%= class_name %></th>
+          <th>Delete?</th>
+        </tr>
+        <% counter = 0 %>
+        <% arr[0].each do |obj| %>
+          <% counter += 1 %>
+          <tr>
+            <td><%= obj.name %></td>
+            <td>
+              <% val = obj[prim_key] %>
+              <%# f.check_box(check_id + " [#{val}]", {value: val}) %>
+              <%= check_box_tag(check_id, val, false, id: "#{base_name}_#{counter}") %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
+  <% end %>
+</noscript>

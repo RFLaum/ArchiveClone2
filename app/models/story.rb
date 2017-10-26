@@ -4,9 +4,19 @@
 class Story < ApplicationRecord
   include Taggable
   include Searchable
+
+  # validates :title, presence: true
+  validates :title, length: { in: 5..80,
+    too_short: "must be at least %{count} characters long",
+    too_long: "must be at most %{count} characters long" }
+
+  validates :summary, length: { in: 10..200,
+    too_short: "must be at least %{count} characters long",
+    too_long: "must be at most %{count} characters long" }
+
+  validate :check_chapter_validity, on: :create
   # include Elasticsearch::Model
   # include Elasticsearch::Model::Callbacks
-  # has_and_belongs_to_many :sources
   has_and_belongs_to_many :tags, association_foreign_key: 'name',
                                  after_add: %i[increment_count add_kids],
                                  after_remove: :decrement_count
@@ -22,13 +32,28 @@ class Story < ApplicationRecord
   has_and_belongs_to_many :characters, after_add: %i[increment_count add_kids],
                                        after_remove: :decrement_count
 
-  after_save :save_dummy
+  # after_save :save_dummy, on: :create
+  after_create :save_dummy, :set_initial_counts
   before_destroy :decrement_counts
   after_update :add_missing_sources
 
-  # scope :adults, -> {
-  #   where(adult_override: true).or
-  # }
+  def check_chapter_validity
+    #have to check validity first, or else the message won't be set
+    #we don't want to do this with validates_associated, becaause we only want
+    #to check this when creating the story, not when editing it
+    if first_chapter.invalid?
+      msg = first_chapter.errors.messages[:body]
+      errors.add(:body, msg) unless msg.empty?
+    end
+  end
+
+  def set_initial_counts
+    [tags, sources, characters].each do |coll|
+      coll.each do |obj|
+        obj.increment!(:stories_count)
+      end
+    end
+  end
 
   def decrement_counts
     [tags, characters, sources].each do |arr|
@@ -39,12 +64,11 @@ class Story < ApplicationRecord
   end
 
   def increment_count(obj)
-    logger.debug "increment #{obj.name}"
-    obj.increment!(:stories_count)
+    obj.increment!(:stories_count) unless new_record?
   end
 
   def decrement_count(obj)
-    logger.debug "decrement #{obj.name}"
+    # logger.debug "decrement_count #{obj.name}"
     obj.decrement!(:stories_count)
   end
 
@@ -248,7 +272,7 @@ class Story < ApplicationRecord
     end
   end
 
-  def deleted_chars=(chars_to_delete)
+  def deleted_characters=(chars_to_delete)
     delete_only(chars_to_delete, characters)
   end
 
@@ -260,22 +284,35 @@ class Story < ApplicationRecord
     delete_only(srcs_to_delete, sources)
   end
 
+  def deleted_tags=(tags_to_delete)
+    delete_only(tags_to_delete, tags)
+  end
+
   def add_missing_sources
     add_missing_imps(characters, :source)
+    add_missing_imps(tags, :tag)
   end
 
   def srcs_add=(srcs_string)
-    # logger.debug "srcs_add test"
-    # logger.debug "#{srcs_string}\t#{srcs_string.class}"
     set_tag_string(srcs_string, false, :source)
-    # src_arr = srcs_string.split(/,\s*/)
-    # src_arr.each do |str|
-    #   if str =~ /\A\d+\z/
-    #     src_to_add = Source.find(str.to_i)
-    #   else
-    #     src_to_add =
-    #   end
-    # end
+  end
+
+  def srcs_add; ''; end
+
+  def tags_add=(tags_string)
+    set_tag_string(tags_string, false, :tag)
+  end
+
+  def tags_add; ''; end
+
+  def chars_add=(chars_string)
+    set_tag_string(chars_string, false, :character)
+  end
+
+  def chars_add; ''; end
+
+  def display_name
+    title
   end
 
   private

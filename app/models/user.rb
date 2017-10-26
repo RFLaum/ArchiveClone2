@@ -93,6 +93,10 @@ class User < ApplicationRecord
     twz.in_time_zone(get_zone)
   end
 
+  def display_name
+    name
+  end
+
 end
 
 # User.__elasticsearch__.create_index! force: true
