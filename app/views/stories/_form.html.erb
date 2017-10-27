@@ -1,7 +1,19 @@
+<%
+=begin
+%>
 <%= form_for(story) do |f| %>
   <%= render 'story_meta', f: f, errors: story.errors.messages, story: story %>
   <%= f.submit 'Submit' %>
 <% end %>
+<%
+=end
+%>
+
+<%= simple_form_for(story) do |f| %>
+  <%= render 'story_meta', f:f, story: story %>
+  <%= f.button :submit %>
+<% end %>
+
 <%
 =begin
 %>

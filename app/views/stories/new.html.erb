@@ -4,12 +4,24 @@
 <%# render 'special_pages/autocomplete_script', sing: 'source', coll: @story.sources %>
 <%= render partial: 'autocompletes' %>
 
+<%
+=begin
+%>
 <% errors = @story.errors.messages %>
 
 <%= form_for(@story) do |f| %>
   <%= render 'story_meta', f: f, errors: errors, story: @story %>
   <%= render 'chapters/chapter_body_edit', f: f, errors: errors %>
   <%= f.submit 'Submit' %>
+<% end %>
+<%
+=end
+%>
+
+<%= simple_form_for(@story) do |f| %>
+  <%= render 'story_meta', f: f, story: @story %>
+  <%= render 'chapters/chapter_body_edit', f: f%>
+  <%= f.button :submit %>
 <% end %>
 
 <%= link_to 'Back', stories_path %>

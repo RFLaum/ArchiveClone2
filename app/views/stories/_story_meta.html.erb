@@ -1,44 +1,24 @@
 <% #form elements for altering the story's metadata %>
+
+
+<%= f.input :title, required: true %>
+<%= f.input :tags_public, label: 'Tags', input_html: {class: 'tag-input'},
+  wrapper_html: {class: 'script-only'} %>
+<%= f.input :sources_public, label: 'Source Media', input_html: {class: 'source-input'},
+  wrapper_html: {class: 'script-only'} %>
+<%= f.input :chars_public, label: 'Characters', input_html: {class: 'character-input'},
+  wrapper_html: {class: 'script-only'} %>
+<%= f.input :summary, required: true %>
+<noscript>
+  <%= f.input :tags_add, label: 'New Tags' %>
+  <%= f.input :srcs_add, label: 'New Source Media' %>
+  <%= f.input :chars_add, label: 'New Characters' %>
+
+  <%= f.collection_check_boxes :deleted_tags, story.tags, :name, :name %>
+  <%= f.collection_check_boxes :deleted_sources, story.sources, :id, :name %>
+  <%= f.collection_check_boxes :deleted_characters, story.characters, :id, :name %>
 <%
 =begin
-%>
-<%= f.label :title, "Story Title:" %>
-<%= f.text_field :title %>
-<br>
-<%= f.label :tags_public, "Tags:" %>
-<%= f.text_field :tags_public, class: 'tag-input' %>
-<br>
-<%= f.label :sources_public, "Sources:" %>
-<%= f.text_field :sources_public, class: 'source-input' %>
-<br>
-<%= f.label :summary, "Blurb:" %>
-<%= f.text_area :summary %>
-<br>
-<%
-=end
-%>
-
-<%= render 'special_pages/form_helper_errors', f: f, meth: :title,
-disp: 'Story title', type: :text_field, errors: errors %>
-<%= render 'special_pages/form_helper_errors', f: f, meth: :tags_public,
-disp: 'Tags', type: :text_field, options: {class: 'tag-input'},
-errors: errors, div_class: 'script-only' %>
-<%= render 'special_pages/form_helper_errors', f: f, meth: :sources_public,
-disp: 'Sources', type: :text_field, options: {class: 'source-input'},
-errors: errors, div_class: 'script-only' %>
-<%= render 'special_pages/form_helper_errors', f: f, meth: :chars_public,
-disp: 'Characters', type: :text_field, options: {class: 'character-input'},
-errors: errors, div_class: 'script-only' %>
-<%= render 'special_pages/form_helper_errors', f: f, meth: :summary,
-disp: 'Blurb', type: :text_area, errors: errors %>
-<noscript>
-  <%= render 'special_pages/form_helper_errors', f: f, meth: :tags_add,
-  disp: 'New tags', type: :text_field, errors: errors %>
-  <%= render 'special_pages/form_helper_errors', f: f, meth: :srcs_add,
-  disp: 'New sources', type: :text_field, errors: errors %>
-  <%= render 'special_pages/form_helper_errors', f: f, meth: :chars_add,
-  disp: 'New characters', type: :text_field, errors: errors %>
-
   <% [
     [story.tags, Tag],
     [story.sources, Source],
@@ -69,4 +49,7 @@ disp: 'Blurb', type: :text_area, errors: errors %>
       </table>
     <% end %>
   <% end %>
+<%
+=end
+%>
 </noscript>

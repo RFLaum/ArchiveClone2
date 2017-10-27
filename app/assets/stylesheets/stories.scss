@@ -19,8 +19,8 @@
 }
 
 textarea#story_summary {
-  height:5em;
-  width:36em;
+  min-height:5em;
+  min-width:36em;
 }
 
 // div#summary_edit {
@@ -34,3 +34,11 @@ textarea#story_summary {
 // div#body_edit {
 //   width: 100%;
 // }
+
+div.input.story_body, div.input.chapter_body {
+  width: 100%;
+  textarea {
+    width: 100%;
+    min-height: 80em;
+  }
+}

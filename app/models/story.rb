@@ -37,13 +37,19 @@ class Story < ApplicationRecord
   before_destroy :decrement_counts
   after_update :add_missing_sources
 
+  def get_prim_key; :name; end;
+
+  def deleted_tags
+    []
+  end
+
   def check_chapter_validity
     #have to check validity first, or else the message won't be set
     #we don't want to do this with validates_associated, becaause we only want
     #to check this when creating the story, not when editing it
     if first_chapter.invalid?
       msg = first_chapter.errors.messages[:body]
-      errors.add(:body, msg) unless msg.empty?
+      errors.add(:body, msg.join(', and ')) unless msg.empty?
     end
   end
 
@@ -273,7 +279,7 @@ class Story < ApplicationRecord
   end
 
   def deleted_characters=(chars_to_delete)
-    delete_only(chars_to_delete, characters)
+    delete_only(chars_to_delete, characters, :id)
   end
 
   def deleted_sources=(srcs_to_delete)
@@ -281,11 +287,11 @@ class Story < ApplicationRecord
     # srcs.each do |src|
     #   maybe_remove_source(src)
     # end
-    delete_only(srcs_to_delete, sources)
+    delete_only(srcs_to_delete, sources, :id)
   end
 
   def deleted_tags=(tags_to_delete)
-    delete_only(tags_to_delete, tags)
+    delete_only(tags_to_delete, tags, :name)
   end
 
   def add_missing_sources

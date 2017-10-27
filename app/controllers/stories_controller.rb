@@ -71,6 +71,7 @@ class StoriesController < ApplicationController
   # PATCH/PUT /stories/1
   # PATCH/PUT /stories/1.json
   def update
+    logger.debug "update test #{params}"
     #we do this here rather than in the model because we don't want timestamps
     #to update when tag implications are changed
     old_holder = {}
@@ -142,9 +143,9 @@ class StoriesController < ApplicationController
 
   def story_params
     params.require(:story)
-          .permit(:title, :author, :tags_add, :srcs_add, :tags_public,
-                  :sources_public, :chars_public, :chapter_title, :body,
-                  :summary, deleted_tags: [], deleted_characters: [],
+          .permit(:title, :author, :tags_add, :srcs_add, :chars_add,
+                  :tags_public, :sources_public, :chars_public, :chapter_title,
+                  :body, :summary, deleted_tags: [], deleted_characters: [],
                   deleted_sources: [])
   end
 

@@ -11,8 +11,11 @@
 =end
 %>
 
-<%= render 'special_pages/form_helper_errors', f: f, meth: :chapter_title,
+<%# render 'special_pages/form_helper_errors', f: f, meth: :chapter_title,
 disp: 'Chapter title', type: :text_field, errors: errors %>
-<%= render 'special_pages/form_helper_errors', f: f, meth: :body,
+<%# render 'special_pages/form_helper_errors', f: f, meth: :body,
 disp: 'Chapter text', type: :text_area, errors: errors,
 options: {class: 'wysiwyg'} %>
+<%= f.input :chapter_title %>
+<%= f.input :body, label: 'Chapter Text', as: :text,
+            input_html: {class: 'wysiwyg'}, required: true %>

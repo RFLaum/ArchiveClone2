@@ -57,12 +57,15 @@ module Taggable
 
   def deleted_tags=(tags_to_delete)
     tag_holder = get_tags
-    delete_only(tags_to_delete, tag_holder)
+    delete_only(tags_to_delete, tag_holder, get_prim_key)
     add_missing_imps(tag_holder)
   end
 
-  def delete_only(tags_del, tag_holder)
-    tag_holder.delete(tag_holder.find(tags_del))
+  def get_prim_key; :id; end
+
+  def delete_only(tags_del, tag_holder, prim_key)
+    # tag_holder.delete(tag_holder.find(tags_del))
+    tag_holder.delete(tag_holder.where(prim_key => tags_del))
   end
 
   def add_missing_imps(tag_holder, type = nil)
