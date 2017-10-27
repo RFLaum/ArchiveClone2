@@ -1,13 +1,55 @@
 <% #form elements for altering the story's metadata %>
-<%= f.label :title, "Story Title:" %>
-<%= f.text_field :title %>
-<br>
-<!-- <%= f.label :author, "Author:" %>
-<%= f.text_field :author %>
-<br> -->
-<%= f.label :tags_public, "Tags:" %>
-<%= f.text_field :tags_public %>
-<br>
-<%= f.label :summary, "Blurb:" %>
-<%= f.text_area :summary %>
-<br>
+
+
+<%= f.input :title, required: true %>
+<%= f.input :tags_public, label: 'Tags', input_html: {class: 'tag-input'},
+  wrapper_html: {class: 'script-only'} %>
+<%= f.input :sources_public, label: 'Source Media', input_html: {class: 'source-input'},
+  wrapper_html: {class: 'script-only'} %>
+<%= f.input :chars_public, label: 'Characters', input_html: {class: 'character-input'},
+  wrapper_html: {class: 'script-only'} %>
+<%= f.input :summary, required: true %>
+<noscript>
+  <%= f.input :tags_add, label: 'New Tags' %>
+  <%= f.input :srcs_add, label: 'New Source Media' %>
+  <%= f.input :chars_add, label: 'New Characters' %>
+
+  <%= f.collection_check_boxes :deleted_tags, story.tags, :name, :name %>
+  <%= f.collection_check_boxes :deleted_sources, story.sources, :id, :name %>
+  <%= f.collection_check_boxes :deleted_characters, story.characters, :id, :name %>
+<%
+=begin
+  <% [
+    [story.tags, Tag],
+    [story.sources, Source],
+    [story.characters, Character],
+  ].each do |arr| %>
+    <% unless arr[0].empty? %>
+      <% class_name = arr[1].to_s %>
+      <% base_name = "deleted_#{class_name.downcase}s" %>
+      <% check_id = "story[#{base_name}][]" %>
+      <% prim_key = arr[1].primary_key.to_sym %>
+      <table>
+        <tr>
+          <th><%= class_name %></th>
+          <th>Delete?</th>
+        </tr>
+        <% counter = 0 %>
+        <% arr[0].each do |obj| %>
+          <% counter += 1 %>
+          <tr>
+            <td><%= obj.name %></td>
+            <td>
+              <% val = obj[prim_key] %>
+              <%# f.check_box(check_id + " [#{val}]", {value: val}) %>
+              <%= check_box_tag(check_id, val, false, id: "#{base_name}_#{counter}") %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
+  <% end %>
+<%
+=end
+%>
+</noscript>

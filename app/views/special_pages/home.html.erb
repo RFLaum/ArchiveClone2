@@ -5,9 +5,19 @@
 <li><%= link_to 'News', newsposts_path %></li>
 <li><%= link_to 'Bookmarks', bookmarks_path %></li>
 <li><%= link_to 'Comments', '/comments' %></li>
+<li><%= link_to 'Sources', sources_path %></li>
 <li><%= link_to 'Search', '/search' %></li>
 <li><%= link_to 'Story search', '/stories/search' %></li>
+<li><%= link_to 'Source search', '/sources/search' %></li>
+<li><%= link_to 'Characters', characters_path %></li>
 </ul>
 
-<p><%= current_user_or_guest.time_zone %></p>
-<p><%= current_user_or_guest.get_zone.name %></p>
+<% #TODO: remove this for production %>
+<% [Tag, Source, Character].each do |klass| %>
+  <%# klass.reset_stories_count %>
+  <% klass.find_each do |obj| %>
+    <% if obj.stories_count != obj.stories.count %>
+      <%= name_link obj %> <%= obj.stories.count %> <%= obj.stories_count %><br>
+    <% end %>
+  <% end %>
+<% end %>

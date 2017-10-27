@@ -1,0 +1,9 @@
+<%= will_paginate @sources %>
+<%= page_entries_info @sources %>
+
+<% @sources.each do |source| %>
+  <p><%= name_link source %></p>
+<% end %>
+
+<hr>
+<%= link_to 'New', new_source_path %>

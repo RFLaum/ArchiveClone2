@@ -1,0 +1,17 @@
+<%# pass in f (form object), meth (method name as symbol), disp (display name),
+type (input type, as symbol), a collection of errors, and optionally an options
+hash and/or a div_class string of additional classes for the div
+%>
+
+<% options ||= {} %>
+<% div_class ||= "" %>
+<% div_class += ' field' %>
+<% unless errors[meth].empty? %>
+  <% div_class += ' field_with_errors' %>
+  <% disp += ' ' + errors[meth].join(', ') %>
+<% end %>
+
+<div class = "<%= div_class %>" id='<%= meth.to_s + '_edit' %>'>
+  <%= f.label(meth, disp) %>
+  <%= f.send(type, meth, options) %>
+</div>

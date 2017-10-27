@@ -20,4 +20,8 @@ class NewsTag < ApplicationRecord
   def tagged_objs
     newsposts
   end
+
+  def display_name
+    name
+  end
 end

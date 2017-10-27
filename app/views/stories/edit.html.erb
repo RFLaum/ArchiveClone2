@@ -1,4 +1,7 @@
 <h1>Editing Story</h1>
+<%# render 'special_pages/autocomplete_script', sing: 'tag', coll: @story.tags %>
+<%# render 'special_pages/autocomplete_script', sing: 'source', coll: @story.sources %>
+<%= render partial: 'autocompletes' %>
 
 <%= render 'form', story: @story %>
 

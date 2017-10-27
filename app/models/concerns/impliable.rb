@@ -9,7 +9,9 @@ module Impliable
     implying_tags.each do |parent|
       before = parent.implied_tags
       implied_tags.each do |child|
-        before << child unless before.include?(child)
+        # before << child unless before.include?(child)
+        #TODO: test this
+        add_unless_present(before, child)
       end
     end
   end

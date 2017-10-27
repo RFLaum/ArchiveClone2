@@ -9,7 +9,7 @@
  */
 
 /* This is not quite the original; I've made some alterations to allow
- * inputting values that are not on the list -- R Flaum
+ * inputting values that are not on the list, and some UI changes -- R Flaum
  */
 
 (function ($) {
@@ -200,8 +200,9 @@ $.TokenList = function (input, url_or_data, settings) {
             }
         })
         .blur(function () {
+            submitContents();
             hide_dropdown();
-            $(this).val("");
+            // $(this).val("");
         })
         .bind("keyup keydown blur update", resize_input)
         .keydown(function (event) {
@@ -232,17 +233,49 @@ $.TokenList = function (input, url_or_data, settings) {
                             select_token($(next_token.get(0)));
                         }
                     } else {
-                        var dropdown_item = null;
-
-                        if(event.keyCode === KEY.DOWN || event.keyCode === KEY.RIGHT) {
-                            dropdown_item = $(selected_dropdown_item).next();
+                        //unlike the default setup, we want to allow user to
+                        //move the cursor in the input field
+                        if (event.keyCode === KEY.LEFT || event.keyCode === KEY.RIGHT) {
+                          return true;
+                        }
+                        var selector = "." + settings.classes.dropdown;
+                        selector += " > ul > li";
+                        var drop_items = $(selector);
+                        var index = -1;
+                        if (selected_dropdown_item) {
+                          index = drop_items.index($(selected_dropdown_item));
+                        }
+                        if(event.keyCode === KEY.DOWN) {
+                          index++;
                         } else {
-                            dropdown_item = $(selected_dropdown_item).prev();
+                          index--;
+                        }
+                        if (index < -1) {
+                          index = drop_items.size() - 1;
+                        } else if (index >= drop_items.size()) {
+                          index = -1;
+                        }
+                        if (index === -1){
+                          deselect_dropdown_item($(selected_dropdown_item));
+                        } else {
+                          // window.alert(index);
+                          select_dropdown_item($(drop_items.get(index)));
                         }
 
-                        if(dropdown_item.length) {
-                            select_dropdown_item(dropdown_item);
-                        }
+                        // var drop_items = dropdown.
+                        // var dropdown_item = null;
+                        // var is_entry = selected_dropdown_item ? false : true
+                        //
+                        // if(event.keyCode === KEY.DOWN || event.keyCode === KEY.RIGHT) {
+                        //     dropdown_item = $(selected_dropdown_item).next();
+                        //
+                        // } else {
+                        //     dropdown_item = $(selected_dropdown_item).prev();
+                        // }
+                        //
+                        // if(dropdown_item.length) {
+                        //     select_dropdown_item(dropdown_item);
+                        // }
                         return false;
                     }
                     break;
@@ -271,18 +304,22 @@ $.TokenList = function (input, url_or_data, settings) {
                 case KEY.ENTER:
                 case KEY.NUMPAD_ENTER:
                 case KEY.COMMA:
-                  if(selected_dropdown_item) {
-                    add_token($(selected_dropdown_item).data("tokeninput"));
-                    hidden_input.change();
-                    return false;
-                  } else if(input_box.val()) {
-                    // window.alert("worked");
-                    $.each(input_box.val().split(settings.tokenDelimiter), function(i, e){
-                      add_token($.trim(e));
-                    });
-                    hidden_input.change();
-                    return false;
-                  }
+                  // if(selected_dropdown_item) {
+                  //   add_token($(selected_dropdown_item).data("tokeninput"));
+                  //   hidden_input.change();
+                  //   return false;
+                  // } else if(input_box.val()) {
+                  //   // window.alert("worked");
+                  //   $.each(input_box.val().split(settings.tokenDelimiter), function(i, e){
+                  //     add_token($.trim(e));
+                  //   });
+                  //   hidden_input.change();
+                  //   return false;
+                  // }
+                    var answer = submitContents();
+                    if (!answer) {
+                      return false;
+                    }
                   break;
 
                 case KEY.ESCAPE:
@@ -438,6 +475,22 @@ $.TokenList = function (input, url_or_data, settings) {
             hide_dropdown();
             return;
         }
+    }
+
+    function submitContents() {
+      if(selected_dropdown_item) {
+        add_token($(selected_dropdown_item).data("tokeninput"));
+        hidden_input.change();
+        return false;
+      } else if(input_box.val()) {
+        // window.alert("worked");
+        $.each(input_box.val().split(settings.tokenDelimiter), function(i, e){
+          add_token($.trim(e));
+        });
+        hidden_input.change();
+        return false;
+      }
+      return true;
     }
 
     function resize_input() {
@@ -704,9 +757,9 @@ $.TokenList = function (input, url_or_data, settings) {
                     this_li.addClass(settings.classes.dropdownItem2);
                 }
 
-                if(index === 0) {
-                    select_dropdown_item(this_li);
-                }
+                // if(index === 0) {
+                //     select_dropdown_item(this_li);
+                // }
 
                 $.data(this_li.get(0), "tokeninput", value);
             });

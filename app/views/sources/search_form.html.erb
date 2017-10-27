@@ -1,0 +1,15 @@
+<%= form_tag('results', method: :get) do %>
+  <%= label_tag(:name) %>
+  <%= text_field_tag(:name, nil, class: 'source-input') %><br>
+  <table>
+    <% #Source.source_types.each do |type| %>
+    <% Source.source_plurals.each do |sym, name| %>
+      <%# type_name = type.to_s %>
+      <tr>
+        <td><%= name.capitalize %></td>
+        <td><%= check_box_tag('types[]', sym) %></td>
+      </tr>
+    <% end %>
+  </table>
+  <%= submit_tag 'Search' %>
+<% end %>

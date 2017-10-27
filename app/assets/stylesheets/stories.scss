@@ -17,3 +17,28 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+textarea#story_summary {
+  min-height:5em;
+  min-width:36em;
+}
+
+// div#summary_edit {
+//   height: 5em;
+//   width: 36em;
+//   textarea {
+//     width: 100%;
+//   }
+// }
+
+// div#body_edit {
+//   width: 100%;
+// }
+
+div.input.story_body, div.input.chapter_body {
+  width: 100%;
+  textarea {
+    width: 100%;
+    min-height: 80em;
+  }
+}

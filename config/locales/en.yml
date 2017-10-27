@@ -32,6 +32,9 @@ en:
       bookmark:
         one: bookmark
         other: bookmarks
+      source:
+        one: source
+        other: sources
   time:
     formats:
       default: "%-l:%M:%S %p, %b %-d, %Y"

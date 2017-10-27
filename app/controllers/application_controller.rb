@@ -136,4 +136,11 @@ class ApplicationController < ActionController::Base
     anon_cant(request.fullpath) unless logged_in?
   end
 
+  #returns true if added, false otherwise
+  def add_unless_present(col, obj)
+    already_in = col.include?(obj)
+    col << obj unless already_in
+    !already_in
+  end
+
 end

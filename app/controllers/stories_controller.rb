@@ -8,11 +8,19 @@ class StoriesController < ApplicationController
   # GET /stories
   # GET /stories.json
   def index
+    @page_title = 'Stories'
     if params[:tag_id]
-      @tag = Tag.find_by_name(params[:tag_id])
-      @stories = @tag.stories
+      @obj = Tag.find_by_name(params[:tag_id])
+    elsif params[:character_id]
+      @obj = Character.find(params[:character_id])
+    elsif params[:source_id]
+      @obj = Source.find(params[:source_id])
     else
       @stories = Story.all
+    end
+    if @obj.present?
+      @stories = @obj.stories
+      @page_title.prepend(@obj.name + ' ')
     end
     unless can_see_adult?
       @stories = @stories.reject(&:is_adult?)
@@ -51,23 +59,43 @@ class StoriesController < ApplicationController
   # POST /stories.json
   def create
     @story = Story.new(story_params)
-    current_user.stories << @story
-    redirect_to @story
+    if @story.valid?
+      current_user.stories << @story
+      redirect_to @story
+    else
+      # @errors = @story.errors.messages
+      render :new
+    end
   end
 
   # PATCH/PUT /stories/1
   # PATCH/PUT /stories/1.json
   def update
-    pars = params.permit(:title, :author, :tags_add, :chapter_title, :body,
-                         :summary, deleted_tags: [])
-    respond_to do |format|
-      if @story.update(pars)
-        format.html { redirect_to @story, notice: 'Story was successfully updated.' }
-        format.json { render :show, status: :ok, location: @story }
-      else
-        format.html { render :edit }
-        format.json { render json: @story.errors, status: :unprocessable_entity }
+    logger.debug "update test #{params}"
+    #we do this here rather than in the model because we don't want timestamps
+    #to update when tag implications are changed
+    old_holder = {}
+    assocs = %w[tag character source]
+    # old_tags = @story.tag_ids.sort
+    assocs.each do |assoc|
+      old_holder[assoc] = @story.send((assoc + '_ids').to_sym).sort
+    end
+
+    # pars = params.permit(:title, :author, :tags_add, :srcs_add, :tags_public,
+    #                      :sources_public, :chars_public, :chapter_title, :body,
+    #                      :summary, deleted_tags: [], deleted_characters: [],
+    #                      deleted_sources: [])
+    pars = story_params
+    if @story.update(pars)
+      assocs.each do |assoc|
+        #need to do this to force Rails to refresh from the DB
+        @story.send((assoc + 's').to_sym).reload
+        new_holder = @story.send((assoc + '_ids').to_sym).sort
+        @story.touch unless old_holder[assoc] == new_holder
       end
+      redirect_to @story, notice: 'Story was successfully updated.'
+    else
+      render :edit
     end
   end
 
@@ -100,6 +128,11 @@ class StoriesController < ApplicationController
     @chapters = @story.get_chapters
   end
 
+  #only called for json
+  # def tag_list
+  #   render json: @story.tags.select('name').map(&:attributes)
+  # end
+
   private
 
   # todo: do we always need tags?
@@ -109,8 +142,11 @@ class StoriesController < ApplicationController
   end
 
   def story_params
-    params.require(:story).permit(:title, :author, :tags_public, :chapter_title,
-                                  :body, :summary) #, deleted_tags: [])
+    params.require(:story)
+          .permit(:title, :author, :tags_add, :srcs_add, :chars_add,
+                  :tags_public, :sources_public, :chars_public, :chapter_title,
+                  :body, :summary, deleted_tags: [], deleted_characters: [],
+                  deleted_sources: [])
   end
 
   alias :super_check_user :check_user

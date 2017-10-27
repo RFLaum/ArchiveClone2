@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926200851) do
+ActiveRecord::Schema.define(version: 20171019172143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,10 +45,19 @@ ActiveRecord::Schema.define(version: 20170926200851) do
 
   create_table "characters", force: :cascade do |t|
     t.integer  "source_id"
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",                      null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "stories_count", default: 0, null: false
     t.index ["source_id"], name: "index_characters_on_source_id", using: :btree
+    t.index ["stories_count"], name: "index_characters_on_stories_count", using: :btree
+  end
+
+  create_table "characters_stories", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.integer "story_id",     null: false
+    t.index ["character_id"], name: "index_characters_stories_on_character_id", using: :btree
+    t.index ["story_id"], name: "index_characters_stories_on_story_id", using: :btree
   end
 
   create_table "comments", force: :cascade do |t|
@@ -99,19 +108,28 @@ ActiveRecord::Schema.define(version: 20170926200851) do
   end
 
   create_table "sources", force: :cascade do |t|
-    t.string   "name",                        null: false
-    t.boolean  "book",        default: false
-    t.boolean  "celeb",       default: false
-    t.boolean  "music",       default: false
-    t.boolean  "theater",     default: false
-    t.boolean  "video_games", default: false
-    t.boolean  "anime",       default: false
-    t.boolean  "comics",      default: false
-    t.boolean  "movies",      default: false
-    t.boolean  "misc",        default: false
-    t.boolean  "tv",          default: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.string   "name",                          null: false
+    t.boolean  "book",          default: false
+    t.boolean  "celeb",         default: false
+    t.boolean  "music",         default: false
+    t.boolean  "theater",       default: false
+    t.boolean  "video_games",   default: false
+    t.boolean  "anime",         default: false
+    t.boolean  "comics",        default: false
+    t.boolean  "movies",        default: false
+    t.boolean  "misc",          default: false
+    t.boolean  "tv",            default: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "stories_count", default: 0,     null: false
+    t.index ["stories_count"], name: "index_sources_on_stories_count", using: :btree
+  end
+
+  create_table "sources_stories", id: false, force: :cascade do |t|
+    t.integer "source_id", null: false
+    t.integer "story_id",  null: false
+    t.index ["source_id"], name: "index_sources_stories_on_source_id", using: :btree
+    t.index ["story_id"], name: "index_sources_stories_on_story_id", using: :btree
   end
 
   create_table "stories", force: :cascade do |t|

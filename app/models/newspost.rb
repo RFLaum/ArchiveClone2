@@ -12,12 +12,17 @@ class Newspost < ApplicationRecord
     Nokogiri::HTML.parse(this.content).at_xpath('//p').text
   end
 
+  def display_name
+    title
+  end
+
   private
 
-  def get_tags
+  def get_tags(type = nil)
     news_tags
   end
-  def tag_class
+  
+  def tag_class(type = nil)
     NewsTag
   end
 end
