@@ -23,8 +23,17 @@ class SourcesController < SuperSearchController
   end
 
   def index
-    @page_title = 'Sources'
-    @sources = Source.all.paginate(page: params[:page])
+    @page_title = 'Source Media'
+    if params[:type].present?
+      type_sym = params[:type].to_sym
+      if Source.source_types.include? type_sym
+        @sources = Source.where(type_sym => true)
+        @page_title += ': ' + Source.source_plurals[type_sym].titleize
+      end
+    end
+    @sources = Source.all unless defined? @sources
+    # @sources = Source.all.paginate(page: params[:page])
+    @sources = @sources.order(:name).paginate(page: params[:page])
   end
 
   def new

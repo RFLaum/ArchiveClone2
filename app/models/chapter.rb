@@ -1,4 +1,5 @@
 class Chapter < ApplicationRecord
+  include Updateable
   self.primary_keys = :story_id, :number
   belongs_to :story, touch: true
 

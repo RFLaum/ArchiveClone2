@@ -2,6 +2,7 @@
 # require 'elasticsearch/dsl'
 
 class Story < ApplicationRecord
+  include Updateable
   include Taggable
   include Searchable
 

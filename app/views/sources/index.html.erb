@@ -2,7 +2,9 @@
 <%= page_entries_info @sources %>
 
 <% @sources.each do |source| %>
-  <p><%= name_link source %></p>
+  <p><%= name_link source %>
+    <%# Source.source_types.select { |type| source[type] }.map(&:to_s).join(', ') %>
+  </p>
 <% end %>
 
 <hr>

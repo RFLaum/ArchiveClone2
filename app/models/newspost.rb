@@ -1,4 +1,5 @@
 class Newspost < ApplicationRecord
+  include Updateable
   include Taggable
   belongs_to :user, foreign_key: 'admin', primary_key: 'name'
   has_and_belongs_to_many :news_tags
@@ -9,7 +10,7 @@ class Newspost < ApplicationRecord
   # end
 
   def first_paragraph
-    Nokogiri::HTML.parse(this.content).at_xpath('//p').text
+    Nokogiri::HTML.parse(content).at_xpath('//p').text
   end
 
   def display_name
@@ -21,7 +22,7 @@ class Newspost < ApplicationRecord
   def get_tags(type = nil)
     news_tags
   end
-  
+
   def tag_class(type = nil)
     NewsTag
   end

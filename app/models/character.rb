@@ -1,4 +1,5 @@
 class Character < ApplicationRecord
+  include Updateable
   include Storycount
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks

@@ -1,0 +1,48 @@
+<li class='entry'>
+  <div class='entry-header'>
+    <h4 class='heading', id='<%= "post_#{post.id}_title" %>'>
+      <%= name_link post %>
+    </h4>
+    <p class='entry-meta'>
+<%
+=begin
+%>
+      <div>
+        <ul class='dates'>
+          <li class='date'>Posted at: <%= time_format post.created_at %></li>
+          <% if post.updated? %>
+          <li class='date'>Last edited: <% time_format post.updated_at %></li>
+          <% end %>
+        </ul>
+        <div>
+          <%# TODO %>
+          Comments: 0
+        </div>
+      </div>
+<%
+=end
+%>
+      <% was_edited = post.updated? %>
+      <table class='time-header'>
+        <tr>
+          <th>Posted at:</th>
+          <td><%= time_format post.created_at %></td>
+          <%# TODO %>
+          <td rowspan="<%= was_edited ? '2' : '1' %>">Comments: 0</td>
+        </tr>
+        <% if was_edited %>
+        <tr>
+          <th>Last edited:</th>
+          <td><%= time_format post.updated_at %></td>
+        </tr>
+        <% end %>
+      </table>
+      <p>
+        <%= post.first_paragraph %>
+      </p>
+      <p>
+        <%= link_to 'Read more...', post %>
+      </p>
+    </p>
+  </div>
+</li>

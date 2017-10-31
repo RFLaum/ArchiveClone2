@@ -1,6 +1,6 @@
 <div id='main-header'>
   <div class='full-width'>
-    <a href='/' class='logo-link'>
+    <a href='<%= root_path %>' class='logo-link'>
       <%= image_tag(CLONE_CONFIG['LOGO_PATH'], id:'logo') %>
       <%= CLONE_CONFIG['SITE_NAME'] %>
     </a>
@@ -24,7 +24,8 @@
     </span>
   </div>
   <div class='full-width' id='navbar'>
-    <%= link_to "Home", root_path %>
+    <%# link_to "Home", root_path %>
+    <%= link_to "Home", '/home2' %>
     <%= link_to 'Users', users_path %>
     <%= link_to 'Stories', stories_path %>
     <% if is_admin? %>

@@ -1,0 +1,26 @@
+<div class='home-container'>
+  <div class='browse page-section'>
+    <h3 class='heading'>Find your favorites</h3>
+    <p>Browse fandoms by media or favorite up to 20 tags to have them listed here!</p>
+    <ul class='options column_2'>
+        <li><%= link_to 'All Fandoms', sources_path, class: 'link' %></li>
+      <% Source.source_plurals.each do |sym, name| %>
+        <li><%= link_to name.titleize, sources_path(type: sym.to_s), class: 'link' %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class='news-summary page-section'>
+    <h3 class='heading'>News
+      <span class='sub-link'>
+        <%= link_to 'All News', newsposts_path, class: 'link' %>
+      </span>
+    </h3>
+    <ul class='entries'>
+      <% @latest_news.each do |post| %>
+        <%= render 'newsposts/summary', post: post %>
+      <% end %>
+    </ul>
+  </div>
+  <div class='clear-bar'></div>
+</div>

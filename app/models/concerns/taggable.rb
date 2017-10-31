@@ -64,6 +64,8 @@ module Taggable
   def get_prim_key; :id; end
 
   def delete_only(tags_del, tag_holder, prim_key)
+    # this causes problems if asked to delete a tag that wasn't there in the
+    #first place
     # tag_holder.delete(tag_holder.find(tags_del))
     tag_holder.delete(tag_holder.where(prim_key => tags_del))
   end
@@ -79,7 +81,6 @@ module Taggable
   end
 
   def add_obj(obj)
-    # get_tags(obj.class.to_s.downcase.to_sym) << obj
     add_tag_with_holder(obj, get_tags(obj.class.to_s.downcase.to_sym))
   end
 

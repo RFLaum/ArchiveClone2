@@ -2,6 +2,7 @@ require 'elasticsearch/model'
 # require 'set'
 
 class Tag < ApplicationRecord
+  include Updateable
   include Impliable
   include Storycount
   include Elasticsearch::Model
@@ -149,7 +150,7 @@ class Tag < ApplicationRecord
   def display_name
     name
   end
-  
+
 end
 
 # Tag.import

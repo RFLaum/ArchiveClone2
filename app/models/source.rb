@@ -1,6 +1,7 @@
 require 'elasticsearch/model'
 
 class Source < ApplicationRecord
+  include Updateable
   include Storycount
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks

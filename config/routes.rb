@@ -1,14 +1,7 @@
 Rails.application.routes.draw do
   root 'special_pages#home'
+  get 'home2' => 'special_pages#home2'
   resources :newsposts
-  # get 'tags/search' => 'tags#search'
-  # get 'tags/find' => 'tags#search_results'
-  # get 'tags/new' => 'tags#new'
-  # post 'tags' => 'tags#create'
-  # get 'tags/:id/stories' => 'tags#show_stories'
-  # get 'tags/:id/edit' => 'tags#edit'
-  # match 'tags/:id' => 'tags#update', via: %i[patch put]
-  # delete 'tags/:id/delete' => 'tags#delete'
   resources :tags do
     resources :stories, only: %i[index]
   end

@@ -12,7 +12,7 @@
 
 <p>
   <strong>Content:</strong>
-  <%= @newspost.content %>
+  <%= raw @newspost.content %>
 </p>
 
 <%= link_to 'Edit', edit_newspost_path(@newspost) %> |
