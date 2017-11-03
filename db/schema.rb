@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019172143) do
+ActiveRecord::Schema.define(version: 20171031205006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,16 @@ ActiveRecord::Schema.define(version: 20171019172143) do
     t.string "implied"
     t.index ["implied"], name: "index_implications_on_implied", using: :btree
     t.index ["implier", "implied"], name: "index_implications_on_implier_and_implied", unique: true, using: :btree
+  end
+
+  create_table "news_comments", force: :cascade do |t|
+    t.string   "author"
+    t.integer  "newspost_id"
+    t.text     "content"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["author"], name: "index_news_comments_on_author", using: :btree
+    t.index ["newspost_id"], name: "index_news_comments_on_newspost_id", using: :btree
   end
 
   create_table "news_implications", force: :cascade do |t|

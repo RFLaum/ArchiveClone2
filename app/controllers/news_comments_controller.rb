@@ -1,6 +1,6 @@
-class CommentsController < ApplicationController
-  before_action :set_story
-  skip_before_action :set_story, only: %i[index_all]
+class NewsCommentsController < ApplicationController
+  before_action :set_post
+  skip_before_action :set_post, only: %i[index_all]
   before_action :load_comment
   skip_before_action :load_comment, only: %i[new create index index_all]
   before_action :check_user, only: %i[edit update destroy]
@@ -8,43 +8,40 @@ class CommentsController < ApplicationController
   def create
     # @comment = @story.comments.build(comment_params)
     unless logged_in?
-      anon_cant(story_path(@story) + '#comments') && return
+      anon_cant(newspost_path(@post) + '#comments') && return
     end
-    @comment = @story.comments.build(comment_params)
+    @comment = @post.comments.build(comment_params)
     # @comment.author = current_user_name
     @comment.user = current_user
     if @comment.save
-      redirect_to [@story, @comment], notice: 'Comment created.'
+      redirect_to [@post, @comment], notice: 'Comment created.'
     else
       render 'errors/generic_error', locals: {message: 'Could not create comment.'}
     end
   end
 
   def show
-    redirect_to (story_path(@story) + "#comment_#{params[:id]}")
+    redirect_to (newspost_path(@post) + "#comment_#{params[:id]}")
   end
 
   def index
-    redirect_to (story_path(@story) + "#comments")
+    redirect_to (newspost_path(@post) + "#comments")
   end
 
   #temporary
   def index_all
     @page_title = "All Comments"
-    @comments = Comment.all
+    @comments = NewsComment.all
   end
 
   def edit
-    # unless logged_in?
-    #   anon_cant(story_path(@story) + '#comments') && return
-    # end
-    # check_user(@comment.user)
+    render 'comments/edit'
   end
 
   def update
     # return unless check_user(@comment.user)
     if @comment.update(comment_params)
-      redirect_to [@story, @comment], notice: 'Comment updated.'
+      redirect_to [@post, @comment], notice: 'Comment updated.'
     else
       render :edit
     end
@@ -53,22 +50,22 @@ class CommentsController < ApplicationController
   def destroy
     # return unless check_user(@comment.user, true)
     @comment.destroy
-    redirect_to @story, notice: 'Comment deleted.'
+    redirect_to @post, notice: 'Comment deleted.'
   end
 
   private
 
   def comment_params
-    params.require(:comment).permit(:content)
+    params.require(:news_comment).permit(:content)
   end
 
-  def set_story
-    @story = Story.find(params[:story_id])
-    @parent = @story
+  def set_post
+    @post = Newspost.find(params[:newspost_id])
+    @parent = @post
   end
 
   def load_comment
-    @comment = Comment.find(params[:id])
+    @comment = NewsComment.find(params[:id])
   end
 
   def check_user

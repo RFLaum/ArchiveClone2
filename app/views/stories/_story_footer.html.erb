@@ -6,7 +6,15 @@
   <%= link_to 'Edit Story', edit_story_path(@story) %>
 <% end %>
 <%= link_to 'Back', stories_path %>
+<%
+=begin
+%>
 <% if logged_in? %>
   <%= render partial: 'comments/comment_add_wrapper' %>
 <% end %>
 <%= render partial: "comments/all_comments", locals: { comments: @story.get_comments } %>
+<%
+=end
+%>
+<% @parent = @story %>
+<%= render partial: 'comments/comment_footer' %>

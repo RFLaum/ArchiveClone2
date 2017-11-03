@@ -1,3 +1,4 @@
 <ul id="comments">
+  <% comments = @parent.get_comments %>
   <%= render partial: "comments/comment", collection: comments %>
 </ul>

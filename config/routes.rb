@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root 'special_pages#home'
   get 'home2' => 'special_pages#home2'
-  resources :newsposts
+  resources :newsposts do
+    resources :news_comments
+  end
   resources :tags do
     resources :stories, only: %i[index]
   end
@@ -60,9 +62,10 @@ Rails.application.routes.draw do
   get 'search' => 'search#full_form'
   get 'results' => 'search#results'
 
-  get 'autocomplete/tag' => 'auto_complete#tag'
-  get 'autocomplete/source' => 'auto_complete#source'
-  get 'autocomplete/character' => 'auto_complete#character'
+  # get 'autocomplete/tag' => 'auto_complete#tag'
+  # get 'autocomplete/source' => 'auto_complete#source'
+  # get 'autocomplete/character' => 'auto_complete#character'
+  get 'autocomplete/:action' => 'auto_complete#%{action}'
 
   get 'sources/search' => 'sources#search_form'
   get 'sources/results' => 'sources#search_results'

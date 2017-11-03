@@ -1,8 +1,10 @@
 class Newspost < ApplicationRecord
   include Updateable
   include Taggable
+  include Commentable
   belongs_to :user, foreign_key: 'admin', primary_key: 'name'
   has_and_belongs_to_many :news_tags
+  has_many :comments, class_name: 'NewsComment', dependent: :destroy
 
   # after_initialize do |post|
   #   @tags = news_tags
@@ -15,6 +17,10 @@ class Newspost < ApplicationRecord
 
   def display_name
     title
+  end
+
+  def comment_edit_helper
+    :edit_newspost_news_comment_path
   end
 
   private

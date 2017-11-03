@@ -17,3 +17,6 @@
 
 <%= link_to 'Edit', edit_newspost_path(@newspost) %> |
 <%= link_to 'Back', newsposts_path %>
+
+<% @parent = @newspost %>
+<%= render partial: 'comments/comment_footer' %>

@@ -5,6 +5,7 @@ class Story < ApplicationRecord
   include Updateable
   include Taggable
   include Searchable
+  include Commentable
 
   # validates :title, presence: true
   validates :title, length: { in: 5..80,
@@ -96,13 +97,13 @@ class Story < ApplicationRecord
     chapters.order("number ASC")
   end
 
-  def get_comments
-    comments.order("created_at ASC")
-  end
+  # def get_comments
+  #   comments.order("created_at ASC")
+  # end
 
-  def get_dummy_comment(author)
-    comments.build(author: author)
-  end
+  # def get_dummy_comment(author)
+  #   comments.build(author: author)
+  # end
 
   def dummy
     @dummy_chapter ||= Chapter.new(story_id: id, number: 1, title: '', body: '')
@@ -126,6 +127,10 @@ class Story < ApplicationRecord
 
   def body=(new_body)
     first_chapter.body = new_body
+  end
+
+  def comment_edit_helper
+    :edit_story_comment_path
   end
 
   def dummy_saved?

@@ -15,6 +15,8 @@ class User < ApplicationRecord
   has_many :bookmarks, foreign_key: 'user_name', primary_key: 'name',
                        dependent: :destroy
   has_many :faves, through: :bookmarks, source: :story
+  has_many :news_comments, foreign_key: 'author', primary_key: 'name',
+                           dependent: :destroy
 
   before_save { self.email = email.downcase }
   validates :name,

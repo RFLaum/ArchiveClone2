@@ -1,0 +1,6 @@
+<div id='comments-wrapper'>
+  <% if logged_in? %>
+    <%= render partial: 'comments/comment_add_wrapper' %>
+  <% end %>
+  <%= render partial: "comments/all_comments" %>
+</div>

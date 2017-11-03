@@ -27,8 +27,8 @@
         <tr>
           <th>Posted at:</th>
           <td><%= time_format post.created_at %></td>
-          <%# TODO %>
-          <td rowspan="<%= was_edited ? '2' : '1' %>">Comments: 0</td>
+          <td rowspan="<%= was_edited ? '2' : '1' %>"> Comments:
+            <%= link_to post.comments.size, newspost_path(post, anchor: 'comments-wrapper') %></td>
         </tr>
         <% if was_edited %>
         <tr>
