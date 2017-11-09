@@ -25,7 +25,7 @@ class StoriesController < ApplicationController
     unless can_see_adult?
       @stories = @stories.reject(&:is_adult?)
     end
-    @stories = @stories.paginate(page: (params[:page] || 1))
+    @stories = @stories.paginate(page: params[:page], per_page: 2)
   end
 
   # GET /stories/1

@@ -6,7 +6,9 @@
 <ol class='no-dec'>
   <% top_results.each do |src| %>
     <li>
-      <%= link_to src.name, src, class: 'tag' %> (<%= src.stories_count %>)
+      <%# link_to src.name, src, class: 'tag' %>
+      <%= link_to src.name, source_stories_path(src), class: 'tag' %>
+      (<%= src.stories_count %>)
     </li>
   <% end %>
 </ol>

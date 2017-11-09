@@ -1,3 +1,4 @@
+<% @story ||= Story.new %>
 <%= render 'special_pages/autocomplete_script', sing: 'tag', coll: @story.tags %>
 <%= render 'special_pages/autocomplete_script', sing: 'source', coll: @story.sources %>
 <%= render 'special_pages/autocomplete_script', sing: 'character', coll: @story.characters %>

@@ -5,6 +5,8 @@
     });
   </script>
 <% end %>
+<%= render partial: 'autocompletes' %>
+
 
 <%= form_tag(stories_path + '/search_results', class: 'search-form', method: :get) do %>
   <fieldset>

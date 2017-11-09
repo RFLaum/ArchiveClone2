@@ -1,14 +1,17 @@
 <p id="notice"><%= notice %></p>
 
 <% if @obj.present? %>
-<h1>Stories in <%= name_link @obj %>.</h1>
+<h1>Stories in <%= name_link(@obj, class: 'tag') %>.</h1>
 <% else %>
 <h1>Stories</h1>
 <% end %>
 
-<%= will_paginate @stories %>
-<%= page_entries_info @stories %>
+<%= will_paginate(@stories, class: 'button-row centered') %>
+<%# page_entries_info @stories %>
 
+<%
+=begin
+%>
 <table>
   <thead>
     <tr>
@@ -40,7 +43,19 @@
     <% end %>
   </tbody>
 </table>
+<%
+=end
+%>
+<%# render 'stories/summary', collection: @stories %>
+<% @stories.each do |story| %>
+  <%= render 'stories/summary', story: story %>
+<% end %>
 
+<%
+=begin
+%>
 <br>
-
 <%= link_to 'New Story', new_story_path %>
+<%
+=end
+%>

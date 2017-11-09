@@ -30,7 +30,8 @@
     <ol class='column_2 no-dec'>
       <% srcs.each do |src| %>
         <li>
-          <%= name_link(src, class: 'tag') %>
+          <%# name_link(src, class: 'tag') %>
+          <%= link_to src.name, source_stories_path(src), class: 'tag' %>
           (<%= src.stories_count %>)
         </li>
       <% end %>

@@ -77,7 +77,7 @@ a > img {
 
 a.link, a.link:visited {color: black!important;}
 
-a.button-appearance, .button-row > a, a.top-link {
+a.button-appearance, .button-row > a, a.top-link, .pagination > a {
   text-decoration: none;
   background: #eee linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
   border: 1px solid #bbb;
