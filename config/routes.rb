@@ -10,6 +10,13 @@ Rails.application.routes.draw do
   resources :characters do
     resources :stories, only: %i[index]
   end
+
+  get 'sources/bulk_update' => 'sources#update_form'
+  post 'sources/bulk_update' => 'sources#update_receiver'
+  get 'sources/search' => 'sources#search_form'
+  get 'sources/results' => 'sources#search_results'
+  get 'sources/:type', to: 'sources#index_type', constraints: { type: /[a-z_]+/ }
+
   resources :sources do
     resources :stories, only: %i[index]
   end
@@ -66,9 +73,4 @@ Rails.application.routes.draw do
   # get 'autocomplete/source' => 'auto_complete#source'
   # get 'autocomplete/character' => 'auto_complete#character'
   get 'autocomplete/:action' => 'auto_complete#%{action}'
-
-  get 'sources/search' => 'sources#search_form'
-  get 'sources/results' => 'sources#search_results'
-  resources :sources
-
 end

@@ -1,8 +1,9 @@
 # class SourcesController < ApplicationController
 class SourcesController < SuperSearchController
-  before_action :set_source
-  skip_before_action :set_source, only: %i[search_results search_form index new
-                                           create]
+  before_action :set_source, only: %i[show edit update destroy]
+  # skip_before_action :set_source, only: %i[search_results search_form index new
+  #                                          create index_type update_form
+  #                                          update_receiver]
   def search_results
     @page_title = 'Source Search Results'
     pars = params.permit(:name, types: [])
@@ -23,17 +24,27 @@ class SourcesController < SuperSearchController
   end
 
   def index
-    @page_title = 'Source Media'
-    if params[:type].present?
-      type_sym = params[:type].to_sym
-      if Source.source_types.include? type_sym
-        @sources = Source.where(type_sym => true)
-        @page_title += ': ' + Source.source_plurals[type_sym].titleize
-      end
-    end
-    @sources = Source.all unless defined? @sources
+    @page_title = 'All Source Media'
+    # if params[:type].present?
+    #   type_sym = params[:type].to_sym
+    #   if Source.source_types.include? type_sym
+    #     @sources = Source.where(type_sym => true)
+    #     @page_title += ': ' + Source.source_plurals[type_sym].titleize
+    #   end
+    # end
+    # @sources = Source.all unless defined? @sources
     # @sources = Source.all.paginate(page: params[:page])
-    @sources = @sources.order(:name).paginate(page: params[:page])
+    @sources = Source.all.order(:name).paginate(page: params[:page])
+  end
+
+  def index_type
+    type_sym = params[:type].to_sym
+    redirect_to sources_path unless Source.source_types.include? type_sym
+    @sources = Source.where(type_sym => true)
+                     .order(:name)
+                     .group_by{ |src| src.name[0].upcase }
+                    #  .paginate(page: params[:page])
+    @page_title = Source.source_plurals[type_sym].titleize
   end
 
   def new
@@ -59,6 +70,21 @@ class SourcesController < SuperSearchController
   def destroy
     @source.destroy
     redirect_to sources_url
+  end
+
+  def update_form
+    @page_title = 'Bulk Update Sources'
+    @sources = Source.all
+    render 'bulk_update'
+  end
+
+  def update_receiver
+    @page_title = 'Update results'
+    # render 'update_results'
+    params.permit!
+    Source.bulk_update(params[:source])
+    @sources = Source.all
+    render 'bulk_update'
   end
 
   private

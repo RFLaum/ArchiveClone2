@@ -48,3 +48,26 @@
   max-width: 68em;
   margin: auto;
 }
+
+li.fandom {
+  margin: 0.375em 0;
+  padding: 0.375em 0;
+}
+
+.listbox {
+  > h3 {
+    margin: 0;
+    padding: 0.25em;
+  }
+  > ol {
+    padding: 0.55em;
+  }
+  li {
+    margin: 0.55em 0;
+  }
+  > p.right-box {
+    padding-right: 0.25em;
+    margin-top: 0.5em;
+    margin-bottom: 0.375em;
+  }
+}

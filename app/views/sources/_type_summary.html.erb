@@ -1,0 +1,16 @@
+<li class='listbox'>
+<% ui_name = Source.source_plurals[type].titleize %>
+<% ind_url = sources_path + "/#{type}" %>
+<h3><%= link_to ui_name, ind_url, class: 'link' %></h3>
+<% top_results = Source.where(type => true).order(stories_count: :desc).limit(5) %>
+<ol class='no-dec'>
+  <% top_results.each do |src| %>
+    <li>
+      <%= link_to src.name, src, class: 'tag' %> (<%= src.stories_count %>)
+    </li>
+  <% end %>
+</ol>
+<p class='right-box'>
+  <%= link_to "All #{ui_name}...", ind_url, class: 'button-appearance' %>
+</p>
+</li>

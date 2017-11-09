@@ -3,9 +3,12 @@
     <h3 class='heading'>Find your favorites</h3>
     <p>Browse fandoms by media or favorite up to 20 tags to have them listed here!</p>
     <ul class='options column_2'>
-        <li><%= link_to 'All Fandoms', sources_path, class: 'link' %></li>
+        <li class = 'fandom'><%= link_to 'All Fandoms', sources_path, class: 'link' %></li>
       <% Source.source_plurals.each do |sym, name| %>
-        <li><%= link_to name.titleize, sources_path(type: sym.to_s), class: 'link' %></li>
+        <li class = 'fandom'>
+          <%# link_to name.titleize, sources_path(type: sym.to_s), class: 'link' %>
+          <%= link_to name.titleize, sources_path + "/#{sym}", class: 'link' %>
+        </li>
       <% end %>
     </ul>
   </div>
@@ -22,5 +25,4 @@
       <% end %>
     </ul>
   </div>
-  <div class='clear-bar'></div>
 </div>

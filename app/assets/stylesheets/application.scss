@@ -77,14 +77,23 @@ a > img {
 
 a.link, a.link:visited {color: black!important;}
 
-a.button-appearance, .button-row > a {
+a.button-appearance, .button-row > a, a.top-link {
   text-decoration: none;
   background: #eee linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
   border: 1px solid #bbb;
   border-radius: 0.25em;
   padding: 0.25em 0.75em;
-  color: black;
+  color: black!important;
+  &:visited {
+    color: black!important;
+  }
   display: inline-block;
+}
+
+a.top-link {
+  font-size: 75%;
+  vertical-align: text-bottom;
+  padding: 0.14em 0.36em;
 }
 
 .button-row {
@@ -102,6 +111,7 @@ a.button-appearance, .button-row > a {
 
 .no-dec {
   list-style-type: none;
+  padding: 0;
 }
 
 #footer {
@@ -149,6 +159,10 @@ ul.options {
   ul.column_#{$i}, ol.column_#{$i} {
     > li {
       width: percentage(1/$i);
+      &.listbox {
+        width: percentage(1/$i - 1/20);
+      }
+      box-sizing: border-box;
       float: left;
       @for $j from 1 through $i {
         &:nth-of-type(#{$j}) {margin-top: 0;}
@@ -179,4 +193,18 @@ ul.entries {
   border: 0;
   margin: 0;
   padding: 0;
+}
+
+a.tag {
+  color: black!important;
+  text-decoration: none;
+  border-bottom: 1px dotted;
+  &:visited{
+    color: DimGrey!important;
+  }
+}
+
+.centered {
+  text-align: center;
+  float: none!important;
 }

@@ -1,0 +1,22 @@
+<%= form_tag('/sources/bulk_update', method: 'post') do %>
+<table>
+  <tr>
+    <th>Name</th>
+    <% Source.source_singulars.each do |k, v| %>
+      <th><%= v.titleize %></th>
+    <% end %>
+  </tr>
+  <% types = Source.source_types %>
+  <% @sources.each do |src| %>
+    <tr>
+      <td><%= name_link src %></td>
+      <% types.each do |type| %>
+        <td>
+          <%= check_box_tag("source[#{src.id}][types][]", type.to_s, src[type]) %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+<%= submit_tag('Submit') %>
+<% end %>

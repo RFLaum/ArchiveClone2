@@ -1,0 +1,9 @@
+<% params.each do |k, v| %>
+<% next unless v.respond_to? :each %>
+<p>
+  <%= "#{k}:" %><br>
+  <% v.each do |k2, v2| %>
+    <%= "#{k2}: #{v2}" %>
+  <% end %>
+</p>
+<% end %>

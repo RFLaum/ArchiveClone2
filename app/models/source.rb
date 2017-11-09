@@ -113,4 +113,31 @@ class Source < ApplicationRecord
   def display_name
     name
   end
+
+  def type_list_key
+    SOURCE_TYPES.select { |type| self[type] }
+  end
+
+  def type_list_sing
+    SOURCE_SINGULAR.values_at(*type_list_key)
+  end
+
+  def type_list_plur
+    SOURCE_PLURALS.values_at(*type_list_key)
+  end
+
+  def types=(type_arr)
+    type_syms = type_arr.map(&:to_sym)
+    SOURCE_TYPES.each do |type|
+      self[type] = type_syms.include?(type)
+    end
+  end
+
+  #new_data is a hash; key is id of source as a string, value is new data for
+  #that source
+  def self.bulk_update(new_data)
+    new_data.each do |k, v|
+      find(k.to_i).update(v)
+    end
+  end
 end

@@ -1,0 +1,43 @@
+<%
+=begin
+%>
+<%= will_paginate @sources %>
+<%= page_entries_info @sources %>
+
+<% @sources.each do |source| %>
+  <p><%= name_link source %>
+    <%# Source.source_types.select { |type| source[type] }.map(&:to_s).join(', ') %>
+  </p>
+<% end %>
+<%
+=end
+%>
+
+<div class='button-row centered' id='toc'>
+  <% @sources.keys.each do |key| %>
+    <%= link_to key, "#letter-#{key}" %>
+  <% end %>
+</div>
+
+<div class='clear-bar'></div>
+
+<% @sources.each do |ltr, srcs| %>
+  <div class='listbox thin' id='<%= "#letter-#{ltr}" %>'>
+    <h3>
+      <%= ltr %>
+      <%= link_to raw('&uarr;'), '#toc', class: 'top-link' %>
+    </h3>
+    <ol class='column_2 no-dec'>
+      <% srcs.each do |src| %>
+        <li>
+          <%= name_link(src, class: 'tag') %>
+          (<%= src.stories_count %>)
+        </li>
+      <% end %>
+    </ul>
+    <div class='clear-bar'></div>
+  </div>
+<% end %>
+
+<hr>
+<%= link_to 'New', new_source_path %>
