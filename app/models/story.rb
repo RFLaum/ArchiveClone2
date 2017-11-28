@@ -39,11 +39,12 @@ class Story < ApplicationRecord
   before_destroy :decrement_counts
   after_update :add_missing_sources
 
+  #gets primary key of Tag; NOT primary key of Story
   def get_prim_key; :name; end;
 
-  def deleted_tags
-    []
-  end
+  def deleted_tags; []; end
+  def deleted_sources; []; end
+  def deleted_characters; []; end
 
   def check_chapter_validity
     #have to check validity first, or else the message won't be set
@@ -224,31 +225,49 @@ class Story < ApplicationRecord
         end
       end
     end
-    if query_params[:tags].present?
-      query_params[:tags].split(/,\s*/).each do |tag|
-        cond = select('1').from('stories_tags')
-        cond = cond.where('stories_tags.story_id = stories.id')
-        cond = convert_query(tag, 'stories_tags.name', cond, true)
-        query = query.where("EXISTS (#{cond.to_sql})")
-      end
-    end
-    if query_params[:sort_by].present?
-      order_clause = query_params[:sort_by]
-      if order_clause == 'num_comments'
-        query = query.left_outer_joins(:comments)
-        query = query.select('stories.*, COUNT(comments.*)')
-        query = query.group('stories.id')
-        order_clause = 'COUNT(comments.*)'
-      end
-      query = query.order(order_clause + ' ' + query_params[:sort_direction])
-    end
+    # if query_params[:tags].present?
+    #   query_params[:tags].split(/,\s*/).each do |tag|
+    #     cond = select('1').from('stories_tags')
+    #     cond = cond.where('stories_tags.story_id = stories.id')
+    #     cond = convert_query(tag, 'stories_tags.name', cond, true)
+    #     query = query.where("EXISTS (#{cond.to_sql})")
+    #   end
+    # end
+    # [Tag, Source, Character].each do |klass|
+    #   sym = (klass.to_s + 's').downcase.to_sym
+    #   if query_params[sym].present?
+    #     rflct = reflect_on_association(sym)
+    #     tab_name = rflct.join_table
+    #     key = rflct.association_foreign_key
+    #     query_params[sym].split(/,\s*/).each do |obj|
+    #       cond = select('1').from(tab_name)
+    #       cond = cond.where("#{tab_name}.#{rflct.foreign_key} = stories.id")
+    #       cond = convert_query(obj, "#{tab_name}.#{key}", cond, true)
+    #       query = query.where("EXISTS (#{cond.to_sql})")
+    #     end
+    #   end
+    # end
+    query = tsc_search(query, query_params)
+    # if query_params[:sort_by].present?
+    #   order_clause = query_params[:sort_by]
+    #   if order_clause == 'num_comments'
+    #     query = query.left_outer_joins(:comments)
+    #     query = query.select('stories.*, COUNT(comments.*)')
+    #     query = query.group('stories.id')
+    #     order_clause = 'COUNT(comments.*)'
+    #   end
+    #   query = query.order(order_clause + ' ' + query_params[:sort_direction])
+    # end
+    query = s_sort(query, query_params[:sort_by], query_params[:sort_string])
     if query_params[:show_adult].blank?
-      query = query.reject(&:is_adult?)
+      # query = query.reject(&:is_adult?)
+      query = non_adult(query)
     end
     if query_params[:show_non_adult].blank?
       #because the parameter is a proc, this calls enumerable's select, not
       #ActiveRecord::Relation's select
-      query = query.select(&:is_adult?)
+      # query = query.select(&:is_adult?)
+      query = only_adult(query)
     end
     query
   end
@@ -325,6 +344,58 @@ class Story < ApplicationRecord
 
   def display_name
     title
+  end
+
+  def self.get_key_of(tag_sym)
+    tag_sym == :tags ? 'name' : 'id'
+  end
+
+  #story_set is sql query to merge this into; s_hash is hash of search terms,
+  #with keys :tags, :sources, :characters
+  def self.tsc_search(story_set, s_hash)
+    # s_hash.each do |k, v|
+    %i[tags sources characters].each do |k|
+      next unless v = s_hash[k]
+      rflct = reflect_on_association(k)
+      table_name = rflct.join_table
+      story_key = rflct.foreign_key
+      tag_key = rflct.association_foreign_key
+      v = v.split(/,\s*/) if v.is_a?(String)
+      v.each do |query|
+        cond = select('1').from(table_name)
+        cond = cond.where("#{table_name}.#{story_key} = stories.id")
+        cond = convert_query(query, "#{table_name}.#{tag_key}", cond, true)
+        story_set = story_set.where("EXISTS (#{cond.to_sql})")
+      end
+    end
+    story_set
+  end
+
+  def self.s_sort(story_set, sort_by, sort_dir)
+    sort_by = (sort_by ||= :updated_at).to_sym
+    sort_dir = (sort_dir ||= :desc).to_sym
+    if sort_by == :num_comments
+      return story_set.left_outer_joins(:comments)
+                      .select('stories.*, COUNT(comments.*)')
+                      .group('stories.id')
+                      .order("COUNT(comments.*) #{sort_dir}")
+    end
+    story_set.order(sort_by => sort_dir)
+  end
+
+  #TODO: test this
+  def self.only_adult(story_set)
+    answer = story_set.left_outer_joins(:tags).distinct
+    answer.where("stories.adult_override = true OR tags.adult = true")
+  end
+
+  #TODO: test this
+  def self.non_adult(story_set)
+    answer = story_set.where(adult_override: false)
+    cond = "SELECT 1 FROM stories_tags INNER JOIN tags ON stories_tags.name "
+    cond += " = tags.name WHERE tags.adult = 't' AND stories_tags.story_id "
+    cond += " = stories.id"
+    answer.where.not("EXISTS (#{cond})")
   end
 
   private

@@ -69,16 +69,6 @@
 
   <fieldset>
     <legend>Search</legend>
-    <dl>
-      <dt><%= label_tag(:sort_by, 'Sort by') %></dt>
-      <dd>
-        <%= select_tag(:sort_by, options_for_select(Story::SORT_COLUMNS)) %>
-      </dd>
-      <dt><%= label_tag(:sort_direction, 'Sort direction') %></dt>
-      <dd>
-        <%= select_tag(:sort_direction,
-        options_for_select([['Ascending', 'asc'], ['Descending', 'desc']])) %>
-      </dd>
-    </dl>
+    <%= render 'sort_dropdown' %>
   </fieldset>
 <% end %>

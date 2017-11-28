@@ -1,55 +1,10 @@
-<p id="notice"><%= notice %></p>
-
 <% if @obj.present? %>
 <h1>Stories in <%= name_link(@obj, class: 'tag') %>.</h1>
 <% else %>
 <h1>Stories</h1>
 <% end %>
 
-<%= will_paginate(@stories, class: 'button-row centered') %>
-<%# page_entries_info @stories %>
-
-<%
-=begin
-%>
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Author</th>
-      <th>Chapters</th>
-      <th>Comments</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% usr = current_user_or_guest %>
-    <% @stories.each do |story| %>
-      <% permissions = usr.story_permissions(story) %>
-      <% #don't need this b/c adult stories are filtered out in controller %>
-      <% #next unless permissions[:read] %>
-      <tr>
-        <td><%= name_link story %></td>
-        <td><%= name_link story.user %></td>
-        <td><%= story.num_chapters %></td>
-        <td><%= story.comments.size %></td>
-        <td><% if permissions[:edit] %>
-          <%= link_to 'Edit', edit_story_path(story) %> <% end %></td>
-        <td><% if permissions[:delete] %>
-          <%= link_to 'Destroy', story, method: :delete, data: { confirm: 'Are you sure?' } %>
-          <% end %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<%
-=end
-%>
-<%# render 'stories/summary', collection: @stories %>
-<% @stories.each do |story| %>
-  <%= render 'stories/summary', story: story %>
-<% end %>
+<%= render 'filterable_listing', page_stories: @stories, all_stories: @base_stories %>
 
 <%
 =begin

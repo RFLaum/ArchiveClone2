@@ -5,6 +5,7 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w( edit_user.js )
 Rails.application.config.assets.precompile += %w( jquery.tokeninput.js )
 Rails.application.config.assets.precompile += %w( token-input.css )
+Rails.application.config.assets.precompile += %w( click_dropdown.js )
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path
 

@@ -1,0 +1,37 @@
+<%# pass in url that form targets as 'target', stories as 'stories' %>
+<%# javascript_include_tag 'click_dropdown.js' %>
+
+
+<% scr = 'special_pages/autocomplete_script' %>
+<% ['tag', 'source', 'character'].each do |t| %>
+  <%= render scr, sing: t, coll: params["other_#{t}s".to_sym].to_s.split(',') %>
+<% end %>
+
+<%= form_tag target, method: :get, class: 'filter-form' do %>
+  <%= submit_tag 'Sort and Filter'%>
+  <%= render 'sort_dropdown' %>
+  <% [Tag, Source, Character].each do |klass| %>
+    <fieldset>
+      <% base_id = klass.to_s.downcase + 's' %>
+      <% name = base_id + '[]' %>
+      <% pars_arr = params[base_id.to_sym] %>
+      <span class = 'click_dropdown_header hide-header'>Top 10 <%= base_id %>:</span>
+      <dl class = 'hidden'>
+        <% klass.most_common(stories).each do |tag| %>
+          <% pv = tag.prim_val %>
+          <% checked = pars_arr ? pars_arr.include?(pv.to_s) : false %>
+          <% id = base_id + "_#{pv}" %>
+          <dt><%= check_box_tag(name, pv, checked, id: id) %></dd>
+          <dd><%= label_tag(id, tag.name + " (#{tag.cnt})") %></dt>
+        <% end %>
+      </dl>
+    </fieldset>
+  <% end %>
+  <fieldset>
+    <% ['tag', 'source', 'character'].each do |nm| %>
+      <span>Other <%= nm.capitalize %>s:</span>
+      <%= text_field_tag "other_#{nm}s", nil, class: "#{nm}-input" %>
+    <% end %>
+  </fieldset>
+  <%= submit_tag 'Sort and Filter' %>
+<% end %>

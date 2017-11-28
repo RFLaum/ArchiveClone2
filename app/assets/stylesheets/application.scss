@@ -77,7 +77,7 @@ a > img {
 
 a.link, a.link:visited {color: black!important;}
 
-a.button-appearance, .button-row > a, a.top-link, .pagination > a {
+a.button-appearance, .button-row > a, a.top-link {
   text-decoration: none;
   background: #eee linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
   border: 1px solid #bbb;
@@ -207,4 +207,26 @@ a.tag {
 .centered {
   text-align: center;
   float: none!important;
+}
+
+.hide-header ~ .hidden {
+  display: none;
+}
+
+.click_dropdown_header {
+  cursor: pointer;
+  &::before {
+    content: "\25BE";
+  }
+  &.hide-header::before {
+    content: "\25B8";
+  }
+}
+
+input[type='submit'] {
+  background: lightgrey;
+  background-image: linear-gradient(white 2%, gainsboro 95%, silver 100%);
+  font-size: 1rem;
+  font-weight: lighter;
+  padding: 0.25em 0.75em;
 }
