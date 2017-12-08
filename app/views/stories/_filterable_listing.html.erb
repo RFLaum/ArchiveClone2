@@ -1,0 +1,15 @@
+<% if all_stories.empty? %>
+<p>No stories found.</p>
+<% else %>
+  <%= page_entries_info(page_stories) %>
+  <%= will_paginate(page_stories, class: 'button-row centered') %>
+
+  <div>
+  <div class = 'story-summaries'>
+    <% page_stories.each do |story| %>
+      <%= render 'stories/summary', story: story %>
+    <% end %>
+  </div>
+  <%= render 'filter_form', stories: all_stories, target: url_for %>
+  </div>
+<% end %>

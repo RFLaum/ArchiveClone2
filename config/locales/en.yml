@@ -20,7 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
   activerecord:
     models:
       story:
@@ -35,6 +34,9 @@ en:
       source:
         one: source
         other: sources
+      news_comment:
+        one: comment
+        other: comments
   time:
     formats:
       default: "%-l:%M:%S %p, %b %-d, %Y"

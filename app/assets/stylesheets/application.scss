@@ -29,6 +29,10 @@ body {
   box-sizing: border-box;
 }
 
+.main-body {
+  padding: 0.5em 2.5em 3.5em;
+}
+
 dl {
   clear: right;
   position: relative;
@@ -71,14 +75,25 @@ a > img {
   vertical-align: middle;
 }
 
-a.button-appearance, .button-row > a {
+a.link, a.link:visited {color: black!important;}
+
+a.button-appearance, .button-row > a, a.top-link {
   text-decoration: none;
   background: #eee linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
   border: 1px solid #bbb;
   border-radius: 0.25em;
   padding: 0.25em 0.75em;
-  color: black;
+  color: black!important;
+  &:visited {
+    color: black!important;
+  }
   display: inline-block;
+}
+
+a.top-link {
+  font-size: 75%;
+  vertical-align: text-bottom;
+  padding: 0.14em 0.36em;
 }
 
 .button-row {
@@ -96,21 +111,7 @@ a.button-appearance, .button-row > a {
 
 .no-dec {
   list-style-type: none;
-}
-
-#footer {
-  background-color: DarkRed;
-  color: white;
-  width: 100%;
-  overflow: auto;
-  position: absolute;
-  bottom: 0;
-  padding-bottom: 16px;
-}
-
-//maybe do this with table-layout:fixed instead?
-#footer li {
-  width: 50%;
+  padding: 0;
 }
 
 .horizontal-list > li {
@@ -124,4 +125,93 @@ a.button-appearance, .button-row > a {
 
 .script-only {
   display: none!important;
+}
+
+ul.options {
+  box-sizing: border-box;
+  list-style-type: none;
+  > li > a {
+    text-decoration: none;
+    &:before {
+      color: DarkRed;
+      content: "\BB";
+      padding-right: 0.25em;
+    }
+  }
+}
+
+@for $i from 2 through 10 {
+  ul.column_#{$i}, ol.column_#{$i} {
+    > li {
+      width: percentage(1/$i);
+      &.listbox {
+        width: percentage(1/$i - 1/20);
+      }
+      box-sizing: border-box;
+      float: left;
+      @for $j from 1 through $i {
+        &:nth-of-type(#{$j}) {margin-top: 0;}
+      }
+    }
+  }
+}
+
+.time-header {
+  width: 100%;
+}
+
+ul.entries {
+  list-style-type: none;
+  padding: 0;
+  > li {
+    border-bottom: 1px solid silver;
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}
+
+.clear-bar {
+  width: 100%;
+  clear: both;
+  height: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+a.tag {
+  color: black!important;
+  text-decoration: none;
+  border-bottom: 1px dotted;
+  &:visited{
+    color: DimGrey!important;
+  }
+}
+
+.centered {
+  text-align: center;
+  float: none!important;
+}
+
+.hide-header ~ .hidden {
+  display: none;
+}
+
+.click_dropdown_header {
+  cursor: pointer;
+  &::before {
+    content: "\25BE";
+  }
+  &.hide-header::before {
+    content: "\25B8";
+  }
+}
+
+input[type='submit'] {
+  background: lightgrey;
+  background-image: linear-gradient(white 2%, gainsboro 95%, silver 100%);
+  font-size: 1rem;
+  font-weight: lighter;
+  padding: 0.25em 0.75em;
 }

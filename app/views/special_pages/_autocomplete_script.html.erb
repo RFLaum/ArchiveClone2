@@ -10,7 +10,7 @@
       <% end %>
       prePopulate: [
         <% coll.each do |obj| %>
-          {name: "<%= obj.name %>"},
+          {name: "<%= obj.is_a?(String) ? obj : obj.name %>"},
         <% end %>
       ]
     });

@@ -1,6 +1,9 @@
 <% if @error.present? %>
 <p>Error: <%= @error %></p>
 <% else %>
+<%
+=begin
+%>
   <% if @results.empty? %>
   <p>No stories found.</p>
   <% end %>
@@ -11,4 +14,9 @@
   <% @results.each do |record| %>
     <%= render 'stories/summary', story: record %>
   <% end %>
+  <%= render 'filter_form', stories: @base_results, target: url_for %>
+<%
+=end
+%>
+  <%= render 'filterable_listing', page_stories: @results, all_stories: @base_results %>
 <% end %>

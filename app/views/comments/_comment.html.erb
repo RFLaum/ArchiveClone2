@@ -15,8 +15,10 @@
   </div>
   <% if is_correct_user?(comment.user, true) %>
     <span class="comment-administration">
-      <%= link_to "Edit", edit_story_comment_path(@story, comment) %>
-      <%= link_to "Delete", [@story, comment], method: :delete %>
+      <%# path = "edit_#{@parent.class.to_s.downcase}_comment_path"%>
+      <% path = @parent.comment_edit_helper %>
+      <%= link_to "Edit", send(path, @parent, comment) %>
+      <%= link_to "Delete", [@parent, comment], method: :delete %>
     </span>
   <% end %>
 </li>

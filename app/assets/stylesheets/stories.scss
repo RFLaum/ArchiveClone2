@@ -42,3 +42,48 @@ div.input.story_body, div.input.chapter_body {
     min-height: 80em;
   }
 }
+
+.story-summaries {
+  width: 75%;
+  float: left;
+}
+
+.filter-form {
+  width: 23%;
+  float: right;
+  background-color: gainsboro;
+  box-shadow: inset 1px 0 5px darkgrey;
+  padding: 0.56em;
+  box-sizing: border-box;
+  > input[type='submit'] {
+    width: 100%;
+    // background: lightgrey;
+    // background-image: linear-gradient(white 2%, gainsboro 95%, silver 100%);
+    // font-size: 1rem;
+    // font-weight: lighter;
+    // padding: 0.25em 0.75em;
+  }
+  > fieldset {
+    border: 0px;
+    margin: 0;
+    padding: 0;
+    > span {
+      border-bottom: 1px solid linen;
+      width: 100%;
+      display: inline-block;
+      // padding-right: 100%;
+      // white-space: nowrap;
+    }
+  }
+  > dl {
+    > dt {
+      width: 45%;
+    }
+    > dd {
+      width: 55%;
+      > select {
+        float: right;
+      }
+    }
+  }
+}

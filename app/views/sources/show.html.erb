@@ -10,6 +10,12 @@
   <%= tagesque_links(@source.characters, 'character', false) %>
 </p>
 
+<p>
+  <strong>Types:</strong>
+  <%# Source.source_singulars.select { |k,v| @source[k] }.values.join(', ') %>
+  <%= @source.type_list_plur.join(', ') %>
+</p>
+
 <%= link_to 'Stories', source_stories_path(@source) %> |
 <% if is_admin? %>
 <%= link_to 'Edit', edit_source_path(@source) %> |

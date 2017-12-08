@@ -16,16 +16,43 @@ class StoriesController < ApplicationController
     elsif params[:source_id]
       @obj = Source.find(params[:source_id])
     else
-      @stories = Story.all
+      @base_stories = Story.all
     end
     if @obj.present?
-      @stories = @obj.stories
+      @base_stories = @obj.stories
       @page_title.prepend(@obj.name + ' ')
     end
+
+    query_params = {
+      tags: params[:other_tags],
+      sources: params[:other_sources],
+      characters: params[:other_characters]
+    }
+    @base_stories = Story.tsc_search(@base_stories, query_params)
+    @base_stories = Story.tsc_search(@base_stories, params)
+
+    # sort_by = params[:sort_by] ? params[:sort_by].to_sym : :updated_at
+    # sort_dir = params[:sort_direction] ? params[:sort_direction].to_sym : :desc
+
+    # if sort_by == :num_comments
+    #   @stories = @base_stories.left_outer_joins(:comments)
+    #                           .select('stories.*, COUNT(comments.*)')
+    #                           .group('stories.id')
+    #                           .order("COUNT(comments.*) #{sort_dir}")
+    # else
+    #   @stories = @base_stories.order(sort_by => sort_dir)
+    # end
+
     unless can_see_adult?
-      @stories = @stories.reject(&:is_adult?)
+      # @base_stories = @base_stories.reject(&:is_adult?)
+      @base_stories = Story.non_adult(@base_stories)
     end
-    @stories = @stories.paginate(page: (params[:page] || 1))
+
+    @stories = Story.s_sort(@base_stories, params[:sort_by], params[:sort_dir])
+
+
+
+    @stories = @stories.paginate(page: params[:page])
   end
 
   # GET /stories/1
@@ -119,8 +146,9 @@ class StoriesController < ApplicationController
     if !(@pars[:show_adult] || @pars[:show_non_adult])
       @error = "You have chosen to show neither adult nor non-adult stories."
     else
-      @results = Story.search(@pars) #.records
-      @results = @results.paginate(page: (params[:page] || 1))
+      @results = Story.search(@pars)
+      @base_results = @results
+      @results = @results.paginate(page: params[:page])
     end
   end
 

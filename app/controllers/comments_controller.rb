@@ -1,8 +1,8 @@
 class CommentsController < ApplicationController
   before_action :set_story
+  skip_before_action :set_story, only: %i[index_all]
   before_action :load_comment
   skip_before_action :load_comment, only: %i[new create index index_all]
-  skip_before_action :set_story, only: %i[index_all]
   before_action :check_user, only: %i[edit update destroy]
 
   def create
@@ -64,6 +64,7 @@ class CommentsController < ApplicationController
 
   def set_story
     @story = Story.find(params[:story_id])
+    @parent = @story
   end
 
   def load_comment

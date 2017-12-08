@@ -1,6 +1,7 @@
 #should only access through my defined methods, not through .new, .create,
 #.find, etc.
 class BannedAddress < ApplicationRecord
+  include Updateable
   self.primary_key = :email
 
   def self.add_email(address)

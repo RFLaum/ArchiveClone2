@@ -72,7 +72,7 @@
     </dd>
     <dt>Summary</dt>
     <dd>
-      <%= @story.summary %>
+      <%= raw @story.summary %>
     </dd>
     <dt>Created</dt>
     <dd><%= time_format(@story.created_at) %> </dd>

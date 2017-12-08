@@ -17,4 +17,14 @@ class ApplicationRecord < ActiveRecord::Base
     # end
     !already_in
   end
+
+  #primary key for join tables
+  def self.pfj
+    "#{table_name}.#{primary_key}"
+  end
+
+  #get value of primary key
+  def prim_val
+    self[self.class.primary_key]
+  end
 end

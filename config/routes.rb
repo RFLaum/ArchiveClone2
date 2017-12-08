@@ -1,20 +1,24 @@
 Rails.application.routes.draw do
   root 'special_pages#home'
-  resources :newsposts
-  # get 'tags/search' => 'tags#search'
-  # get 'tags/find' => 'tags#search_results'
-  # get 'tags/new' => 'tags#new'
-  # post 'tags' => 'tags#create'
-  # get 'tags/:id/stories' => 'tags#show_stories'
-  # get 'tags/:id/edit' => 'tags#edit'
-  # match 'tags/:id' => 'tags#update', via: %i[patch put]
-  # delete 'tags/:id/delete' => 'tags#delete'
+  get 'home2' => 'special_pages#home2'
+  get 'about' => 'special_pages#about', as: :about
+  get 'tech' => 'special_pages#technical', as: :tech
+  resources :newsposts do
+    resources :news_comments
+  end
   resources :tags do
     resources :stories, only: %i[index]
   end
   resources :characters do
     resources :stories, only: %i[index]
   end
+
+  get 'sources/bulk_update' => 'sources#update_form'
+  post 'sources/bulk_update' => 'sources#update_receiver'
+  get 'sources/search' => 'sources#search_form'
+  get 'sources/results' => 'sources#search_results'
+  get 'sources/:type', to: 'sources#index_type', constraints: { type: /[a-z_]+/ }
+
   resources :sources do
     resources :stories, only: %i[index]
   end
@@ -34,6 +38,7 @@ Rails.application.routes.draw do
     resources :bookmarks, except: [:show]
   end
   resources :bookmarks, only: [:index]
+  # resources :chapters, only: %i[index create]
 
   # get 'stories/:story_id/add' => 'chapters#new'
   # get 'stories/:story_id/edit_chapter/:chapter_num' => 'chapters#edit'
@@ -67,12 +72,8 @@ Rails.application.routes.draw do
   get 'search' => 'search#full_form'
   get 'results' => 'search#results'
 
-  get 'autocomplete/tag' => 'auto_complete#tag'
-  get 'autocomplete/source' => 'auto_complete#source'
-  get 'autocomplete/character' => 'auto_complete#character'
-
-  get 'sources/search' => 'sources#search_form'
-  get 'sources/results' => 'sources#search_results'
-  resources :sources
-
+  # get 'autocomplete/tag' => 'auto_complete#tag'
+  # get 'autocomplete/source' => 'auto_complete#source'
+  # get 'autocomplete/character' => 'auto_complete#character'
+  get 'autocomplete/:action' => 'auto_complete#%{action}'
 end

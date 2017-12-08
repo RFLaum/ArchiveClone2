@@ -1,3 +1,17 @@
 // Place all the styles related to the Sources controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.listbox {
+  background: gainsboro;
+  border: 2px solid lightgrey;
+  margin-right: 1.5em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  > ol {
+    background: white;
+  }
+  &.thin > ol {
+    margin: 0;
+  }
+}

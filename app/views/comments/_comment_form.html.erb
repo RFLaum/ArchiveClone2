@@ -1,4 +1,4 @@
-<%= form_for([@story, comment]) do |f| %>
-  <%= f.text_area :content %>
+<%= form_for([@parent, comment]) do |f| %>
+  <%= f.text_area :content, class: 'wysiwyg' %>
   <%= f.submit 'Submit Comment' %>
 <% end %>

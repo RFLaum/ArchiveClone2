@@ -1,5 +1,5 @@
 <% if logged_in? %>
-  <% dummy_comment = @story.get_dummy_comment(current_user) %>
+  <% dummy_comment = @parent.get_dummy_comment(current_user) %>
   <div id = "comment-add-wrapper">
     <h4>Add a comment</h4>
     <%= render partial: "comments/comment_form", locals: {comment: dummy_comment} %>
