@@ -1,3 +1,5 @@
+require 'elasticsearch/model'
+
 module Storycount
   extend ActiveSupport::Concern
   include Elasticsearch::Model
