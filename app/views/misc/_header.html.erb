@@ -31,7 +31,7 @@
     <% if is_admin? %>
       <%= link_to 'Banned Addresses', admin_banned_addresses_path %>
     <% end %>
-    <div class = 'dropdown'>
+    <span class = 'dropdown'>
       <%= link_to 'Search', '/search' %>
       <ul class = 'dropdown-hidden'>
         <li><%= link_to 'Stories', '/stories/search' %></li>
