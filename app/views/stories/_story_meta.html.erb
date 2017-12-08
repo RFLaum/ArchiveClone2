@@ -8,7 +8,7 @@
   wrapper_html: {class: 'script-only'} %>
 <%= f.input :chars_public, label: 'Characters', input_html: {class: 'character-input'},
   wrapper_html: {class: 'script-only'} %>
-<%= f.input :summary, required: true %>
+<%= f.input :summary, input_html: {class: 'wysiwyg'}, required: true %>
 <noscript>
   <%= f.input :tags_add, label: 'New Tags' %>
   <%= f.input :srcs_add, label: 'New Source Media' %>

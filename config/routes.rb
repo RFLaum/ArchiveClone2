@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root 'special_pages#home'
   get 'home2' => 'special_pages#home2'
+  get 'about' => 'special_pages#about', as: :about
+  get 'tech' => 'special_pages#technical', as: :tech
   resources :newsposts do
     resources :news_comments
   end
@@ -36,6 +38,7 @@ Rails.application.routes.draw do
     resources :bookmarks, except: [:show]
   end
   resources :bookmarks, only: [:index]
+  # resources :chapters, only: %i[index create]
 
   # get 'stories/:story_id/add' => 'chapters#new'
   # get 'stories/:story_id/edit_chapter/:chapter_num' => 'chapters#edit'

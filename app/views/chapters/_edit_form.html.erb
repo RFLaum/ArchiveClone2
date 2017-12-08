@@ -1,7 +1,10 @@
 <%# form_for [@story, this_chapter] do |f| %>
-<%= form_for this_chapter do |f| %>
+<%# form_for this_chapter do |f| %>
+<%= simple_form_for [@story, this_chapter] do |f| %>
   <%= render 'chapter_body_edit', f: f %>
   <% #todo: add tags %>
-  <%= f.hidden_field(:number) %>
-  <%= f.submit("Submit") %>
+  <%# f.hidden_field(:number) %>
+  <%= f.input(:number, as: :hidden) %>
+  <%# f.submit("Submit") %>
+  <%= f.button :submit %>
 <% end %>

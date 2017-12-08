@@ -1,0 +1,27 @@
+//styles for site header and site footer
+
+
+#footer {
+  background-color: DarkRed;
+  color: white;
+  width: 100%;
+  overflow: auto;
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 16px;
+}
+
+#footer > ul {
+  padding: 1em 5%;
+  // padding-left: 5%;
+  // padding-right: 5%;
+}
+
+#footer a, #footer a:visited {
+  color: white!important;
+  // text-decoration: none;
+}
+
+// #footer h4 {
+//   margin: 0;
+// }

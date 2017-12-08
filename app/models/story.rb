@@ -12,7 +12,7 @@ class Story < ApplicationRecord
     too_short: "must be at least %{count} characters long",
     too_long: "must be at most %{count} characters long" }
 
-  validates :summary, length: { in: 10..200,
+  validates :summary, length: { in: 10..3000,
     too_short: "must be at least %{count} characters long",
     too_long: "must be at most %{count} characters long" }
 

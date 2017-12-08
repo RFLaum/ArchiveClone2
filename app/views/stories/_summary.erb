@@ -19,7 +19,7 @@
     </dd>
     <dt>Summary</dt>
     <dd>
-      <%= story.summary || "This story has no blurb." %>
+      <%= raw (story.summary || "This story has no blurb.") %>
     </dd>
     <dt>Author</dt>
     <dd><%= name_link(story.user) %></dd>

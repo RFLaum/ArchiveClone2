@@ -114,21 +114,6 @@ a.top-link {
   padding: 0;
 }
 
-#footer {
-  background-color: DarkRed;
-  color: white;
-  width: 100%;
-  overflow: auto;
-  position: absolute;
-  bottom: 0;
-  padding-bottom: 16px;
-}
-
-//maybe do this with table-layout:fixed instead?
-#footer li {
-  width: 50%;
-}
-
 .horizontal-list > li {
   float: left;
   text-align: left;

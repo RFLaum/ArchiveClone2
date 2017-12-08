@@ -19,7 +19,36 @@
       selector: '.wysiwyg',
       branding: false,
       menubar: false,
-      content_style: "html {cursor: text; min-height: 100%;}"
+      content_style: "html {cursor: text; min-height: 100%;}",
+      //This is a workaround; including this plugin fixes the scrolling issue
+      //in Chrome (https://github.com/tinymce/tinymce/issues/4031). For some
+      //reason.
+      plugins: 'paste',
+      paste_postprocess: function(plugin, args) {
+        $(args.node).find(".signature").css("text-align", "right");
+        $(args.node).find(".smcap").css("font-variant", "small-caps");
+        $(args.node).find("p.buscard").css("text-align", "center");
+        $(args.node).find(".pagenum").remove();
+        $(args.node).find("p.pullquote").each(function(i) {
+          $(this).replaceWith("<blockquote>" + this.innerHTML + "</blockquote>");
+        });
+        $(args.node).find("ins").each(function(i) {
+          $(this).replaceWith(this.innerHTML);
+        });
+      }
+      // paste_preprocess: function(plugin, args) {
+      //   args.content = args.content.replace(/(class\s*=\s*["'']signature["''])/g,
+      //     '\1 style="text-align: right;"');
+      //   args.content = args.content.replace(/<\s*span/)
+      //   // answer = "";
+      //   // for (var key in args) {
+      //   //   if (args.hasOwnProperty(key)){
+      //   //     answer += "<br> " + key.toString() + ": ";
+      //   //     answer += args[key].toString();
+      //   //   }
+      //   // }
+      //   // args.content = answer;
+      // }
     });
     </script>
   </head>
