@@ -66,6 +66,7 @@ gem 'paperclip', '~> 5.1'
 
 # gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
 
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
+# gem 'elasticsearch-model'
+# gem 'elasticsearch-rails'
+gem 'bonsai-elasticsearch-rails'
 gem 'elasticsearch-dsl'
