@@ -12,6 +12,12 @@
   min-width: 20em;
 }
 
+.dropdown {
+  //needed to get the menu to be positioned relative to this rather than to
+  //the document body
+  position: relative;
+}
+
 .dropdown:hover {
   background-color: #ddd;
   .dropdown-hidden {
