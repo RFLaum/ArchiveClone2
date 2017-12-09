@@ -10,7 +10,7 @@
          <!-- (<%= link_to('Log out', '/logout') %>) -->
          <div class='dropdown'>
            <%= name_link current_user %>
-           <ul class='dropdown-hidden'>
+           <ul class='dropdown-hidden on-right'>
              <li><%= link_to('Settings', edit_user_path(current_user)) %></li>
              <li><%= link_to('Post new story', new_story_path) %></li>
              <li><%= link_to('Log out', '/logout') %></li>
@@ -33,7 +33,7 @@
     <% end %>
     <span class = 'dropdown'>
       <%= link_to 'Search', '/search' %>
-      <ul class = 'dropdown-hidden'>
+      <ul class = 'dropdown-hidden on-left'>
         <li><%= link_to 'Stories', '/stories/search' %></li>
         <li><%= link_to 'Source Media', '/sources/search' %></li>
         <li><%= link_to 'General', '/search' %></li>

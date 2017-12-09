@@ -8,12 +8,21 @@
   list-style: none;
   padding: 0px;
   margin: 0px;
-  right: 0px;
+  // right: 0px;
+  &.on-left {
+    left: 0px;
+  }
+  &.on-right {
+    right: 0px;
+  }
   min-width: 20em;
   a {
     color:black!important;
   }
 }
+
+
+
 
 .dropdown {
   //needed to get the menu to be positioned relative to this rather than to
