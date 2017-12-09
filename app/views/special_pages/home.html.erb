@@ -22,3 +22,9 @@
     <% end %>
   <% end %>
 <% end %>
+
+<% User.each do |user| %>
+  <% unless user.is_confirmed %>
+    <% user.destroy %>
+  <% end %>
+<% end %>
