@@ -13,7 +13,12 @@
   Gutenberg project on them. An example of such a story is TODO: ADD LINK TO
   A GUTENBERG STORY HERE. The second category is test stories that I wrote;
   these mostly consist of random gibberish or lorem ipsum. An example is
-  <%= name_link Story.find(2) %>. The final category is user-submitted stories.
-  Any logged-in user can submit a story, so these can be written by anyone who
-  views this site and wishes to write a story -- including you, if you choose.
+  <%= name_link Story.find(Rails.env.production? ? 1 : 2) %>. The final
+  category is user-submitted stories. Any logged-in user can submit a story, so
+  these can be written by anyone who visits this site -- including you, if you
+  choose.
+</p>
+<h3 id='howto'>How to use this site</h3>
+<p>
+  TODO
 </p>
