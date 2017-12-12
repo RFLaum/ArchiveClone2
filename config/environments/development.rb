@@ -38,7 +38,7 @@ Rails.application.configure do
     domain: 'archiveofourclone.org',
     user_name: 'archiveofourclone',
     password: 'archivepassword',
-    authentication: 'plain',
+    authentication: 'login',
     enable_starttls_auto: true
   }
   config.action_mailer.default_url_options = { host: "0.0.0.0:3000" }
