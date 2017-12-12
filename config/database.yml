@@ -20,19 +20,19 @@ development:
   <<: *default
   database: archiveclone_development
   username: archiveclone
-  password: psqlpassword
+  password: <%= ENV['AC_SQL_PASSWORD'] %>
 
 test:
   <<: *default
   database: archiveclone_test
   username: archiveclone
-  password: psqlpassword
+  password: <%= ENV['AC_SQL_PASSWORD'] %>
 
 production:
   <<: *default
   database: archiveclone_production
   username: archiveclone
-  password: psqlpassword
+  password: <%= ENV['AC_SQL_PASSWORD'] %>
 # development:
 #   <<: *default
 #   database: db/development.sqlite3

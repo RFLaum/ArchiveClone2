@@ -5,16 +5,22 @@ class UsersController < ApplicationController
   before_action :check_user, only: %i[deactivate edit update]
 
   def register
+    @page_title = "Register new user"
     @user = User.new
   end
 
   def index
+    @page_title = "Users"
     @users = User.all
   end
 
-  def show; end
+  def show
+    @page_title = @user.name
+  end
 
-  def edit; end
+  def edit
+    @page_title = "Editing #{@user.name}"
+  end
 
   def update
     pars = params_for_edit

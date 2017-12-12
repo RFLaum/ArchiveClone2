@@ -62,8 +62,8 @@ Rails.application.configure do
     address: 'smtp.gmail.com',
     port: 587,
     domain: 'archiveofourclone.org',
-    user_name: GMAIL_SMTP_USER,
-    password: GMAIL_SMTP_PASSWORD,
+    user_name: ENV['GMAIL_SMTP_USER'],
+    password: ENV['GMAIL_SMTP_PASSWORD'],
     authentication: 'login',
     enable_starttls_auto: true
   }
