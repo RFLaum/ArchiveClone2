@@ -3,6 +3,7 @@ require 'elasticsearch/model'
 class Source < ApplicationRecord
   include Updateable
   include Storycount
+  # include Impliable
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
@@ -146,4 +147,8 @@ class Source < ApplicationRecord
       find(k.to_i).update(v)
     end
   end
+
+  # def get_descendant_implications
+  #   []
+  # end
 end
