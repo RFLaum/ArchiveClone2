@@ -17,11 +17,10 @@ Rails.application.routes.draw do
   post 'sources/bulk_update' => 'sources#update_receiver'
   get 'sources/search' => 'sources#search_form'
   get 'sources/results' => 'sources#search_results'
-  get 'sources/:type', to: 'sources#index_type', constraints: { type: /[a-z_]+/ }
-
   resources :sources do
     resources :stories, only: %i[index]
   end
+  get 'sources/:type', to: 'sources#index_type', constraints: { type: /[a-z_]+/ }
 
   get 'stories/:id/chapters/all' => 'stories#showall'
   get 'stories/:id/all' => 'stories#showall'
