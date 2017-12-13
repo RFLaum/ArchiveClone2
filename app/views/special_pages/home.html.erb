@@ -23,11 +23,22 @@
   <% end %>
 <% end %>
 
+<% ["Harry Potter", "Hermione Granger"].each do |str| %>
+  <% chr = Character.find_by(name: str) %>
+  <%= str %>: <%= chr.id %> (<%= chr.source_id %>) <br>
+<% end %>
+
+<%
+=begin
+%>
 <ul>
 <% Character.find_each do |chr| %>
   <li><%= chr.name %>: <%= chr.source_name %> (<%= chr.source_id %>)</li>
 <% end %>
 </ul>
+<%
+=end
+%>
 
 <%# User.find_each do |user| %>
   <%# user.destroy unless user.is_confirmed %>
