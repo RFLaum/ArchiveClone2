@@ -101,7 +101,8 @@ class Source < ApplicationRecord
   end
 
   def chars_public
-    characters.reduce { |str, char| str + ', ' + char.name }
+    # characters.reduce { |str, char| str + ', ' + char.name }
+    characters.map{ |c| c.name }.join(', ')
   end
 
   def chars_public=(new_chars)

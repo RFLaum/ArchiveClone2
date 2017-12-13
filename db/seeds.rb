@@ -18,3 +18,5 @@
 # hg_chr = Character.find_or_create_by(name: "Hermione Granger")
 # hp_chr.source = hp_src
 # hg_chr.source = hp_src
+# hp_chr.save
+# hg_chr.save
