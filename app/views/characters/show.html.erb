@@ -7,7 +7,11 @@
 
 <p>
   <strong>Source:</strong>
-  <%= name_link @character.source %>
+  <% if @character.source %>
+    <%= name_link @character.source %>
+  <% else %>
+    none
+  <% end %>
 </p>
 
 <%= link_to 'Stories', character_stories_path(@character) %> |

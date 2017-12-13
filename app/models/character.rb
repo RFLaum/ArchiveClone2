@@ -29,7 +29,7 @@ class Character < ApplicationRecord
   end
 
   def source_name=(src_name)
-    source = Source.find_or_initialize_by(name: src_name)
+    self.source = Source.find_or_initialize_by(name: src_name)
   end
 
   def self.name_field
