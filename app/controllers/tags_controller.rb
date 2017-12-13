@@ -13,10 +13,12 @@ class TagsController < ApplicationController
     # else
     #   @tags = Tag.where(adult: false)
     # end
-    @stories = Story.all
-    @stories = Story.non_adult(stories) unless can_see_adult?
+    # @stories = Story.all
+    # @stories = Story.non_adult(stories) unless can_see_adult?
     # @tags = Tag.most_common(stories, 100).reorder('name ASC')
     # @tags = cloud_sizer(Tag, stories, Tag.cloud_names)
+    tag_set = can_see_adult? ? Tag.all : Tag.where(adult: false)
+    @tags = Tag.get_top(tag_set)
   end
 
   # GET /tags/1

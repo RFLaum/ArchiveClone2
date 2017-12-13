@@ -48,5 +48,19 @@ module Storycount
       answer
     end
 
+    def get_top(base_set = all, num = 100)
+      base_rel = base_set.order(stories_count: :desc).limit(num)
+      min = base_rel.last.stories_count
+      max = base_rel.first.stories_count
+      alpha_rel = select('*').from("(#{base_rel.to_sql}) as alias")
+                             .order("alias.#{name_field} ASC")
+      [alpha_rel, min, max]
+    end
+
+    # def get_top_ordered(base_set = all, num = 100)
+    #   select('*').from("(#{get_top(base_set, num).to_sql})").where(true)
+    #              .order(name_field: :asc)
+    # end
+
   end
 end

@@ -5,8 +5,9 @@ class CharactersController < ApplicationController
   def index
     @page_title = "Most Common Characters"
     # @characters = Character.all.paginate(page: params[:page])
-    @stories = Story.all
-    @stories = Story.non_adult(stories) unless can_see_adult?
+    # @stories = Story.all
+    # @stories = Story.non_adult(stories) unless can_see_adult?
+    @chars = Character.get_top
   end
 
   def new
