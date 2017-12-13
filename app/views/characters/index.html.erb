@@ -1,3 +1,7 @@
+<%
+=begin
+%>
+
 <%= will_paginate @characters %>
 <%= page_entries_info @characters %>
 
@@ -7,3 +11,7 @@
 
 <hr>
 <%= link_to 'New', new_character_path %>
+<%
+=end
+%>
+<%= raw cloud_sizer(Character, @stories, Character.cloud_names).join(' ') %>

@@ -18,6 +18,18 @@
   </li>
   <li>
     <strong>Tagging:</strong> Stories can be tagged with three kinds of tags:
-    general, character, and source. <%= link_to 'General tags', tags_path %> 
+    general, character, and source. <%= link_to 'General tags', tags_path %>
+    are indications of the general content of a story; for instance, tagging a
+    story "romance" indicates that the story is a romantic one.
+    <%= link_to 'Character tags', characters_path %> indicate which canon
+    characters are featured in a fanfic; for instance, if writing a Harry
+    Potter fanfic, you might tag it with
+    <%= link_name Character, "Harry Potter" %>,
+    <%= link_name Character, "Hermione Granger" %>, et cetera.
+    <%= link_to 'Source tags', sources_path %> indicate what media a story is a
+    fanfic of; in the earlier example of a Harry Potter fanfic, it would be
+    tagged with <%= link_name Source, "Harry Potter" %>. Note that the three
+    types of tags are entirely separate; the Harry Potter character tag is not
+    the same as the Harry Potter source tag.
   </li>
 </ul>

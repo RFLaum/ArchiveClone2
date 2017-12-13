@@ -346,6 +346,10 @@ class Story < ApplicationRecord
     title
   end
 
+  def self.name_field
+    :title
+  end
+
   def self.get_key_of(tag_sym)
     tag_sym == :tags ? 'name' : 'id'
   end

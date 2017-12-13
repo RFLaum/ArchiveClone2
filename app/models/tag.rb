@@ -151,6 +151,10 @@ class Tag < ApplicationRecord
     name
   end
 
+  def self.name_field
+    :name
+  end
+
 end
 
 # Tag.import

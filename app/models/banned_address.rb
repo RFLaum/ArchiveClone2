@@ -21,6 +21,10 @@ class BannedAddress < ApplicationRecord
     User.find_email_by_regex(make_regex_str(email)).each(&:destroy)
   end
 
+  def self.name_field
+    :email
+  end
+
   #assumes raw_address is a valid email address
   def self.clean_email(raw_address)
     raw_address = raw_address.downcase

@@ -24,4 +24,8 @@ class NewsTag < ApplicationRecord
   def display_name
     name
   end
+
+  def self.name_field
+    :name
+  end
 end

@@ -114,6 +114,10 @@ class Source < ApplicationRecord
     name
   end
 
+  def self.name_field
+    :name
+  end
+
   def type_list_key
     SOURCE_TYPES.select { |type| self[type] }
   end

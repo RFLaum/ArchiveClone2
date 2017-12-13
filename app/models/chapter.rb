@@ -36,4 +36,8 @@ class Chapter < ApplicationRecord
     answer += ": #{title}" unless title.empty?
     answer
   end
+
+  def self.name_field
+    :title
+  end
 end

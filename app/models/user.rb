@@ -100,6 +100,10 @@ class User < ApplicationRecord
     name
   end
 
+  def self.name_field
+    :name
+  end
+
 end
 
 # User.__elasticsearch__.create_index! force: true

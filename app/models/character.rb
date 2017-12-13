@@ -31,6 +31,10 @@ class Character < ApplicationRecord
   def source_name=(src_name)
     source = Source.find_or_initialize_by(name: src_name)
   end
+
+  def self.name_field
+    :name
+  end
 end
 
 
