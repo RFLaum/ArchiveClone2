@@ -10,5 +10,14 @@
   an idea of the general approach they used, or to see what gems they used.
 </p>
 <h3 id='feature-list'>Features</h3>
-<p>
-</p>
+<ul>
+  <li>
+    <strong>User-submitted stories:</strong> Any logged-in user can
+    <%= link_to 'create a story', new_story_path %>. Stories can be created or
+    edited with a WYSIWYG editor.
+  </li>
+  <li>
+    <strong>Tagging:</strong> Stories can be tagged with three kinds of tags:
+    general, character, and source. <%= link_to 'General tags', tags_path %> 
+  </li>
+</ul>

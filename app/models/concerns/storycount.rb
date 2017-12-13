@@ -40,5 +40,13 @@ module Storycount
                      .limit(num)
     end
 
+    def cloud_names(num = 9)
+      answer = []
+      num.times do |i|
+        answer << "cloud_item#{i + 1}"
+      end
+      answer
+    end
+
   end
 end

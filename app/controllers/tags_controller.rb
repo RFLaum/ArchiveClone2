@@ -1,16 +1,22 @@
 class TagsController < ApplicationController
   # before_action :find_tags, only: [:find]
+  include
   before_action :set_tag #, only: %i[show edit update destroy]
   skip_before_action :set_tag, only: %i[index new create search search_results]
 
   # GET /tags
   # GET /tags.json
   def index
-    if can_see_adult?
-      @tags = Tag.all
-    else
-      @tags = Tag.where(adult: false)
-    end
+    @page_title = "Most Common Tags"
+    # if can_see_adult?
+    #   @tags = Tag.all
+    # else
+    #   @tags = Tag.where(adult: false)
+    # end
+    @stories = Story.all
+    @stories = Story.non_adult(stories) unless can_see_adult?
+    # @tags = Tag.most_common(stories, 100).reorder('name ASC')
+    # @tags = cloud_sizer(Tag, stories, Tag.cloud_names)
   end
 
   # GET /tags/1

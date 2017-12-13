@@ -26,9 +26,10 @@
   <div class='full-width' id='navbar'>
     <%# link_to "Home", root_path %>
     <%= link_to "Home", '/home2' %>
-    <%= link_to 'Users', users_path %>
+    <%= link_to 'Tags', tags_path %>
     <%= link_to 'Stories', stories_path %>
     <% if is_admin? %>
+      <%= link_to 'Users', users_path %>
       <%= link_to 'Banned Addresses', admin_banned_addresses_path %>
     <% end %>
     <span class = 'dropdown'>
