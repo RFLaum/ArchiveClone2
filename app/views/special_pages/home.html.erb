@@ -25,7 +25,7 @@
 
 <ul>
 <% Character.find_each do |chr| %>
-  <li><%= chr.name %>: <%= chr.source_name %> <%= chr.source_id %></li>
+  <li><%= chr.name %>: <%= chr.source_name %> (<%= chr.source_id %>)</li>
 <% end %>
 </ul>
 
