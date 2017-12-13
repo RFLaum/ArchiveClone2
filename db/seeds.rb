@@ -13,8 +13,8 @@
 # Source.create(name: 'The Matrix', movies: true)
 # Source.create(name: 'The Identity Matrix', book: true)
 
-hp_src = Source.find_or_create_by(name: "Harry Potter")
-hp_chr = Character.find_or_create_by(name: "Harry Potter")
-hg_chr = Character.find_or_create_by(name: "Hermione Granger")
-hp_chr.source = hp_src
-hg_chr.source = hp_src
+# hp_src = Source.find_or_create_by(name: "Harry Potter")
+# hp_chr = Character.find_or_create_by(name: "Harry Potter")
+# hg_chr = Character.find_or_create_by(name: "Hermione Granger")
+# hp_chr.source = hp_src
+# hg_chr.source = hp_src

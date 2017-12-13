@@ -23,6 +23,9 @@
   <% end %>
 <% end %>
 
+<% Character.find_by(name: "Harry Potter").source_name = "Harry Potter" %>
+<% Character.find_by(name: "Hermione Granger").source_name = "Harry Potter" %>
+
 <%# User.find_each do |user| %>
   <%# user.destroy unless user.is_confirmed %>
 <%# end %>
