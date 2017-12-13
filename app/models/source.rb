@@ -102,11 +102,12 @@ class Source < ApplicationRecord
 
   def chars_public
     # characters.reduce { |str, char| str + ', ' + char.name }
-    characters.map{ |c| c.name }.join(', ')
+    characters.map(&:name).join(', ')
   end
 
   def chars_public=(new_chars)
-    new_chars.split(/,\s+/).each do |char|
+    characters.clear
+    new_chars.split(/,\s*/).each do |char|
       characters << Character.find_or_initialize_by(name: char)
     end
   end

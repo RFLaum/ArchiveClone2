@@ -16,6 +16,7 @@
 
 <%= link_to 'Stories', character_stories_path(@character) %> |
 <% if is_admin? %>
+<%= link_to 'Destroy', @character, method: :delete, data: { confirm: 'Are you sure?' } %>
 <%= link_to 'Edit', edit_character_path(@character) %> |
 <% end %>
 <%= link_to 'Back', characters_path %>
