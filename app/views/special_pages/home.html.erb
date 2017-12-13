@@ -23,7 +23,12 @@
   <% end %>
 <% end %>
 
-<%= Source.find_by(name: "Harry Potter").id %>
+<% hp_src = Source.find_by(name: "Harry Potter") %>
+<% hg = Character.find_by(name: "Hermione Granger") %>
+<% hg.source = hp_src %>
+hg: <%= hg.source_name %>
+
+<%# Source.find_by(name: "Harry Potter").id %>
 
 <%
 =begin
