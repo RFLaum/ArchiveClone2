@@ -18,6 +18,13 @@ module ApplicationHelper
     link_to name, klass.find_by(klass.name_field => name), opts
   end
 
+  #creates it if it doesn't already exist
+  #TODO: remove any uses of this in production code
+  def link_name2(klass, name, opts = nil)
+    obj = klass.find_or_create_by(klass.name_field => name)
+    link_to name, obj, opts
+  end
+
   #if a given collection is present in params, get item associated with key
   #otherwise, return nil
   # def param_col_value(col_name, key)

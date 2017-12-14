@@ -31,7 +31,8 @@
       <% if @next_chapter.present? %>
         <%= link_to raw('Next Chapter &rarr;'), @next_chapter %>
       <% end %>
-      <%= link_to 'Chapter Index', url_for(@story) + '/navigate' %>
+      <%# link_to 'Chapter Index', url_for(@story) + '/navigate' %>
+      <%= link_to 'Chapter Index', chap_nav_path(@story) %>
     <% else %>
       <%= link_to 'Chapter by Chapter', @story.first_chapter %>
     <% end %>

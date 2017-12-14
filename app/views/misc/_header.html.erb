@@ -13,19 +13,19 @@
            <ul class='dropdown-hidden on-right'>
              <li><%= link_to('Settings', edit_user_path(current_user)) %></li>
              <li><%= link_to('Post new story', new_story_path) %></li>
-             <li><%= link_to('Log out', '/logout') %></li>
+             <li><%= link_to('Log out', logout_path) %></li>
            </ul>
          </div>
       <% else %>
-        <%= link_to('Log In', '/login') %>
+        <%= link_to('Log In', login_path) %>
          or
-        <%= link_to('Register', '/register') %>
+        <%= link_to('Register', register_path) %>
       <% end %>
     </span>
   </div>
   <div class='full-width' id='navbar'>
     <%# link_to "Home", root_path %>
-    <%= link_to "Home", '/home2' %>
+    <%= link_to "Home", home_path %>
     <%= link_to 'Tags', tags_path %>
     <%= link_to 'Stories', stories_path %>
     <% if is_admin? %>
@@ -33,11 +33,11 @@
       <%= link_to 'Banned Addresses', admin_banned_addresses_path %>
     <% end %>
     <span class = 'dropdown'>
-      <%= link_to 'Search', '/search' %>
+      <%= link_to 'Search', search_path %>
       <ul class = 'dropdown-hidden on-left'>
-        <li><%= link_to 'Stories', '/stories/search' %></li>
-        <li><%= link_to 'Source Media', '/sources/search' %></li>
-        <li><%= link_to 'General', '/search' %></li>
+        <li><%= link_to 'Stories', story_search_path %></li>
+        <li><%= link_to 'Source Media', source_search_path %></li>
+        <li><%= link_to 'General', search_path %></li>
       </ul>
     </div>
   </div>

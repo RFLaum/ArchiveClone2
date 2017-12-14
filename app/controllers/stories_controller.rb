@@ -76,11 +76,14 @@ class StoriesController < ApplicationController
 
   # GET /stories/new
   def new
+    @page_title = "New Story"
     @story = Story.new
   end
 
   # GET /stories/1/edit
-  def edit; end
+  def edit
+    @page_title = "Editing " + @story.title
+  end
 
   # POST /stories
   # POST /stories.json
@@ -98,7 +101,7 @@ class StoriesController < ApplicationController
   # PATCH/PUT /stories/1
   # PATCH/PUT /stories/1.json
   def update
-    logger.debug "update test #{params}"
+    # logger.debug "update test #{params}"
     #we do this here rather than in the model because we don't want timestamps
     #to update when tag implications are changed
     old_holder = {}
@@ -137,6 +140,7 @@ class StoriesController < ApplicationController
   end
 
   def search
+    @page_title = "Story Search"
     render 'full_search_form'
   end
 
@@ -189,6 +193,7 @@ class StoriesController < ApplicationController
 
   def search_params
     params.permit(:title, :author, :updated, :created, :show_adult,
-                  :show_non_adult, :tags, :sort_by, :sort_direction)
+                  :show_non_adult, :tags, :sources, :characters, :sort_by,
+                  :sort_direction)
   end
 end

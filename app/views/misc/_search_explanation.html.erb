@@ -1,0 +1,23 @@
+<ul class='no-dec boxed'>
+  <li>Text searches can use wildcards and boolean logic.</li>
+  <li>By default, search terms are all required. The search
+  <kbd>alpha beta</kbd> would return results that include both
+  <kbd>alpha</kbd> and <kbd>beta</kbd> (as complete words).</li>
+  <li>The minus sign negates a term. The search <kbd>alpha -beta</kbd> would
+  return results that include
+  <kbd>alpha</kbd> but not <kbd>beta</kbd> (as complete words).</li>
+  <li>The pipe operator (found on most keyboards by holding down shift and
+  hitting the \ key) acts as "or". The search <kbd>alpha|beta</kbd> would
+  return results that
+  contain the word <kbd>alpha</kbd> or the word <kbd>beta</kbd> (or both).</li>
+  <li>The asterisk wildcard matches any number of characters. The search
+  <kbd>alph*</kbd> would return results that contain a word starting with
+  <kbd>alph</kbd>, such as <kbd>alpha</kbd>, <kbd>alphabet</kbd>, and
+  <kbd>alphonse</kbd>.</li>
+  <li>The question mark acts as a single-character wildcard. <kbd>fl?p</kbd>
+  would match <kbd>flap</kbd>, <kbd>flip</kbd>, and <kbd>flop</kbd>, but not
+  <kbd>flytrap</kbd>.</li>
+  <li>Quotation marks denote an exact phrase. The search
+  <kbd>"happy birthday"</kbd> would match <kbd>happy birthday</kbd> but not
+  <kbd>happy fiftieth birthday</kbd>.</li>
+</ul>

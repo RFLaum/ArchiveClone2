@@ -18,7 +18,7 @@
   </li>
   <li>
     <strong>Tagging:</strong> Stories can be tagged with three kinds of tags:
-    general, character, and source. <%= link_to 'General tags', tags_path %>
+    general, character, and source. <%= link_to 'Content tags', tags_path %>
     are indications of the general content of a story; for instance, tagging a
     story "romance" indicates that the story is a romantic one.
     <%= link_to 'Character tags', characters_path %> indicate which canon
@@ -28,11 +28,50 @@
     <%= link_name Character, "Hermione Granger" %>, et cetera.
     <%= link_to 'Source tags', sources_path %> indicate what media a story is a
     fanfic of; in the earlier example of a Harry Potter fanfic, it would be
-    tagged with <%= link_name Source, "Harry Potter" %>. Note that the three
+    tagged with <%= link_name Source, "Harry Potter" %>. Each source may belong
+    to one or more categories; for instance, Harry Potter is both a book series
+    and a film series, so it belongs to the
+    <%= link_to 'book', type_path('book') %> and
+    <%= link_to 'movie', type_path('movies') %> categories. Note that the three
     types of tags are entirely separate; the Harry Potter character tag is not
     the same as the Harry Potter source tag.
   </li>
   <li>
-    <strong>Tag Implications:</strong>
+    <strong>Tag Implications:</strong> Tags can imply other tags. For instance,
+    <%= link_name2(Tag, "dog") %> implies <%= link_name2 Tag, "animal" %>.
+    Therefore, any story tagged "dog" will also automatically be tagged
+    "animal", and you cannot remove the "animal" tag as long as the "dog" tag
+    is present. Similarly, characters can imply sources; a story with the
+    <%= link_name2 Character, "Frodo Baggins" %> character is automatically a
+    part of the <%= link_name2 Source, "Lord of the Rings" %> fandom. Only
+    administrators can change implications. Checks exist to make sure that no
+    circular implication chains are created. On a similar note, some content
+    tags are considered "adult," meaning that any story that contains them is
+    automatically marked as an adult story, and not displayed to anybody whose
+    preferences do not allow that. A story without any adult tags can be marked
+    as adult by the author, but a story with adult tags cannot be marked as
+    non-adult by anybody.
+  </li>
+  <li>
+    <strong>Searching:</strong> There is robust search capability. Support is
+    provided for boolean queries and wildcard searches. The
+    <%= link_to 'story search', story_search_path %> page is the most powerful,
+    allowing users to search and order by many different fields. In addition,
+    you can filter the results of a search, thereby refining it further (this
+    filtering capability is also available on many other pages that contain a
+    list of stories). The <%= link_to 'general search', search_path %> (which
+    allows searches of content tags and usernames) and
+    <%= link_to 'source search', source_search_path %> pages are less powerful,
+    mostly because they are searching things that don't have as many fields.
+  </li>
+  <li>
+    <strong>User Accounts:</strong> Anybody with a valid email address can
+    <%= link_to 'create an account', register_path %>. Having an account allows
+    you to post and edit your own stories, comment on other people's stories
+    and on newsposts, and bookmark favorite stories for later. Users can also
+    set various prefernces for browsing the site, such as choosing a time zone
+    (which will cause all dates and times to be displayed in that time zone),
+    uploading a user avatar, and choosing whether they would like to see adult
+    content.
   </li>
 </ul>

@@ -37,6 +37,12 @@ en:
       news_comment:
         one: comment
         other: comments
+      tag:
+        one: tag
+        other: tags
+      user:
+        one: user
+        other: users
   time:
     formats:
       default: "%-l:%M:%S %p, %b %-d, %Y"
