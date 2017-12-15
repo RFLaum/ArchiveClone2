@@ -1,3 +1,12 @@
 // Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.user-summary {
+  box-shadow: 1px 1px 5px #aaa;
+  overflow: auto;
+  clear: both;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
