@@ -23,13 +23,10 @@ module Impliable
   #children is a collection of the new child tags
   #returns an array of children that could not be added
   def add_implications(children)
-    # new_descs = get_descendant_implications(imp_arr)
     bad_kids = []
     good_kids = []
-    # parents = implying_tags.to_set
     children.each do |child|
-      # descs = child.get_descendant_implications
-      # if child == self || descs.include?(self) #descs.intersect?(parents)
+      #check to make sure we aren't creating any circular implication chains
       if child == self || child.get_descendant_implications.include?(self)
         bad_kids << child.name
       else

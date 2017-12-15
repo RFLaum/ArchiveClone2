@@ -22,7 +22,11 @@
 <p>This user is no longer active.</p>
 <% end %>
 
-<h1>Stories:</h1>
+<h1 id='user-stories'>Stories:</h1>
+<% stories = user.stories %>
+<% unless is_self || can_see_adult? %>
+  <% stories = Story.non_adult(stories) %>
+<% end %>
 <% @user.stories.each do |story| %>
   <%= render 'stories/summary', story: story %>
 <% end %>

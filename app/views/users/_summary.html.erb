@@ -4,5 +4,24 @@
   <div class = 'icon-container'>
     <%= image_tag user.avatar.url %>
   </div>
-
+  <div class = 'details'>
+    <h4><%= name_link user %></h4>
+    <h5>
+      <% links = [] %>
+      <% is_self = is_correct_user?(user) %>
+      <% book_num = user.num_bookmarks(is_self) %>
+      <% show_all_stories = is_self || can_see_adult? %>
+      <% stories = user.stories %>
+      <% stories = Story.non_adult(stories) unless show_all_stories %>
+      <% story_num = stories.count %>
+      <% #TODO: test the adult filtering of stories %>
+      <% if story_num > 0 %>
+        <% links << link_to(pluralize(story_num, 'story'), user_path(user, anchor: 'user-stories')) %>
+      <% end %>
+      <% if book_num > 0 %>
+        <% links << link_to(pluralize(book_num, 'bookmark'), user_bookmarks_path(user)) %>
+      <% end %>
+      <%= raw links.join(', ') %>
+    </h5>
+  </div>
 </div>

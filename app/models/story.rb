@@ -357,7 +357,6 @@ class Story < ApplicationRecord
   #story_set is sql query to merge this into; s_hash is hash of search terms,
   #with keys :tags, :sources, :characters
   def self.tsc_search(story_set, s_hash)
-    # s_hash.each do |k, v|
     %i[tags sources characters].each do |k|
       next unless v = s_hash[k]
       rflct = reflect_on_association(k)
@@ -376,8 +375,8 @@ class Story < ApplicationRecord
   end
 
   def self.s_sort(story_set, sort_by, sort_dir)
-    sort_by = (sort_by ||= :updated_at).to_sym
-    sort_dir = (sort_dir ||= :desc).to_sym
+    sort_by = (sort_by || :updated_at).to_sym
+    sort_dir = (sort_dir || :desc).to_sym
     if sort_by == :num_comments
       return story_set.left_outer_joins(:comments)
                       .select('stories.*, COUNT(comments.*)')

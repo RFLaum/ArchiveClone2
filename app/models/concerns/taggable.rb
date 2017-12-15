@@ -1,3 +1,5 @@
+#I no longer remember how any of this works
+
 module Taggable
   extend ActiveSupport::Concern
 

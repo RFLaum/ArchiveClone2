@@ -55,6 +55,7 @@ group :development do
 end
 
 group :production do
+  #need an older version because paperclip has a bug with version 3
   gem 'aws-sdk', '< 3.0'
 end
 
