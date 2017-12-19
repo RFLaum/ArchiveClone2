@@ -112,11 +112,17 @@ class UsersController < ApplicationController
   def destroy
     if is_correct_user?(@user)
       unregister
-    elsif is_admin?
-      ban
+    # elsif is_admin?
+      # ban_internal
     else
-      wrong_user(@user, true)
+      # wrong_user(@user, true)
+      wrong_user(@user)
     end
+  end
+
+  def ban
+    check_admin
+    ban_internal
   end
 
   def deactivate
@@ -131,7 +137,7 @@ class UsersController < ApplicationController
 
   private
 
-  def ban
+  def ban_internal
     @user_name = @user.name
     BannedAddress.add_email(@user.email)
     UserMailMailer.ban_notification(@user).deliver_now

@@ -1,6 +1,11 @@
 <p>
-  This site was built on Ruby on Rails to be a clone of
-  <%= link_to 'Archive of our Own', 'http://archiveofourown.org/' %>. While
+  I built this site on Ruby on Rails to be a clone of
+  <%= link_to 'Archive of our Own', 'http://archiveofourown.org/' %>, a
+  popular
+  <%= render 'misc/footnote', marker: 'fanfiction', body: 'Fanfiction, or ' +
+  '"fanfic," is fiction written by fans of, and featuring characters from, ' +
+  'popular media.' %>
+  archive. While
   the original site is also written in Rails, I did not copy any of their code
   when building my own (with one exception: the search page allows you to
   filter by publication date, and this requires the application to parse

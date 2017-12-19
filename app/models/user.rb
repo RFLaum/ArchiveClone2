@@ -64,9 +64,22 @@ class User < ApplicationRecord
     self.is_confirmed && !(self.deactivated)
   end
 
-  def num_bookmarks(can_see_private)
-    can_see_private ? bookmarks.count : bookmarks.where(private: false).count
+  def visible_stories(other_user)
+    get_all = (other_user == self) || other_user.adult
+    get_all ? stories : Story.non_adult(stories)
   end
+
+  def visible_bookmarks(other_user)
+    other_user == self ? bookmarks : bookmarks.where(private: false)
+  end
+
+  def to_partial_path
+    'users/summary'
+  end
+
+  # def num_bookmarks(can_see_private)
+  #   can_see_private ? bookmarks.count : bookmarks.where(private: false).count
+  # end
 
   def self.valid_user?(username)
     return false unless self.exists?(username)

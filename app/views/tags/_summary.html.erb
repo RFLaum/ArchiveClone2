@@ -1,0 +1,16 @@
+<% tag = obj if obj %>
+<div class = "tag-summary">
+  <h4><%= name_link tag %></h4>
+  <h5>
+    <% cse = can_see_adult? %>
+    <% stories = tag.visible_stories(cse) %>
+    <% kids = cse ? tag.implied_tags : tag.implied_tags.where(adult: false) %>
+    <% parents = cse ? tag.implying_tags : tag.implying_tags.where(adult: false) %>
+    <%= link_to pluralize(stories.count, 'story'), tag_stories_path(tag) %>.
+    Implies <%= pluralize(kids.count, 'other tag') %>.
+    Is implied by <%= pluralize(parents.count, 'other tag') %>.
+    <% if is_admin? %>
+      <%= link_to 'Edit', edit_tag_path(tag) %>
+    <% end %>
+  </h5>
+</div>

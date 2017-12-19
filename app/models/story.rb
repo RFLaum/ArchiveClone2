@@ -56,6 +56,10 @@ class Story < ApplicationRecord
     end
   end
 
+  def to_partial_path
+    'stories/summary'
+  end
+
   def set_initial_counts
     [tags, sources, characters].each do |coll|
       coll.each do |obj|
@@ -96,6 +100,10 @@ class Story < ApplicationRecord
 
   def get_chapters
     chapters.order("number ASC")
+  end
+
+  def visible_bookmarks(viewing_user)
+    Bookmark.visible_filter(bookmarks, viewing_user)
   end
 
   # def get_comments
@@ -399,6 +407,14 @@ class Story < ApplicationRecord
     cond += " = tags.name WHERE tags.adult = 't' AND stories_tags.story_id "
     cond += " = stories.id"
     answer.where.not("EXISTS (#{cond})")
+  end
+
+  #TODO: test
+  def self.visible_filter(story_set, viewing_user)
+    return story_set if viewing_user.adult
+    first = non_adult(story_set)
+    second = story_set.where(user: viewing_user)
+    first.or(second)
   end
 
   private

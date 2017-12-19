@@ -1,3 +1,5 @@
+<% mark = obj if obj %>
+
 <div class = 'bookmark-summary'>
   Bookmarked by <%= name_link mark.user %> at <%= time_format(mark.created_at) %>.
   <% if mark.user_notes.present? %>

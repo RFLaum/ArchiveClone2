@@ -24,7 +24,7 @@
 <div class = 'button-row'>
   <% if @story.num_chapters > 1 %>
     <% if @chapter.present? %>
-      <%= link_to 'Entire Work', story_all(@story) %>
+      <%= link_to 'Entire Work', story_all_path(@story) %>
       <% if @prev_chapter.present? %>
         <%= link_to raw('&larr; Previous Chapter'), @prev_chapter %>
       <% end %>

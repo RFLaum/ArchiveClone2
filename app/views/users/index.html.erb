@@ -1,7 +1,9 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Users</h1>
-
+<%
+=begin
+%>
 <table>
   <thead>
     <tr>
@@ -29,3 +31,9 @@
 </table>
 
 <br>
+<%
+=end
+%>
+<% @users.each do |user| %>
+  <%= render 'users/summary', user: user %>
+<% end %>

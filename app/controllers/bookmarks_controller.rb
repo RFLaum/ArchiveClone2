@@ -66,20 +66,25 @@ class BookmarksController < ApplicationController
 
   def index
     @show_summaries = true
+    cu = current_user_or_guest
     if params[:story_id].present?
       @story = Story.find(params[:story_id])
-      @bookmarks = @story.bookmarks.where(private: false)
+      #TODO: test this
+      @bookmarks = @story.visible_bookmarks(cu)
+      # @bookmarks = @story.bookmarks.where(private: false)
       @show_summaries = false
     elsif params[:user_id].present?
       @user = User.find_by(name: params[:user_id])
       # u_name = params[:user_id]
-      @bookmarks = @user.bookmarks
-      unless is_correct_user?(@user)
-        @bookmarks = @bookmarks.where(private: false)
-      end
+      # @bookmarks = @user.bookmarks
+      # unless is_correct_user?(@user)
+      #   @bookmarks = @bookmarks.where(private: false)
+      # end
+      @bookmarks = @user.visible_bookmarks(cu)
     else
       #don't need to filter by privacy here because this is just for testing
       #purposes
+      #TODO: remove this for production
       @bookmarks = Bookmark.all
     end
     @bookmarks = @bookmarks.paginate(page: params[:page])

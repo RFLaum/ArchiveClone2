@@ -1,19 +1,49 @@
 <%# pass in user object as 'user' %>
+<% user = obj if obj %>
+
 <div class = 'user-summary'>
   <%# put it in a div in case the avatar is smaller than normal %>
   <div class = 'icon-container'>
-    <%= image_tag user.avatar.url %>
+    <%# image_tag user.avatar.url %>
+    <%= render 'users/icon_link', user: user %>
   </div>
   <div class = 'details'>
-    <h4><%= name_link user %></h4>
+    <h4>
+      <% ed_links = [] %>
+      <%= name_link user %>
+      <% if is_correct_user?(user) %>
+        <% ed_links << link_to('edit', edit_user_path(user)) %>
+        <% ed_links << link_to('delete account', user, method: :delete,
+          data: { confirm: 'Are you sure?' }) %>
+        <% ed_links << link_to('deactivate account', deactivate_path(user),
+          method: :patch) unless user.deactivated %>
+      <% end %>
+      <% if is_admin? %>
+        <% ed_links << link_to('ban user', ban_path(user), method: :delete,
+        data: { confirm: 'Are you sure?' }) %>
+      <% end %>
+      <% unless ed_links.empty? %>
+        (<%= raw ed_links.join(', ') %>)
+      <% end %>
+    </h4>
     <h5>
       <% links = [] %>
+<%
+=begin
+%>
       <% is_self = is_correct_user?(user) %>
       <% book_num = user.num_bookmarks(is_self) %>
       <% show_all_stories = is_self || can_see_adult? %>
       <% stories = user.stories %>
       <% stories = Story.non_adult(stories) unless show_all_stories %>
+<%
+=end
+%>
+      <% cu = current_user_or_guest %>
+      <% stories = user.visible_stories(cu) %>
       <% story_num = stories.count %>
+      <% bookmarks = user.visible_bookmarks(cu) %>
+      <% book_num = bookmarks.count %>
       <% #TODO: test the adult filtering of stories %>
       <% if story_num > 0 %>
         <% links << link_to(pluralize(story_num, 'story'), user_path(user, anchor: 'user-stories')) %>

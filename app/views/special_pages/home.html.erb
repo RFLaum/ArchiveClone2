@@ -12,6 +12,9 @@
 <li><%= link_to 'Newsposts', newsposts_path %></li>
 </ul>
 
+
+<%# lookup_context.find('summary', ["bookmarks", "tags", "users"], true).inspect %>
+
 <% #TODO: remove this for production %>
 <% [Tag, Source, Character].each do |klass| %>
   <%# klass.reset_stories_count %>

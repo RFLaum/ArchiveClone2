@@ -20,6 +20,8 @@
 //     preventDuplicates: true,
 //   });
 // });
+//This function will only be called if javascript is enabled, and is how I
+//have elements that will only be displayed if js is enabled
 $(function(){
   $('.script-only').removeClass('script-only');
 });
@@ -32,3 +34,13 @@ $(function(){
 //     preventDuplicates: true
 //   });
 // });
+
+$(document).ready(function(){
+  $('.footnote-marker').click(function(e){
+    $(this).next().toggle();
+    e.stopPropagation();
+  });
+  $('body').click(function(e){
+    $('.footnote-body').hide();
+  });
+});

@@ -111,6 +111,14 @@ class Tag < ApplicationRecord
     stories
   end
 
+  def visible_stories(adult)
+    adult ? stories : Story.non_adult(stories)
+  end
+
+  def to_partial_path
+    'tags/summary'
+  end
+
   # def story_count
   #   if can_see_adult?
   #     return stories.size

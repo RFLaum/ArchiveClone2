@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   end
 
   get 'stories/:id/chapters/all' => 'stories#showall'
-  get 'stories/:id/all' => 'stories#showall'
+  get 'stories/:id/all' => 'stories#showall', as: :story_all
   get 'stories/:id/navigate' => 'stories#navigate', as: :chap_nav
   # get 'stories/:id/tags' => 'stories#tag_list', constraints: lambda { |req| req.format == :json }
   # get 'stories/:id/chapters/:chapter_num' => 'stories#show_chapter'
@@ -51,7 +51,8 @@ Rails.application.routes.draw do
   post 'login' => 'users#login_receiver'
   get 'register' => 'users#register', as: :register
   get 'logout' => 'users#logout', as: :logout
-  match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put]
+  match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put], as: :deactivate
+  delete 'users/:id/ban' => 'users#ban', as: :ban
   resources :users, except: [:new], constraints: { id: /[^\/]+/ } do
     member do
       get 'send_confirmation'

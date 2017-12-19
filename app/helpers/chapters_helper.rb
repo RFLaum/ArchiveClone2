@@ -6,6 +6,7 @@ module ChaptersHelper
   # def chapter_url(chapter)
   #   "#{request.protocol}#{request.host_with_port}#{chapter_path(chapter)}"
   # end
+  #TODO: Fix all of these
   def chapter_path(chapter)
     story_chapters_path(chapter.story) + "/#{chapter.number}"
   end

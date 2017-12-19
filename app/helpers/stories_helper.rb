@@ -1,8 +1,8 @@
 module StoriesHelper
   #TODO: replace this with an :as in routes.rb
-  def story_all(story)
-    story_path(story) + '/all'
-  end
+  # def story_all(story)
+  #   story_path(story) + '/all'
+  # end
 
   #produces a comma-separated list of links.
   #obj_arr: array of objects to link to

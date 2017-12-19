@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   # end
 
 
+  #TODO: fix these?
   def chapter_path(chapter)
     "/stories/#{chapter.story_id}/chapters/#{chapter.number}"
   end
@@ -45,6 +46,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  #TODO: use an :as in routes.rb
   def resumable_error(attempted_action, error_page)
     session[:left_off] = attempted_action
     render 'errors/' + error_page, status: :forbidden
@@ -113,7 +115,8 @@ class ApplicationController < ActionController::Base
     # end
     # answer
 
-    current_user || User.new(name: 'guest', adult: false)
+    # current_user || User.new(name: 'guest', adult: false)
+    current_user || User.new(name: 'guest', adult: !!(session[:adult]))
   end
 
   def current_user_or_guest_name
