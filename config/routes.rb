@@ -56,6 +56,8 @@ Rails.application.routes.draw do
   match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put], as: :deactivate
   delete 'users/:id/ban' => 'users#ban', as: :ban
   get 'faves' => 'users#faves', as: :faves
+  get 'users/:id/subscribe' => 'users#subscribe', as: :subscribe
+  get 'users/:id/unsubscribe' => 'users#unsubscribe', as: :unsubscribe  
   resources :users, except: [:new], constraints: { id: /[^\/]+/ } do
     member do
       get 'send_confirmation'

@@ -21,6 +21,13 @@ class User < ApplicationRecord
                                  foreign_key: 'user_name',
                                  association_foreign_key: 'tag_name'
 
+  has_many :sub_reads, class_name: 'Subscription', foreign_key: 'reader_name',
+                       primary_key: 'name'
+  has_many :sub_writes, class_name: 'Subscription', foreign_key: 'writer_name',
+                        primary_key: 'name'
+  has_many :fave_writers, through: :sub_reads, source: :writer
+  has_many :fans, through: :sub_writes, source: :reader
+  
   before_save { self.email = email.downcase }
   validates :name,
             presence: { message: " can't be blank." },

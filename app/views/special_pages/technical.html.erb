@@ -89,18 +89,25 @@
     <%= link_to 'source search', source_search_path %> pages are less powerful,
     mostly because they are searching things that don't have as many fields.
   </p></li>
-  <li><p>
-    <strong>User Accounts:</strong> Anybody with a valid email address can
+  <li>
+    <p><strong>User Accounts:</strong> Anybody with a valid email address can
     <%= link_to 'create an account', register_path %>. Having an account allows
     you to post and edit your own stories, comment on other people's stories
     and on newsposts, and bookmark favorite stories for later. Users can also
-    set various prefernces for browsing the site, such as choosing a time zone
+    set various preferences for browsing the site, such as choosing a time zone
     (which will cause all dates and times to be displayed in that time zone),
     uploading a user avatar, and choosing whether they would like to see adult
-    content. Users can also either delete or deactivate their own accounts.
+    content.</p>
+    <p>Viewing a user's profile page lets you see all the stories they've
+    posted, and if you are logged in, you can "subscribe" to that user, which
+    means that you will get an email notification when they create a new story
+    or add a new chapter to an existing story. TODO: ADD SUB/UNSUB LINKS ON
+    USER PAGES AND USER SUMMARIES, ADD A "ALL SUBS" PAGE, MAKE SUBS ACTUALLY
+    WORK</p>
+    <p>Users can also either delete or deactivate their own accounts.
     Deleting your account also deletes all your stories, comments, and
-    bookmarks. Deactivating your account leaves those in place.
-  </p></li>
+    bookmarks. Deactivating your account leaves those in place.</p>
+  </li>
   <li><p>
     <strong>Administrator Accounts:</strong> Some users are "administrators,"
     which gives them certain powers that ordinary users do not have. The only
@@ -212,8 +219,15 @@
     tag has only one name.
   </p></li>
   <li><p>
+    <strong>In-Story Images:</strong> In addition to user avatars, AO3 also
+    allows users to upload images to use as illustrations in their stories.
+    This would likely be very easy to implement, but I left it out because I
+    have limited data storage.
   </p></li>
   <li><p>
+    <strong>RSS feeds:</strong> I do not provide RSS feeds to let users know
+    when a new story matching specified criteria is posted. I don't have this.
+    However, I do provide
   </p></li>
   <li><p>
   </p></li>
