@@ -1,12 +1,18 @@
 <div class='home-container'>
   <div class='browse page-section'>
     <h3 class='heading'>Find your favorites</h3>
-    <p>Browse fandoms by media type</p>
+    <p>Browse fandoms by media type or favorite some tags to have them
+      listed here.</p>
     <ul class='options column_2'>
         <li class = 'fandom'><%= link_to 'All Fandoms', sources_path, class: 'link' %></li>
       <% Source.source_plurals.each do |sym, name| %>
         <li class = 'fandom'>
           <%= link_to name.titleize, type_path(sym), class: 'link' %>
+        </li>
+      <% end %>
+      <% current_user_or_guest.tags.each do |tag| %>
+        <li class = 'fandom'>
+          <%= link_to tag.name, tag_stories_path(tag), class: 'link' %>
         </li>
       <% end %>
     </ul>

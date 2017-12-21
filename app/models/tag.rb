@@ -21,6 +21,10 @@ class Tag < ApplicationRecord
                       primary_key: 'name'
   has_many :implying_tags, through: :impliers, source: :spec_tag
 
+  has_and_belongs_to_many :users, join_table: :fave_tags, primary_key: 'name',
+                                  foreign_key: 'tag_name',
+                                  association_foreign_key: 'user_name'
+
   before_destroy :knit_implications
 
   # #if A implies B implies C, then deleting B makes A imply c

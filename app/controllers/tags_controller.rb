@@ -86,6 +86,22 @@ class TagsController < ApplicationController
     @results = Tag.search(params[:q]).records
   end
 
+  def add_fave
+    faves = current_user_or_guest.tags
+    unless faves.include? @tag
+      faves << @tag
+    end
+    redirect_to session[:return_page]
+  end
+
+  def remove_fave
+    faves = current_user_or_guest.tags
+    if faves.include? @tag
+      faves.delete(@tag)
+    end
+    redirect_to session[:return_page]
+  end
+
   private
 
   def set_tag

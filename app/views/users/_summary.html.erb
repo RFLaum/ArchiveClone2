@@ -1,5 +1,5 @@
 <%# pass in user object as 'user' %>
-<% user = obj if obj %>
+<% user = obj if local_assigns[:obj] %>
 
 <div class = 'user-summary'>
   <%# put it in a div in case the avatar is smaller than normal %>

@@ -4,13 +4,14 @@ module Searchable
   module ClassMethods
     def convert_query(raw_query, field_name, q = where('true'), complete = false)
       padder = '(% )?'
-      query = raw_query.downcase.strip
+      # query = raw_query.downcase.strip
+      query = raw_query.downcase.squish
       #note that the final query uses the SQL standard's definition of a regular
       #expression, which is an unusual one
       query.gsub!(/[\\\[\]\+\{\}\^\$\(\)_%]/, '\\<\1>')
       #squeeze all whitespace; preferable to squeeze! because it handles ALL
       #whitespace, not just spaces
-      query.gsub!(/\s+/, ' ')
+      # query.gsub!(/\s+/, ' ')
       #remove spaces around pipes
       query.gsub!(/\s?\|\s?/, '|')
       #remove spaces after - (negate symbol)

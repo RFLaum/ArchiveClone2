@@ -1,10 +1,12 @@
+<%= javascript_include_tag 'bigfoot' %>
+<script>
+  $.bigfoot();
+</script>
+
 <p>
   I built this site on Ruby on Rails to be a clone of
   <%= link_to 'Archive of our Own', 'http://archiveofourown.org/' %>, a
-  popular
-  <%= render 'misc/footnote', marker: 'fanfiction', body: 'Fanfiction, or ' +
-  '"fanfic," is fiction written by fans of, and featuring characters from, ' +
-  'popular media.' %>
+  popular fanfiction <%= render 'misc/fn_a', num: 1 %>
   archive. While
   the original site is also written in Rails, I did not copy any of their code
   when building my own (with one exception: the search page allows you to
@@ -16,14 +18,14 @@
 </p>
 <h3 id='feature-list'>Features</h3>
 <ul>
-  <li>
+  <li><p>
     <strong>User-Submitted Stories:</strong> Any logged-in user can
     <%= link_to 'create a story', new_story_path %>. Stories can be created or
     edited with a WYSIWYG editor.
-  </li>
-  <li>
+  </p></li>
+  <li><p>
     <strong>Tagging:</strong> Stories can be tagged with three kinds of tags:
-    general, character, and source. <%= link_to 'Content tags', tags_path %>
+    content, character, and source. <%= link_to 'Content tags', tags_path %>
     are indications of the general content of a story; for instance, tagging a
     story "romance" indicates that the story is a romantic one.
     <%= link_to 'Character tags', characters_path %> indicate which canon
@@ -31,17 +33,20 @@
     Potter fanfic, you might tag it with
     <%= link_name Character, "Harry Potter" %>,
     <%= link_name Character, "Hermione Granger" %>, et cetera.
-    <%= link_to 'Source tags', sources_path %> indicate what media a story is a
-    fanfic of; in the earlier example of a Harry Potter fanfic, it would be
+    <%= link_to 'Source tags', sources_path %> indicate what fandom a story
+    belongs to; in the earlier example of a Harry Potter fanfic, it would be
     tagged with <%= link_name Source, "Harry Potter" %>. Each source may belong
-    to one or more categories; for instance, Harry Potter is both a book series
-    and a film series, so it belongs to the
+    to one or more categories <%= render 'misc/fn_a', num: 2 %>; for
+    instance, Harry Potter is both a book series and a film series, so it
+    belongs to the
     <%= link_to 'book', type_path('book') %> and
     <%= link_to 'movie', type_path('movies') %> categories. Note that the three
     types of tags are entirely separate; the Harry Potter character tag is not
-    the same as the Harry Potter source tag.
-  </li>
-  <li>
+    the same as the Harry Potter source tag. Logged-in users can also
+    designate any number of  content tags as "favorite" tags, which will cause
+    those tags to show up on the home page for that user.
+  </p></li>
+  <li><p>
     <strong>Tag Implications:</strong> Tags can imply other tags. For instance,
     <%= link_name2(Tag, "dog") %> implies <%= link_name2 Tag, "animal" %>.
     Therefore, any story tagged "dog" will also automatically be tagged
@@ -50,26 +55,41 @@
     <%= link_name2 Character, "Frodo Baggins" %> character is automatically a
     part of the <%= link_name2 Source, "Lord of the Rings" %> fandom. Only
     administrators can change implications. Checks exist to make sure that no
-    circular implication chains are created. On a similar note, some content
-    tags are considered "adult," meaning that any story that contains them is
-    automatically marked as an adult story, and not displayed to anybody whose
-    preferences do not allow that. A story without any adult tags can be marked
-    as adult by the author, but a story with adult tags cannot be marked as
-    non-adult by anybody.
-  </li>
+    circular implication chains are created.
+  </p></li>
   <li>
-    <strong>Searching:</strong> There is robust search capability. Support is
-    provided for boolean queries and wildcard searches. The
+    <p><strong>Content Filtering:</strong> Some users prefer not to see stories
+    with adult content. This is a setting that can be toggled by the user. By
+    default, newly created users cannot see adult content, nor can people who
+    aren't logged in. However, users can always see stories they wrote, even if
+    those stories are adult. Non-visible stories won't show up in searches,
+    won't be visible in user pages, won't show up in indices, et cetera; from
+    the perspective of a user who doesn't want to see them, these stories do
+    not exist.</p>
+    <p>
+      Stories can be considered "adult" in one of two ways. First, certain
+      content tags are treated as adult, and any story tagged with one is
+      automatically an adult story. (These adult tags are also invisible to
+      users who can't see adult content). Second, the author of a story may
+      manually indicate that it is adult. Note that this override only goes one
+      way: it is possible to indicate that a story with no adult tags is still
+      adult, but it is not possible to indicate that a story with adult tags is
+      non-adult.
+    </p>
+  </li>
+  <li><p>
+    <strong>Searching:</strong> There is robust search capability. I provide
+    support for boolean queries and wildcard searches. The
     <%= link_to 'story search', story_search_path %> page is the most powerful,
     allowing users to search and order by many different fields. In addition,
     you can filter the results of a search, thereby refining it further (this
     filtering capability is also available on many other pages that contain a
     list of stories). The <%= link_to 'general search', search_path %> (which
-    allows searches of content tags and usernames) and
+    lets you find content tags or users) and
     <%= link_to 'source search', source_search_path %> pages are less powerful,
     mostly because they are searching things that don't have as many fields.
-  </li>
-  <li>
+  </p></li>
+  <li><p>
     <strong>User Accounts:</strong> Anybody with a valid email address can
     <%= link_to 'create an account', register_path %>. Having an account allows
     you to post and edit your own stories, comment on other people's stories
@@ -77,6 +97,140 @@
     set various prefernces for browsing the site, such as choosing a time zone
     (which will cause all dates and times to be displayed in that time zone),
     uploading a user avatar, and choosing whether they would like to see adult
-    content.
-  </li>
+    content. Users can also either delete or deactivate their own accounts.
+    Deleting your account also deletes all your stories, comments, and
+    bookmarks. Deactivating your account leaves those in place.
+  </p></li>
+  <li><p>
+    <strong>Administrator Accounts:</strong> Some users are "administrators,"
+    which gives them certain powers that ordinary users do not have. The only
+    way to become an administrator is to be designated as such by an existing
+    administrator. Administators can post
+    <%= link_to 'newsposts', newsposts_path %>, ban and unban users, alter tag
+    implications, change source categories, delete inappropriate stories, and
+    perform various other maintenance tasks. When a user is banned, their
+    email address is recorded, and that address can no longer be used to sign
+    up for new accounts. This also checks for trivial variations on that
+    address; for instance, "firstname.lastname@gmail.com" is considered to be
+    the same as "firstnameLastname@gmail.com" because GMail will send these
+    both to the same person (other email providers, which do not treat periods
+    in this way, are exempt from this particular rule). Banning a user will
+    also delete all their stories, comments, and bookmarks.
+  </p></li>
+  <li><p>
+    <strong>Comments:</strong> Users can comment on stories, and the comments
+    will be properly displayed below the story. Users can also edit their own
+    comments; if a comment has been edited, the comment header will indicate
+    this fact.
+  </p></li>
+  <li><p>
+    <strong>Bookmarks:</strong> Users can bookmark favorite stories. This
+    serves two purposes: to allow users to save favorite stories to read later,
+    and to act as a recommendation system. A given bookmark may be either
+    private or public. Private bookmarks are only visible to the user who made
+    them, while public bookmarks are visible to any user who can see the story
+    bookmarked (bookmarks of adult stories will not be visible to users who
+    cannot see adult stories). When creating a bookmark, you can optionally add
+    a note, either to remind yourself why you bookmarked it or to act as a
+    review for others who are using your bookmarks as recommendations.
+  </p></li>
+  <li><p>
+    <strong>Newsposts:</strong> Administrators can make newsposts, which are
+    visible on the <%= link_to 'home page', home_path %> and on
+    <%= link_to 'their own page', newsposts_path %>. Just like stories,
+    newsposts can be tagged, although their tags are a separate set from the
+    tags used by stories. Also like stories, any user can comment on a
+    newspost, although only administrators can create or edit the newspost
+    itself. The home page displays the first paragraph of each of the three
+    most recent newsposts. The newspost page displays the entire newspost.
+  </p></li>
 </ul>
+<h3 id='bugs'>Known Issues</h3>
+<ul>
+  <li><p>
+    This site requires users to have both JavaScript and CSS enabled. When I
+    started making the site I did try to have it degrade gracefully, but that
+    became too time-consuming, so some features are just flat-out unavailable
+    to users without these.
+  </p></li>
+  <li><p>
+    Security is less than complete. I have guarded against accidental harm,
+    but not against malice. While there is no way I know of to cause problems
+    by normal use of the site, there are a few cases where a user could do so
+    by modifying request headers. Similarly to the above issue, this is mostly
+    because of lack of time; it wouldn't be very difficult to make it more
+    secure, but it would be time-consuming.
+  </p></li>
+</ul>
+<h3 id='non-features'>Unimplemented Features</h3>
+<p>There are some features of AO3 that I did not implement. These include:</p>
+<ul>
+  <li><p>
+    <strong>Translation:</strong> The original site allows users to select
+    their language, and have the interface display in that language. I didn't
+    do this, because I don't speak any languages other than English.
+  </p></li>
+  <li><p>
+    <strong>Custom Skins:</strong> Similarly to the above, AO3 allows users to
+    choose from several stylesheets; I have my stylesheet hardcoded in.
+  </p></li>
+  <li><p>
+    <strong>Kudos:</strong> AO3 has two separate mechanisms to record stories
+    you like: bookmarks and kudos. I didn't see the point of this, so I just
+    have bookmarks.
+  </p></li>
+  <li><p>
+    <strong>Upload and Download:</strong> AO3 allows users to upload their
+    stories as document files. My site requires users to use the on-site
+    editor. (However, if you copy-and-paste from a local document, formatting
+    will be preserved, so the practical difference is minimal.) Similarly, AO3
+    lets you download a story as an ebook. I didn't do this because that would
+    require me to spend a lot of time familiarizing myself with the intricacies
+    of a number of different ebook formats.
+  </p></li>
+  <li><p>
+    <strong>Admin Levels:</strong> AO3 has a number of different levels of
+    users, each with different privileges. For simplicity I collapsed this
+    structure into just two levels: regular users and administrators.
+  </p></li>
+  <li><p>
+    <strong>Detailed Ratings:</strong> AO3 has four different levels of
+    maturity rating (general, teen, mature, and explicit). I simplified this
+    into just two levels.
+  </p></li>
+  <li><p>
+    <strong>Relationship Tags:</strong> AO3 has a class of tags that I do not:
+    relationship tags, which indicate a romantic relationship between two
+    characters (e.g., if Alice and Bob are involved in a story, that story
+    would have the 'Alice/Bob' tag). If a user of my site wanted to tag a
+    relationship, they would have to use a content tag, rather than having a
+    separate type of tag dedicated to relationships.
+  </p></li>
+  <li><p>
+    <strong>Tag Aliases:</strong> AO3 allows tags to have multiple names, which
+    can be useful to combine several synonyms into one tag. On my site, each
+    tag has only one name.
+  </p></li>
+  <li><p>
+  </p></li>
+  <li><p>
+  </p></li>
+  <li><p>
+  </p></li>
+  <li><p>
+  </p></li>
+</ul>
+
+<div class='footnotes'>
+  <ol>
+    <%= render layout: 'misc/fn_b', locals: {num: 1} do %>
+      Fanfiction, or "fanfic," is fiction written by fans of, and featuring
+      characters from, popular media
+    <% end %>
+    <%= render layout: 'misc/fn_b', locals: {num: 2} do %>
+      Categories are not tags, but in some respects act like tags. Users cannot
+      create or delete categories, as all ten categories are hardcoded into the
+      database structure.
+    <% end %>
+  </ol>
+</div>

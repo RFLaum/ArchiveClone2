@@ -1,4 +1,5 @@
-<% tag = obj if obj %>
+<%# tag = obj if obj %>
+<% tag = obj if local_assigns[:obj] %>
 <div class = "tag-summary">
   <h4><%= name_link tag %></h4>
   <h5>
@@ -11,6 +12,13 @@
     Is implied by <%= pluralize(parents.count, 'other tag') %>.
     <% if is_admin? %>
       <%= link_to 'Edit', edit_tag_path(tag) %>
+    <% end %>
+    <% if logged_in? %>
+      <% if current_user.tags.include?(tag) %>
+        <%= link_to 'Remove Favorite', remove_fave_path(tag) %>
+      <% else %>
+        <%= link_to 'Favorite Tag', add_fave_path(tag) %>
+      <% end %>
     <% end %>
   </h5>
 </div>

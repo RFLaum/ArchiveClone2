@@ -17,6 +17,9 @@ class User < ApplicationRecord
   has_many :faves, through: :bookmarks, source: :story
   has_many :news_comments, foreign_key: 'author', primary_key: 'name',
                            dependent: :destroy
+  has_and_belongs_to_many :tags, join_table: :fave_tags, primary_key: 'name',
+                                 foreign_key: 'user_name',
+                                 association_foreign_key: 'tag_name'
 
   before_save { self.email = email.downcase }
   validates :name,

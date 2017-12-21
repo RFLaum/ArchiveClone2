@@ -14,7 +14,8 @@ class BannedAddress < ApplicationRecord
   end
 
   def self.is_banned?(email)
-    exists?(clean_email(email))
+    # exists?(clean_email(email))
+    self.where("email ~* ?", make_regex_str(clean_email(email))).exists?
   end
 
   def self.destroy_users_matching(email)
@@ -27,6 +28,7 @@ class BannedAddress < ApplicationRecord
 
   #assumes raw_address is a valid email address
   def self.clean_email(raw_address)
+    raw_address = raw_address.strip
     raw_address = raw_address.downcase
     raw_address.sub(/\+[^@]*@/, '@')
     # at_loc = raw_address.index('@')
@@ -40,6 +42,10 @@ class BannedAddress < ApplicationRecord
     # raw_address.sub(/^([^\+@]+)((\+[^@]*)?@)(.*$)/, '$1(\)')
     first_part = raw_address[0...raw_address.index(/[@\+]/)]
     second_part = raw_address[raw_address.index('@')..-1]
+    if ['gmail.com', 'googlemail.com'].include? second_part
+      second_part = 'g(oogle)?mail.com'
+      first_part = first_part.remove('.')
+    end
     first_part + '(\+[^@]*)?' + second_part
   end
 

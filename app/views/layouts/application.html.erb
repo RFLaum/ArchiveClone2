@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<% unless defined? @dont_loc %>
+  <% session[:return_page] = request.fullpath %>
+<% end %>
 <html>
   <head>
     <title>

@@ -32,7 +32,9 @@ body {
 .main-body {
   padding: 0.5em 2.5em 3.5em;
   margin-bottom:1.25em;
-  overflow: auto;
+  //removing this to make footnotes work
+  //TODO: figure out if removing this causes problems
+  // overflow: auto;
 }
 
 dl {

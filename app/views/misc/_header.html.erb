@@ -13,6 +13,7 @@
            <ul class='dropdown-hidden on-right'>
              <li><%= link_to('Settings', edit_user_path(current_user)) %></li>
              <li><%= link_to('Post new story', new_story_path) %></li>
+             <li><%= link_to('Favorite tags', faves_path) %></li>
              <li><%= link_to('Log out', logout_path) %></li>
            </ul>
          </div>
@@ -28,8 +29,8 @@
     <%= link_to "Home", home_path %>
     <%= link_to 'Tags', tags_path %>
     <%= link_to 'Stories', stories_path %>
+    <%= link_to 'Users', users_path %>
     <% if is_admin? %>
-      <%= link_to 'Users', users_path %>
       <%= link_to 'Banned Addresses', admin_banned_addresses_path %>
     <% end %>
     <span class = 'dropdown'>

@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   resources :newsposts do
     resources :news_comments
   end
+  get 'tags/:id/add' => 'tags#add_fave', as: :add_fave
+  get 'tags/:id/remove' => 'tags#remove_fave', as: :remove_fave
   resources :tags do
     resources :stories, only: %i[index]
   end
@@ -53,6 +55,7 @@ Rails.application.routes.draw do
   get 'logout' => 'users#logout', as: :logout
   match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put], as: :deactivate
   delete 'users/:id/ban' => 'users#ban', as: :ban
+  get 'faves' => 'users#faves', as: :faves
   resources :users, except: [:new], constraints: { id: /[^\/]+/ } do
     member do
       get 'send_confirmation'

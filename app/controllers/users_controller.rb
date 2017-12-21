@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   include ApplicationHelper
   before_action :set_user #, only: %i[show destroy send_confirmation]
-  skip_before_action :set_user, only: %i[register index create logout login]
+  skip_before_action :set_user, only: %i[register index create logout login faves]
   before_action :check_user, only: %i[deactivate edit update]
 
   def register
@@ -133,6 +133,11 @@ class UsersController < ApplicationController
     # else
     #   wrong_user(@user)
     # end
+  end
+
+  def faves
+    @user = current_user
+    @page_title = "#{@user}'s Favorite Tags"
   end
 
   private
