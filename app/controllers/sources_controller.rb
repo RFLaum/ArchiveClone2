@@ -8,7 +8,9 @@ class SourcesController < SuperSearchController
     @page_title = 'Source Search Results'
     pars = params.permit(:name, types: [])
     type_arr = pars[:types] ? pars[:types].map(&:to_sym) : nil
-    results = Source.search(pars[:name], type_arr).records
+    results = Source.search(pars[:name], type_arr)
+                    .records
+                    .order(stories_count: :desc, name: :asc)
     # @results = @results.paginate(page: params[:page])
     # render 'search/results'
     result_display(results)
