@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   self.primary_key = :name
   has_many :stories,   foreign_key: 'author', primary_key: 'name',
-                       dependent: :destroy
+                       dependent: :destroy, after_add: :mail_followers
   has_many :comments,  foreign_key: 'author', primary_key: 'name',
                        dependent: :destroy
   has_many :newsposts, foreign_key: 'admin', primary_key: 'name',
@@ -27,7 +27,7 @@ class User < ApplicationRecord
                         primary_key: 'name'
   has_many :fave_writers, through: :sub_reads, source: :writer
   has_many :fans, through: :sub_writes, source: :reader
-  
+
   before_save { self.email = email.downcase }
   validates :name,
             presence: { message: " can't be blank." },
@@ -53,6 +53,12 @@ class User < ApplicationRecord
 
   def delete_avatar
     false
+  end
+
+  def mail_followers(story)
+    self.fans.each do |fan|
+      UserMailMailer.story_created(self, fan, story).deliver_now
+    end
   end
 
   def story_permissions(story)

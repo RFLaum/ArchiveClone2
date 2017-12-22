@@ -2,10 +2,24 @@ class Chapter < ApplicationRecord
   include Updateable
   self.primary_keys = :story_id, :number
   belongs_to :story, touch: true
+  after_create :notify_fans
+  before_save :space_correct
 
   validates :body, length: { in: 20..900000,
     too_short: "must be at least %{count} characters long",
     too_long: "must be at most %{count} characters long" }
+
+  def notify_fans
+    unless (number == 1)
+      story.user.fans.each do |fan|
+        UserMailMailer.chapter_added(fan, self).deliver_now
+      end
+    end
+  end
+
+  def space_correct
+    body.gsub!('&nbsp;', ' ')
+  end
 
   def get_title
     self.title.to_s

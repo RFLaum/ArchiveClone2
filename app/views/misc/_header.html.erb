@@ -9,11 +9,16 @@
         <!-- Logged in as <%= name_link current_user %> -->
          <!-- (<%= link_to('Log out', '/logout') %>) -->
          <div class='dropdown'>
-           <%= name_link current_user %>
+           <%= name_link (cu = current_user) %>
            <ul class='dropdown-hidden on-right'>
-             <li><%= link_to('Settings', edit_user_path(current_user)) %></li>
+             <li><%= link_to('Settings', edit_user_path(cu)) %></li>
              <li><%= link_to('Post new story', new_story_path) %></li>
-             <li><%= link_to('Favorite tags', faves_path) %></li>
+             <% unless cu.tags.empty? %>
+              <li><%= link_to('Favorite tags', faves_path) %></li>
+             <% end %>
+             <% unless cu.fave_writers.empty? %>
+              <li><%= link_to('Subscriptions', subs_path) %></li>
+             <% end %>
              <li><%= link_to('Log out', logout_path) %></li>
            </ul>
          </div>

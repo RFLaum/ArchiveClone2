@@ -22,7 +22,7 @@ class Story < ApplicationRecord
   has_and_belongs_to_many :tags, association_foreign_key: 'name',
                                  after_add: %i[increment_count add_kids],
                                  after_remove: :decrement_count
-  has_many :chapters, dependent: :destroy
+  has_many :chapters, dependent: :destroy #, after_add: :fans_chapter
   has_many :comments, dependent: :destroy
   belongs_to :user, foreign_key: 'author', primary_key: 'name'
   has_and_belongs_to_many :sources, after_add: :increment_count,
@@ -87,6 +87,14 @@ class Story < ApplicationRecord
 
   # def add_kids(obj)
   #   obj.implied_tags.each do |child|
+  #   end
+  # end
+
+  # def fans_chapter(chapter)
+  #   unless chapter.number == 1
+  #     self.user.fans.each do |fan|
+  #       UserMailMailer.chapter_added(fan, chapter).deliver_now
+  #     end
   #   end
   # end
 

@@ -1,0 +1,7 @@
+<p>One of your favorite writers, <%= name_link @writer %>, has added a
+  <%= link_to 'new chapter', story_chapter_url(@story, @chapter.number) %> to the story
+  <%= name_link @story %>!</p>
+<p>You are receiving this email because you have subscribed to
+  <%= name_link @writer %>. If you do not wish to receive further
+  notifications, you can edit your subscriptions
+  <%= link_to 'here', subs_url %>.</p>

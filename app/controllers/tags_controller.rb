@@ -1,6 +1,5 @@
 class TagsController < ApplicationController
   # before_action :find_tags, only: [:find]
-  include
   before_action :set_tag #, only: %i[show edit update destroy]
   skip_before_action :set_tag, only: %i[index new create search search_results]
 

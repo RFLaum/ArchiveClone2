@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   include ApplicationHelper
   before_action :set_user #, only: %i[show destroy send_confirmation]
   skip_before_action :set_user, only: %i[
-    register index create logout login faves
+    register index create logout login faves subs
   ]
   before_action :check_user, only: %i[deactivate edit update]
 
@@ -13,7 +13,7 @@ class UsersController < ApplicationController
 
   def index
     @page_title = "Users"
-    @users = User.all
+    @users = User.where(is_confirmed: true)
   end
 
   def show
@@ -138,6 +138,7 @@ class UsersController < ApplicationController
   end
 
   def faves
+    anon_cant && return unless logged_in?
     @user = current_user
     @page_title = "#{@user}'s Favorite Tags"
   end
@@ -149,7 +150,7 @@ class UsersController < ApplicationController
         fvs << @user
       end
     end
-    redirect_to session[:left_off]
+    redirect_to session[:return_page]
   end
 
   def unsubscribe
@@ -159,7 +160,12 @@ class UsersController < ApplicationController
         fvs.delete(@user)
       end
     end
-    redirect_to session[:left_off]
+    redirect_to session[:return_page]
+  end
+
+  def subs
+    @page_title = "Subscriptions"
+    anon_cant && return unless logged_in?
   end
 
   private

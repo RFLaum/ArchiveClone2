@@ -57,7 +57,8 @@ Rails.application.routes.draw do
   delete 'users/:id/ban' => 'users#ban', as: :ban
   get 'faves' => 'users#faves', as: :faves
   get 'users/:id/subscribe' => 'users#subscribe', as: :subscribe
-  get 'users/:id/unsubscribe' => 'users#unsubscribe', as: :unsubscribe  
+  get 'users/:id/unsubscribe' => 'users#unsubscribe', as: :unsubscribe
+  get 'users/subs', as: :subs
   resources :users, except: [:new], constraints: { id: /[^\/]+/ } do
     member do
       get 'send_confirmation'

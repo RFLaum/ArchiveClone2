@@ -17,7 +17,14 @@
   <dt><%= link_to 'Bookmarks', user_bookmarks_path(@user) %></dt>
   <dd><%= @user.visible_bookmarks(cu).count %></dd>
 </dl>
-
+<br>
+<% if logged_in? %>
+  <% if cu.fave_writers.include?(@user) %>
+    <%= link_to 'Unsubscribe', unsubscribe_path(@user) %>
+  <% else %>
+    <%= link_to 'Subscribe', subscribe_path(@user) %>
+  <% end %>
+<% end %>
 <br>
 <% if @user.deactivated %>
 <p>This user is no longer active.</p>

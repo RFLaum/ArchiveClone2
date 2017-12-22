@@ -68,7 +68,15 @@ class ChaptersController < ApplicationController
   def get_row
     # @chapter = Chapter.find_by([params[:story_id], params[:id]])
     # @chapter = Chapter.find(params[:id])
-    @chapter = Chapter.find([params[:story_id], params[:id]])
+    s_id = params[:story_id]
+    c_id = params[:id]
+    if pos = c_id.rindex(',')
+      c_id = c_id[(pos + 1)..-1]
+    end
+    # logger.debug "story_id: #{s_id}"
+    # logger.debug "c_id: #{c_id}"
+    # @chapter = Chapter.find([params[:story_id], params[:id]])
+    @chapter = Chapter.find([s_id, c_id])
   end
 
   def chapter_params

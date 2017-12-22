@@ -22,6 +22,15 @@
         <% ed_links << link_to('ban user', ban_path(user), method: :delete,
         data: { confirm: 'Are you sure?' }) %>
       <% end %>
+      <% if logged_in? %>
+        <% unless is_correct_user?(user) %>
+          <% if current_user.fave_writers.include?(user) %>
+            <% ed_links << link_to('unsubscribe', unsubscribe_path(user)) %>
+          <% else %>
+            <% ed_links << link_to('subscribe', subscribe_path(user)) %>
+          <% end %>
+        <% end %>
+      <% end %>
       <% unless ed_links.empty? %>
         (<%= raw ed_links.join(', ') %>)
       <% end %>
