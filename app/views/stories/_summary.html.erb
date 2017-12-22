@@ -4,20 +4,13 @@
 <div class='story-summary'>
   <dl>
     <dt>Title</dt>
-    <dd><%= name_link story%>
+    <dd><%= name_link story%></dd>
+    <dt>Fandoms</dt>
+    <dd>
+      <%= tagesque_links(story.sources, 'source', true) %>
+    </dd>
     <dt>Tags</dt>
     <dd>
-<%
-=begin
-%>
-      <% #tag_array = story.tags.map { |tag| link_to(tag.name, tag) } %>
-      <% tag_array = story.tags.map do |tag|
-        link_to(tag.name, tag_stories_path(tag) )
-      end %>
-      <%= raw tag_array.join(', ') %>
-<%
-=end
-%>
       <%= tags_links story.tags, true %>
     </dd>
     <dt>Summary</dt>
