@@ -45,6 +45,9 @@
         <li><%= link_to 'Source Media', source_search_path %></li>
         <li><%= link_to 'General', search_path %></li>
       </ul>
-    </div>
+    </span>
+    <% if logged_in? %>
+      <%= link_to('Post Story', new_story_path) %>
+    <% end %>
   </div>
 </div>

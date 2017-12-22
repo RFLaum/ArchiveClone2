@@ -47,13 +47,21 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params_for_create)
-    if BannedAddress.is_banned?(@user.email)
-      render('errors/generic_error',
-             locals: { message: "That email is banned." }) && return
-    end
+    # if @user.invalid?
+    #   render('errors/generic_error', locals: {message: @user.errors.inspect}) && return
+    # end
+    # if BannedAddress.is_banned?(@user.email)
+    #   render('errors/generic_error',
+    #          locals: { message: "That email is banned." }) && return
+    # end
     @user.confirmation_hash = generate_hash
     if @user.save
-      send_confirmation
+      if BannedAddress.is_banned?(@user.email)
+        render('errors/generic_error',
+               locals: { message: "That email is banned." }) && return
+      else
+        send_confirmation
+      end
       # redirect_to action: index
       # render 'signup_made'
     else
