@@ -274,7 +274,7 @@ class Story < ApplicationRecord
     #   end
     #   query = query.order(order_clause + ' ' + query_params[:sort_direction])
     # end
-    query = s_sort(query, query_params[:sort_by], query_params[:sort_string])
+    query = s_sort(query, query_params[:sort_by], query_params[:sort_direction])
     if query_params[:show_adult].blank?
       # query = query.reject(&:is_adult?)
       query = non_adult(query)
@@ -390,9 +390,64 @@ class Story < ApplicationRecord
     story_set
   end
 
+  #exact is a boolean indicating whether this is an exact match on primary key;
+  #if it's false, we do a fuzzy search instead
+  #s_hash is a hash with :tags, :sources, :characters as the keys and the
+  #search query for that type of object as the values
+  def self.tsc_wrapper(story_set, s_hash, exact)
+    %i[tags sources characters].each do |k|
+      next unless v = s_hash[k]
+      if exact
+        story_set = exact_search(story_set, k, v)
+      else
+        #for tags, sources, and characters, the field is always called 'name'
+        story_set = approx_search(story_set, k, v, 'name')
+      end
+    end
+    story_set
+  end
+
+  def self.approx_search(story_set, assoc_sym, queries, field)
+    queries = queries.split(/,\s*/) if queries.is_a?(String)
+    rflct = reflect_on_association(assoc_sym)
+    table_name = rflct.join_table
+    story_key = rflct.foreign_key
+    tag_key = rflct.association_foreign_key
+    klass = rflct.klass
+    queries.each do |query|
+      base_join = "#{table_name} INNER JOIN #{klass.table_name} ON "
+      base_join += "#{table_name}.#{tag_key} = #{klass.pfj}"
+      cond = select('1').from(base_join)
+      cond = cond.where("#{table_name}.#{story_key} = stories.id")
+      cond = convert_query(query, "#{klass.table_name}.#{field}", cond, true)
+      # cond = convert_query(query, "#{table_name}.#{tag_key}", cond, true)
+      story_set = story_set.where("EXISTS (#{cond.to_sql})")
+    end
+    story_set
+  end
+
+  def self.exact_search(story_set, assoc_sym, vals)
+    vals = vals.split(/,\s*/) if vals.is_a?(String)
+    rflct = reflect_on_association(assoc_sym)
+    table_name = rflct.join_table
+    story_key = rflct.foreign_key
+    tag_key = rflct.association_foreign_key
+    vals.each do |val|
+      cond = select('1').from(table_name)
+      cond = cond.where("#{table_name}.#{story_key} = stories.id")
+      cond = cond.where("#{table_name}.#{tag_key} = ?", val)
+      story_set = story_set.where("EXISTS (#{cond.to_sql})")
+    end
+    story_set
+  end
+
   def self.s_sort(story_set, sort_by, sort_dir)
+    # logger.debug "s_sort #{sort_by}"
+    # logger.debug "s_sort #{sort_dir}"
     sort_by = (sort_by || :updated_at).to_sym
     sort_dir = (sort_dir || :desc).to_sym
+    # logger.debug "s_sort #{sort_by}"
+    # logger.debug "s_sort #{sort_dir}"
     if sort_by == :num_comments
       return story_set.left_outer_joins(:comments)
                       .select('stories.*, COUNT(comments.*)')

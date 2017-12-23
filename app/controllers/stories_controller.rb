@@ -23,13 +23,24 @@ class StoriesController < ApplicationController
       @page_title.prepend(@obj.name + ' ')
     end
 
-    query_params = {
-      tags: params[:other_tags],
-      sources: params[:other_sources],
-      characters: params[:other_characters]
-    }
-    @base_stories = Story.tsc_search(@base_stories, query_params)
-    @base_stories = Story.tsc_search(@base_stories, params)
+    @base_stories = do_filtering(@base_stories)
+    # exact_filters = {}
+    # fuzzy_filters = {}
+    #
+    # %i[tags sources characters].each do |tp|
+    #   exact_filters[tp] = params["filter_#{tp}".to_sym]
+    #   fuzzy_filters[tp] = params["other_#{tp}".to_sym]
+    # end
+    # @base_stories = Story.tsc_wrapper(@base_stories, exact_filters, true)
+    # @base_stories = Story.tsc_wrapper(@base_stories, fuzzy_filters, false)
+
+    # query_params = {
+    #   tags: params[:other_tags],
+    #   sources: params[:other_sources],
+    #   characters: params[:other_characters]
+    # }
+    # @base_stories = Story.tsc_search(@base_stories, query_params)
+    # @base_stories = Story.tsc_search(@base_stories, params)
 
     # sort_by = params[:sort_by] ? params[:sort_by].to_sym : :updated_at
     # sort_dir = params[:sort_direction] ? params[:sort_direction].to_sym : :desc
@@ -48,7 +59,7 @@ class StoriesController < ApplicationController
       @base_stories = Story.non_adult(@base_stories)
     end
 
-    @stories = Story.s_sort(@base_stories, params[:sort_by], params[:sort_dir])
+    @stories = Story.s_sort(@base_stories, params[:sort_by], params[:sort_direction])
 
 
 
@@ -150,9 +161,9 @@ class StoriesController < ApplicationController
     if !(@pars[:show_adult] || @pars[:show_non_adult])
       @error = "You have chosen to show neither adult nor non-adult stories."
     else
-      @results = Story.search(@pars)
-      @base_results = @results
-      @results = @results.paginate(page: params[:page])
+      @base_results = Story.search(@pars)
+      @base_results = do_filtering(@base_results)
+      @results = @base_results.paginate(page: params[:page])
     end
   end
 
@@ -166,6 +177,22 @@ class StoriesController < ApplicationController
   # end
 
   private
+
+  def do_filtering(story_set)
+    exact_filters = {}
+    fuzzy_filters = {}
+
+    %i[tags sources characters].each do |tp|
+      exact_filters[tp] = params["filter_#{tp}".to_sym]
+      fuzzy_filters[tp] = params["other_#{tp}".to_sym]
+    end
+    # logger.debug "do_filtering test"
+    # fuzzy_filters.each do |k, v|
+      # logger.debug "#{k}: #{v}"
+    # end
+    answer = Story.tsc_wrapper(story_set, exact_filters, true)
+    Story.tsc_wrapper(answer, fuzzy_filters, false)
+  end
 
   # todo: do we always need tags?
   def set_story
