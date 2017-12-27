@@ -5,7 +5,7 @@ module Searchable
 
   module ClassMethods
     def convert_query(raw_query, field_name, q = where('true'), complete = false)
-      padder = '(% )?'
+      # padder = '(% )?'
       # query = raw_query.downcase.strip
       query = raw_query.downcase.squish
       #note that the final query uses the SQL standard's definition of a regular
@@ -37,7 +37,8 @@ module Searchable
         if complete
           cooked_term = term.delete('"')
         else
-          cooked_term = padder + term.delete('"') + padder
+          # cooked_term = padder + term.delete('"') + padder
+          cooked_term = "(% )?#{term.delete('"')}%"
         end
         q = is_negated ? q.where.not(this_string, cooked_term) : q.where(this_string, cooked_term)
         # q = q.where(this_string, '(% )?' + term.delete('"') + '( %)?')
