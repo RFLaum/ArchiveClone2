@@ -224,7 +224,7 @@ class Story < ApplicationRecord
   #   answer
   # end
 
-  def convert_elastic(field_name, query)
+  def self.convert_elastic(field_name, query)
     __elasticsearch__.search(
       query: {
         query_string: {
