@@ -229,7 +229,7 @@ class Story < ApplicationRecord
     %i[title author].each do |par|
       if query_params[par].present?
         # query = convert_query(query_params[par], 'stories.' + par.to_s, query)
-        query = query.merge(convert_elastic("stories.#{par}", query_params[par]))
+        query = query.merge(convert_elastic(par.to_s, query_params[par]))
       end
     end
     %i[updated created].each do |par|
