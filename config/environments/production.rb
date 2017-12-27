@@ -59,13 +59,23 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address: 'smtp.gmail.com',
+  #   port: 587,
+  #   domain: 'archiveofourclone.org',
+  #   user_name: ENV['GMAIL_SMTP_USER'],
+  #   password: ENV['GMAIL_SMTP_PASSWORD'],
+  #   authentication: 'login',
+  #   enable_starttls_auto: true
+  # }
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
+    user_name: ENV['SENDGRID_USERNAME'],
+    password: ENV['SENDGRID_PASSWORD'],
+    domain: 'archiveclone.herokuapp.com',
+    address: 'smtp.sendgrid.net',
     port: 587,
-    domain: 'archiveofourclone.org',
-    user_name: ENV['GMAIL_SMTP_USER'],
-    password: ENV['GMAIL_SMTP_PASSWORD'],
-    authentication: 'login',
+    authentication: :plain,
     enable_starttls_auto: true
   }
   config.action_mailer.default_url_options = { host: "archiveclone.herokuapp.com" }

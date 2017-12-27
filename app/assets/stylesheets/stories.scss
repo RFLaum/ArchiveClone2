@@ -16,6 +16,14 @@
   clear: both;
   margin-top: 10px;
   margin-bottom: 10px;
+  dd {
+    :first-child {
+      margin-top: 0;
+    }
+    :last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 textarea#story_summary {

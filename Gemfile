@@ -57,6 +57,7 @@ end
 group :production do
   #need an older version because paperclip has a bug with version 3
   gem 'aws-sdk', '< 3.0'
+  gem 'sendgrid-ruby'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
