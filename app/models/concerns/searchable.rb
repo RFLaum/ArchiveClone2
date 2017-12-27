@@ -30,7 +30,8 @@ module Searchable
       terms.each do |term|
         is_negated = term[0] == '-'
         term = term[1..-1] if is_negated
-        this_string = field_name + ' SIMILAR TO ?'
+        # this_string = field_name + ' SIMILAR TO ?'
+        this_string = "LOWER(#{field_name}) SIMILAR TO ?"
         if complete
           cooked_term = term.delete('"')
         else
