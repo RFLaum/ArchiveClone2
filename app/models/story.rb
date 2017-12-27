@@ -1,4 +1,4 @@
-require 'elasticsearch/model'
+# require 'elasticsearch/model'
 # require 'elasticsearch/dsl'
 
 class Story < ApplicationRecord
@@ -6,8 +6,8 @@ class Story < ApplicationRecord
   include Taggable
   include Searchable
   include Commentable
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+  # include Elasticsearch::Model
+  # include Elasticsearch::Model::Callbacks
 
   # validates :title, presence: true
   validates :title, length: { in: 5..80,
@@ -224,24 +224,28 @@ class Story < ApplicationRecord
   #   answer
   # end
 
-  def self.convert_elastic(field_name, query)
-    __elasticsearch__.search(
-      query: {
-        query_string: {
-          default_field: field_name,
-          default_operator: 'AND',
-          query: query
-        }
-      }
-    ).records
-  end
+  # def self.convert_elastic(field_name, query)
+  #   logger.debug "convert_elastic a"
+  #   answer = __elasticsearch__.search(
+  #     query: {
+  #       query_string: {
+  #         default_field: field_name,
+  #         default_operator: 'AND',
+  #         query: query
+  #       }
+  #     }
+  #   ).records
+  #   logger.debug "convert_elastic b"
+  #   logger.debug answer.class.to_s
+  #   answer
+  # end
 
   def self.search(query_params)
     query = where('true')
     %i[title author].each do |par|
       if query_params[par].present?
-        # query = convert_query(query_params[par], 'stories.' + par.to_s, query)
-        query = query.merge(convert_elastic(par.to_s, query_params[par]))
+        query = convert_query(query_params[par], 'stories.' + par.to_s, query)
+        # query = query.merge(convert_elastic(par.to_s, query_params[par]))
       end
     end
     %i[updated created].each do |par|
@@ -533,4 +537,4 @@ end
 
 
 # Story.__elasticsearch__.create_index! force: true
-Story.import
+# Story.import
