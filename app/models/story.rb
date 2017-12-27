@@ -6,6 +6,8 @@ class Story < ApplicationRecord
   include Taggable
   include Searchable
   include Commentable
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   # validates :title, presence: true
   validates :title, length: { in: 5..80,
