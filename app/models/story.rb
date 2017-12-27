@@ -1,4 +1,4 @@
-# require 'elasticsearch/model'
+require 'elasticsearch/model'
 # require 'elasticsearch/dsl'
 
 class Story < ApplicationRecord
@@ -223,6 +223,18 @@ class Story < ApplicationRecord
   #   answer = answer.select(&:is_adult?) if query_params[:show_non_adult].blank?
   #   answer
   # end
+
+  def convert_elastic(field_name, query)
+    __elasticsearch__.search(
+      query: {
+        query_string: {
+          default_field: field_name,
+          default_operator: 'AND',
+          query: query
+        }
+      }
+    ).records
+  end
 
   def self.search(query_params)
     query = where('true')
@@ -521,4 +533,4 @@ end
 
 
 # Story.__elasticsearch__.create_index! force: true
-# Story.import
+Story.import

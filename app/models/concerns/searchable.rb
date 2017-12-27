@@ -1,7 +1,7 @@
 module Searchable
   extend ActiveSupport::Concern
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+  # include Elasticsearch::Model
+  # include Elasticsearch::Model::Callbacks
 
   module ClassMethods
     def convert_query(raw_query, field_name, q = where('true'), complete = false)
@@ -47,17 +47,17 @@ module Searchable
     end
 
     #field_name and query are strings
-    def convert_elastic(field_name, query)
-      __elasticsearch__.search(
-        query: {
-          query_string: {
-            default_field: field_name,
-            default_operator: 'AND',
-            query: query
-          }
-        }
-      ).records
-    end
+    # def convert_elastic(field_name, query)
+    #   __elasticsearch__.search(
+    #     query: {
+    #       query_string: {
+    #         default_field: field_name,
+    #         default_operator: 'AND',
+    #         query: query
+    #       }
+    #     }
+    #   ).records
+    # end
 
     def convert_time(raw_string)
       cooked = raw_string.gsub('&gt;', '>')
