@@ -204,8 +204,8 @@ class StoriesController < ApplicationController
     params.require(:story)
           .permit(:title, :author, :tags_add, :srcs_add, :chars_add,
                   :tags_public, :sources_public, :chars_public, :chapter_title,
-                  :body, :summary, deleted_tags: [], deleted_characters: [],
-                  deleted_sources: [])
+                  :body, :summary, :adult_override, deleted_tags: [],
+                  deleted_characters: [], deleted_sources: [])
   end
 
   alias :super_check_user :check_user
