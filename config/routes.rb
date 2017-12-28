@@ -51,16 +51,16 @@ Rails.application.routes.draw do
   # match 'stories/:story_id/:chapter_num' => 'chapters#update', via: %i[patch put]
 
   # get '/user_confirm/:user_name/auth=:hash' => 'users#confirm'
-  get 'users/:id/auth=:hash' => 'users#confirm'
+  get 'users/:id/auth=:hash' => 'users#confirm', constraints: { id: /[^\/]+/ }
   get 'login' => 'users#login', as: :login
   post 'login' => 'users#login_receiver'
   get 'register' => 'users#register', as: :register
   get 'logout' => 'users#logout', as: :logout
-  match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put], as: :deactivate
-  delete 'users/:id/ban' => 'users#ban', as: :ban
+  match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put], as: :deactivate, constraints: { id: /[^\/]+/ }
+  delete 'users/:id/ban' => 'users#ban', as: :ban, constraints: { id: /[^\/]+/ }
   get 'faves' => 'users#faves', as: :faves
-  get 'users/:id/subscribe' => 'users#subscribe', as: :subscribe
-  get 'users/:id/unsubscribe' => 'users#unsubscribe', as: :unsubscribe
+  get 'users/:id/subscribe' => 'users#subscribe', as: :subscribe, constraints: { id: /[^\/]+/ }
+  get 'users/:id/unsubscribe' => 'users#unsubscribe', as: :unsubscribe, constraints: { id: /[^\/]+/ }
   get 'users/subs', as: :subs
   resources :users, except: [:new], constraints: { id: /[^\/]+/ } do
     member do
