@@ -9,9 +9,12 @@ Rails.application.routes.draw do
   resources :newsposts do
     resources :news_comments
   end
-  get 'tags/:id/add' => 'tags#add_fave', as: :add_fave
-  get 'tags/:id/remove' => 'tags#remove_fave', as: :remove_fave
-  resources :tags do
+  resources :news_tags do
+    resources :newsposts, only: %i[index]
+  end
+  get 'tags/:id/add' => 'tags#add_fave', as: :add_fave #, constraints: { id: /[^\/]+/ }
+  get 'tags/:id/remove' => 'tags#remove_fave', as: :remove_fave #, constraints: { id: /[^\/]+/ }
+  resources :tags do #, constraints: { id: /[^\/]+/ } do
     resources :stories, only: %i[index]
   end
   resources :characters do
@@ -22,7 +25,7 @@ Rails.application.routes.draw do
   post 'sources/bulk_update' => 'sources#update_receiver'
   get 'sources/search' => 'sources#search_form', as: :source_search
   get 'sources/results' => 'sources#search_results'
-  resources :sources, only: [:new]
+  resources :sources, only: [:new] #, constraints: { id: /[^\/]+/ }
   get 'sources/:type', to: 'sources#index_type', constraints: { type: /[a-z_]+/ }, as: :type
   resources :sources do
     resources :stories, only: %i[index]
@@ -56,11 +59,11 @@ Rails.application.routes.draw do
   post 'login' => 'users#login_receiver'
   get 'register' => 'users#register', as: :register
   get 'logout' => 'users#logout', as: :logout
-  match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put], as: :deactivate, constraints: { id: /[^\/]+/ }
-  delete 'users/:id/ban' => 'users#ban', as: :ban, constraints: { id: /[^\/]+/ }
+  match 'users/:id/deactivate' => 'users#deactivate', via: %i[patch put], as: :deactivate #, constraints: { id: /[^\/]+/ }
+  delete 'users/:id/ban' => 'users#ban', as: :ban #, constraints: { id: /[^\/]+/ }
   get 'faves' => 'users#faves', as: :faves
-  get 'users/:id/subscribe' => 'users#subscribe', as: :subscribe, constraints: { id: /[^\/]+/ }
-  get 'users/:id/unsubscribe' => 'users#unsubscribe', as: :unsubscribe, constraints: { id: /[^\/]+/ }
+  get 'users/:id/subscribe' => 'users#subscribe', as: :subscribe #, constraints: { id: /[^\/]+/ }
+  get 'users/:id/unsubscribe' => 'users#unsubscribe', as: :unsubscribe #, constraints: { id: /[^\/]+/ }
   get 'users/subs', as: :subs
   resources :users, except: [:new], constraints: { id: /[^\/]+/ } do
     member do

@@ -2,6 +2,7 @@ require 'elasticsearch/model'
 
 class User < ApplicationRecord
   include Updateable
+  include Nameclean
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
@@ -48,6 +49,11 @@ class User < ApplicationRecord
 
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
   validates_attachment_size :avatar, less_than: 200.kilobytes
+
+  def self.find_by_name(str)
+    # super(un_param(str))
+    find_by(name: un_param(str))
+  end
 
   def delete_avatar=(del)
     self.avatar = nil if del.to_i == 1

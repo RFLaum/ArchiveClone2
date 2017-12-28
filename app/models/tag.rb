@@ -5,6 +5,7 @@ class Tag < ApplicationRecord
   include Updateable
   include Impliable
   include Storycount
+  include Nameclean
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
@@ -27,6 +28,19 @@ class Tag < ApplicationRecord
 
   before_destroy :knit_implications
 
+  def self.find_by_name(str)
+    # super(un_param(str))
+    find_by(name: un_param(str))
+  end
+
+  # def to_param
+  #   name.gsub('*', '***')
+  #       .gsub('/', '*s*')
+  #       .gsub('&', '*a*')
+  #       .gsub('.', '*d*')
+  #       .gsub('?', '*q*')
+  #       .gsub('#', '*h*')
+  # end
   # #if A implies B implies C, then deleting B makes A imply c
   # before_destroy do
   #   implying_tags.each do |parent|

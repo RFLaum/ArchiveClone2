@@ -205,9 +205,11 @@ class UsersController < ApplicationController
   def set_user
     #do this as find_by rather than find in order to better handle the case
     #where an incorrect username is submitted
-    @user = User.find_by(name: params[:id])
+    # @user = User.find_by(name: params[:id])
+    @user = User.find_by_name(params[:id])
     unless @user
-      @username = params[:id]
+      # @username = params[:id]
+      @username = User.un_param(params[:id])
       render 'errors/no_such_user'
     end
     # @was_set_user_called = true

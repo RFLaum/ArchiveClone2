@@ -22,7 +22,9 @@ class TagsController < ApplicationController
 
   # GET /tags/1
   # GET /tags/1.json
-  def show; end
+  def show
+    @page_title = @tag.name
+  end
 
   # GET /tags/new
   def new
@@ -30,7 +32,9 @@ class TagsController < ApplicationController
   end
 
   # GET /tags/1/edit
-  def edit; end
+  def edit
+    @oage_title = "Editing #{@tag.name}"
+  end
 
   # POST /tags
   # POST /tags.json
@@ -104,7 +108,8 @@ class TagsController < ApplicationController
   private
 
   def set_tag
-    @tag = Tag.find_by(name: params[:id])
+    # @tag = Tag.find_by(name: params[:id])
+    @tag = Tag.find_by_name(params[:id])
   end
 
   def tag_params

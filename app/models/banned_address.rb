@@ -2,7 +2,10 @@
 #.find, etc.
 class BannedAddress < ApplicationRecord
   include Updateable
+  # include Nameclean
   self.primary_key = :email
+
+  # def self.find_by_email
 
   def self.add_email(address)
     find_or_create_by(email: clean_email(address))

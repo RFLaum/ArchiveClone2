@@ -15,6 +15,13 @@
   <%= raw @newspost.content %>
 </p>
 
+<p>
+  <strong>Tags:</strong> (<%= @newspost.news_tags.count %>)
+  <%= raw (@newspost.news_tags.map do |tag|
+    link_to(tag.name, news_tag_newsposts_path(tag))
+  end).join(', ') %>
+</p>
+
 <%= link_to 'Edit', edit_newspost_path(@newspost) %> |
 <%= link_to 'Back', newsposts_path %>
 

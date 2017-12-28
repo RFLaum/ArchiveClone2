@@ -7,11 +7,11 @@
     <dd><%= name_link story%></dd>
     <dt>Fandoms</dt>
     <dd>
-      <%= tagesque_links(story.sources, 'source', true) %>
+      <%= tagesque_links(story.sources.order(name: :asc), 'source', true) %>
     </dd>
     <dt>Tags</dt>
     <dd>
-      <%= tags_links story.tags, true %>
+      <%= tags_links story.tags.order(name: :asc), true %>
     </dd>
     <dt>Summary</dt>
     <dd>
