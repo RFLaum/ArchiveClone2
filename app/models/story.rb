@@ -282,7 +282,8 @@ class Story < ApplicationRecord
     #     end
     #   end
     # end
-    query = tsc_search(query, query_params)
+    # query = tsc_search(query, query_params)
+    query = tsc_wrapper(query, query_params, false)
     # if query_params[:sort_by].present?
     #   order_clause = query_params[:sort_by]
     #   if order_clause == 'num_comments'
@@ -394,6 +395,8 @@ class Story < ApplicationRecord
   def self.tsc_search(story_set, s_hash)
     %i[tags sources characters].each do |k|
       next unless v = s_hash[k]
+      # logger.debug "tsc test #{k}"
+      # logger.debug v
       rflct = reflect_on_association(k)
       table_name = rflct.join_table
       story_key = rflct.foreign_key
