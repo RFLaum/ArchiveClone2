@@ -43,7 +43,7 @@
     <%# link_to 'Add Bookmark', story_bookmark(@story) %>
     <% permissions = usr.story_permissions(@story) %>
     <% if permissions[:edit] %>
-      <%= link_to 'Edit Story', edit_story_path(@story) %>
+      <%= link_to 'Edit Story Metadata', edit_story_path(@story) %>
       <%= link_to 'Add Chapter', new_story_chapter_path(@story) %>
       <% if @chapter.present? %>
         <%= link_to 'Edit Chapter', edit_story_chapter_path(@chapter) %>

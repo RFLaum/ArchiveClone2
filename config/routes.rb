@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  root 'special_pages#home'
-  get 'home2' => 'special_pages#home2', as: :home
+  # root 'special_pages#home'
+  root 'special_pages#home2'
+  get 'home' => 'special_pages#home2', as: :home
+  get 'home2' => 'special_pages#home2' #, as: :home
+  get 'home3' => 'special_pages#home'
   get 'about' => 'special_pages#about', as: :about
   get 'tech' => 'special_pages#technical', as: :tech
   resources :newsposts do

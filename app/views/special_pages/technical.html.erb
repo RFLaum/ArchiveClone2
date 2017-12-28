@@ -5,7 +5,8 @@
 
 <p>
   I built this site on Ruby on Rails to be a clone of
-  <%= link_to 'Archive of our Own', 'http://archiveofourown.org/' %>, a
+  <%= link_to 'Archive of our Own', 'http://archiveofourown.org/' %> (also
+  AO3 for short), a
   popular fanfiction <%= render 'misc/fn_a', num: 1 %>
   archive. While
   the original site is also written in Rails, I did not copy any of their code
@@ -33,7 +34,7 @@
     Potter fanfic, you might tag it with
     <%= link_name Character, "Harry Potter" %>,
     <%= link_name Character, "Hermione Granger" %>, et cetera.
-    <%= link_to 'Source tags', sources_path %> indicate what fandom a story
+    <%= link_to 'Source tags', sources_path %> (AKA fandom tags) indicate what fandom a story
     belongs to; in the earlier example of a Harry Potter fanfic, it would be
     tagged with <%= link_name Source, "Harry Potter" %>. Each source may belong
     to one or more categories <%= render 'misc/fn_a', num: 2 %>; for

@@ -38,7 +38,7 @@ module Searchable
           cooked_term = term.delete('"')
         else
           # cooked_term = padder + term.delete('"') + padder
-          cooked_term = "(% )?#{term.delete('"')}%"
+          cooked_term = "(% )?#{term.delete('"')}( %)?"
         end
         q = is_negated ? q.where.not(this_string, cooked_term) : q.where(this_string, cooked_term)
         # q = q.where(this_string, '(% )?' + term.delete('"') + '( %)?')
