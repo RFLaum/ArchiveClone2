@@ -11,6 +11,10 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def login
+    @page_title = "Log In"
+  end
+
   def index
     @page_title = "Users"
     @users = User.where(is_confirmed: true)
@@ -116,6 +120,7 @@ class UsersController < ApplicationController
   end
 
   def logout
+    @page_title = "Logged Out"
     session[:user] = nil
   end
 

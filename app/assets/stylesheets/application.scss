@@ -66,6 +66,10 @@ dd {
   float:right;
 }
 
+.right-text {
+  text-align: right;
+}
+
 .disabled {
   color: gray;
 }
@@ -112,9 +116,13 @@ a.top-link {
   border-radius: 0.25em
 }
 
-.no-dec {
+ol.no-dec, ul.no-dec {
   list-style-type: none;
   padding: 0;
+}
+
+a.no-dec {
+  text-decoration: none;
 }
 
 .horizontal-list > li {
@@ -243,4 +251,8 @@ input[type='submit'] {
   left: 0;
   top: 1em;
   min-width: 10em;
+}
+
+.in-line {
+  display: inline;
 }

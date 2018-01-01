@@ -34,8 +34,8 @@ class User < ApplicationRecord
             presence: { message: " can't be blank." },
             length: { maximum: 50, message: "Name is too long." },
             exclusion: { in: ['guest'] },
-            format: { with: /[^\/]+/,
-                      message: " cannot contain the character '/'" },
+            # format: { with: /[^\/]+/,
+            #           message: " cannot contain the character '/'" },
             uniqueness: true
   EMAIL_REGEX = /\A[\w+\-\.\+]+@[a-z\d\-\.]+\.[a-z]+\z/i
   validates :email, presence: true,

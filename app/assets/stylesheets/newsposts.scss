@@ -1,3 +1,34 @@
 // Place all the styles related to the Newsposts controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.post-header {
+  > h3 {
+    text-align: center;
+    font-size: 1.875em;
+    font-weight: normal;
+    margin-top:0.3em;
+  }
+}
+
+#news-banner {
+  display: flex;
+  align-items: center;
+  > img {
+    flex-grow: 0;
+  }
+  > div {
+    flex-grow: 1;
+    .button-row {
+      margin-bottom: 0;
+    }
+  }
+  h2 {
+    text-align: right;
+    border-bottom: 2px solid black;
+    font-size: 1.875em;
+    font-weight: normal;
+    margin-bottom: 0.4em;
+    margin-top: 0;
+  }
+}

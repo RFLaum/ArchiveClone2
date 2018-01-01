@@ -19,6 +19,9 @@
              <% unless cu.fave_writers.empty? %>
               <li><%= link_to('Subscriptions', subs_path) %></li>
              <% end %>
+             <% unless cu.bookmarks.empty? %>
+              <li><%= link_to('Bookmarks', user_bookmarks_path(cu)) %></li>
+             <% end %>
              <li><%= link_to('Log out', logout_path) %></li>
            </ul>
          </div>

@@ -1,5 +1,6 @@
 class NewsTag < ApplicationRecord
   include Impliable
+  # include Nameclean
   # self.primary_key = :name
   has_and_belongs_to_many :newsposts
 
@@ -10,6 +11,11 @@ class NewsTag < ApplicationRecord
   has_many :implying_tags, through: :impliers, source: :spec_tag
 
   before_destroy :knit_implications
+
+  # def self.find_by_name(str)
+  #   # super(un_param(str))
+  #   find_by(name: un_param(str))
+  # end
 
   #translates a user-input tag to the form used by the database
   #todo

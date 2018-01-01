@@ -20,7 +20,8 @@ class StoriesController < ApplicationController
     end
     if @obj.present?
       @base_stories = @obj.stories
-      @page_title.prepend(@obj.name + ' ')
+      # @page_title.prepend(@obj.name + ' ')
+      @page_title += " in \"#{@obj.name}\""
     end
 
     @base_stories = do_filtering(@base_stories)
