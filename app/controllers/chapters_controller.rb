@@ -48,6 +48,7 @@ class ChaptersController < ApplicationController
 
   def edit
     # return unless check_user(@story.user)
+    @page_title = "Editing Chapter #{@chapter.number} of #{@story.title}"
   end
 
   def update
