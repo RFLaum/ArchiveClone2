@@ -50,7 +50,7 @@
       <% end %>
     <% end %>
     <% if permissions[:delete] %>
-      <%= link_to 'Destroy', @story, method: :delete, data: { confirm: 'Are you sure?' } %>
+      <%= link_to 'Delete Story', @story, method: :delete, data: { confirm: 'Are you sure?' } %>
     <% end %>
     <% if usr.faves.include?(@story) %>
       <%= link_to 'Edit Bookmark', edit_story_bookmark_path(@story) %>
