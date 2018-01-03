@@ -1,0 +1,5 @@
+<%= form_tag(multi_update_story_path(@story), method: :post) do %>
+  <%= hidden_field_tag(:position, @position) %>
+  <%= text_area_tag(:body, nil, class: 'wysiwyg') %>
+  <%= submit_tag('Submit') %>
+<% end %>

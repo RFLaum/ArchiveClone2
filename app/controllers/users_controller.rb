@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   include ApplicationHelper
   before_action :set_user #, only: %i[show destroy send_confirmation]
   skip_before_action :set_user, only: %i[
-    register index create logout login faves subs
+    register index create logout login faves subs forgot
   ]
   before_action :check_user, only: %i[deactivate edit update]
 
@@ -81,24 +81,29 @@ class UsersController < ApplicationController
   end
 
   def confirm
-    message = ""
+    @message = ""
     begin
       # @user = User.find(params[:user_name])
       # logger.debug "is_confirmed datatype: #{@user.is_confirmed.class}"
-      if @user.is_confirmed
-        message = "Error: user #{@user.name} already active."
-      elsif @user.confirmation_hash != params[:hash]
-        message = "Error: invalid confirmation hash."
+      # if @user.is_confirmed
+      #   message = "Error: user #{@user.name} already active."
+      # elsif @user.confirmation_hash != params[:hash]
+      #   message = "Error: invalid confirmation hash."
+      if @user.confirmation_hash != params[:hash]
+        @message = "Error: invalid confirmation hash."
+      elsif @user.is_confirmed
+        render 'reset_password'
+        # redirect_to action: 'forgot'  && return
       else
-        message = "User account #{@user.name} activated!"
+        @message = "User account #{@user.name} activated!"
         @user.is_confirmed = true
-        message = "Could not save" unless @user.save
+        @message = "Could not save" unless @user.save
         login_internal
       end
     rescue ActiveRecord::RecordNotFound
-      message = "Error: no such user."
+      @message = "Error: no such user."
     end
-    render :user_confirm, locals: { message: message }
+    # render :confirm, locals: { message: message }
   end
 
   def login_receiver
@@ -151,7 +156,7 @@ class UsersController < ApplicationController
   end
 
   def faves
-    anon_cant && return unless logged_in?
+    anon_cant(faves_path) && return unless logged_in?
     @user = current_user
     @page_title = "#{@user}'s Favorite Tags"
   end
@@ -178,7 +183,38 @@ class UsersController < ApplicationController
 
   def subs
     @page_title = "Subscriptions"
-    anon_cant && return unless logged_in?
+    anon_cant(subs_path) && return unless logged_in?
+  end
+
+  def forgot
+    @page_title = "Forgot Password"
+  end
+
+  def forgot_receiver
+    @page_title = "Forgot Password"
+    if @user.deactivated
+      render 'errors/generic_error',
+      locals: {message: "Error: Account of user '#{@user.name}' has been deactivated."}
+    elsif !@user.is_confirmed
+      render 'errors/generic_error',
+      locals: {message: "Error: This email address has not yet been confirmed."}
+    else
+      @user.confirmation_hash = generate_hash
+      @user.save
+      UserMailMailer.forgot(@user).deliver_now
+    end
+  end
+
+  def reset_receiver
+    unless params[:conf] == @user.confirmation_hash
+      redirect_to action: 'confirm'
+    end
+    if @user.update(params_for_edit)
+      redirect_to login_path, notice: "Password updated"
+    else
+      render action: 'confirm'
+    end
+
   end
 
   private

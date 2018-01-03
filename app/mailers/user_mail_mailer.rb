@@ -35,4 +35,10 @@ class UserMailMailer < ApplicationMailer
     subject = "#{@writer.name} has added a new chapter to #{@story.title}"
     mail(to: @reader.email, subject: subject)
   end
+
+  def forgot(user)
+    @user = user
+    @reset_path = @register_path = user_url(@user) + "/auth=#{@user.confirmation_hash}"
+    mail(to: @user.email, subject: "Reset your password")
+  end
 end

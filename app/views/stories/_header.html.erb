@@ -37,7 +37,8 @@
       <%= link_to 'Chapter by Chapter', @story.first_chapter %>
     <% end %>
   <% end %>
-  <%= link_to 'Comments', '#comments-wrapper' %>
+</div>
+<div class = 'button-row'>
   <%# if logged_in? %>
   <% if (usr = current_user) %>
     <%# link_to 'Add Bookmark', story_bookmark(@story) %>
@@ -47,6 +48,10 @@
       <%= link_to 'Add Chapter', new_story_chapter_path(@story) %>
       <% if @chapter.present? %>
         <%= link_to 'Edit Chapter', edit_story_chapter_path(@chapter) %>
+        <%= link_to 'Delete Chapter', @chapter, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% if multi_chapter? %>
+          <%= link_to 'Multiple Chapters', multi_update_story_chapter_path(@story, @chapter) %>
+        <% end %>
       <% end %>
     <% end %>
     <% if permissions[:delete] %>
@@ -59,6 +64,7 @@
     <% end %>
   <% end %>
   <%= link_to 'Show Bookmarks', story_bookmarks_path(@story) %>
+  <%= link_to 'Comments', '#comments-wrapper' %>
 </div>
 
 <div class='story-header'>

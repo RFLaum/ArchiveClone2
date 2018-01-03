@@ -113,7 +113,6 @@ class StoriesController < ApplicationController
   # PATCH/PUT /stories/1
   # PATCH/PUT /stories/1.json
   def update
-    # logger.debug "update test #{params}"
     #we do this here rather than in the model because we don't want timestamps
     #to update when tag implications are changed
     old_holder = {}
@@ -123,10 +122,6 @@ class StoriesController < ApplicationController
       old_holder[assoc] = @story.send((assoc + '_ids').to_sym).sort
     end
 
-    # pars = params.permit(:title, :author, :tags_add, :srcs_add, :tags_public,
-    #                      :sources_public, :chars_public, :chapter_title, :body,
-    #                      :summary, deleted_tags: [], deleted_characters: [],
-    #                      deleted_sources: [])
     pars = story_params
     if @story.update(pars)
       assocs.each do |assoc|
@@ -169,9 +164,14 @@ class StoriesController < ApplicationController
   end
 
   def navigate
+    @page_title = "#{@story.title}: Chapter Index"
     @chapters = @story.get_chapters
   end
 
+  def multi_update
+    @story.split(params[:body], params[:position].to_i)
+    redirect_to chap_nav_path(@story)
+  end
   #only called for json
   # def tag_list
   #   render json: @story.tags.select('name').map(&:attributes)

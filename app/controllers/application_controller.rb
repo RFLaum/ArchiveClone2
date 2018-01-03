@@ -7,12 +7,18 @@ class ApplicationController < ActionController::Base
   helper_method :is_admin?
   helper_method :is_correct_user?
   helper_method :can_see_adult?
+  helper_method :multi_chapter?
   protect_from_forgery with: :exception
 
   # def default_url_options
   #   { host: "0.0.0.0:3000" }
   # end
 
+
+  #TODO
+  def multi_chapter?
+    Rails.env.development? || ENV["MULTI_CHAPTER_UPDATE"]
+  end
 
   #TODO: fix these?
   def chapter_path(chapter)

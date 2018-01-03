@@ -112,6 +112,17 @@ class Story < ApplicationRecord
     chapters.order("number ASC")
   end
 
+  # def delete_chapter(num)
+  #   nc = num_chapters
+  #   return if num > nc
+  #   get_chapter(num).destroy
+  #   (num..nc).each do |i|
+  #     chap = get_chapter(i)
+  #     chap.number = i - 1
+  #     chap.save
+  #   end
+  # end
+
   def visible_bookmarks(viewing_user)
     Bookmark.visible_filter(bookmarks, viewing_user)
   end
@@ -163,6 +174,47 @@ class Story < ApplicationRecord
     # logger.debug "dummy title: #{@dummy_chapter.title}"
     self.chapters << dummy #@dummy_chapter
     # logger.debug "saved"
+  end
+
+  def insert_chapters(chap_arr, pos)
+    nc = num_chapters
+    n_add = chap_arr.size
+
+    pos = [pos, nc + 1].min
+
+    (pos..nc).reverse_each do |i|
+      chap = get_chapter(i)
+      chap.number += n_add
+      chap.save
+    end
+
+    chap_arr.each_with_index do |chap, i|
+      chap.story = self
+      chap.number = i + pos
+      chap.save
+    end
+  end
+
+  def split(body, pos)
+    doc = Nokogiri::HTML.parse(body)
+    headings = doc.css('.chaptertitle')
+    chap_arr = []
+    base_this = "//*[not(@class='chaptertitle')]" +
+                "[not(@class='chapterhead')]" +
+                "[not(self::hr)]" +
+                "[not(self::h2[child::a])]"
+
+    base_cntr = "[count(preceding-sibling::p[@class='chaptertitle']) = %d]"
+    # logger.debug "split test"
+    headings.count.times do |i|
+      selector = base_this + (base_cntr % (i + 1))
+      # logger.debug "split selector"
+      # logger.debug selector
+      node_set = doc.xpath(selector)
+      # chap = Chapter.new(number: number + i, title: headings[i], body: node_set.to_s)
+      chap_arr << Chapter.new(title: headings[i].text, body: node_set.to_html)
+    end
+    insert_chapters(chap_arr, pos)
   end
 
   def is_adult?

@@ -1,0 +1,5 @@
+<%= form_tag(:forgot, method: :post) do %>
+  <%= label_tag(:id, "User Name:") %>
+  <%= text_field_tag(:id) %>
+  <%= submit_tag('Reset Password') %>
+<% end %>

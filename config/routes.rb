@@ -41,7 +41,18 @@ Rails.application.routes.draw do
   post 'stories/search_results' => 'stories#search_results'
   get 'stories/search_results' => 'stories#search_results', as: :story_s_res
   resources :stories do
-    resources :chapters
+    member do
+      post 'multi_update'
+    end
+    resources :chapters do
+      # collection do
+      member do
+        if Rails.env.development? || ENV["MULTI_CHAPTER_UPDATE"]
+          get 'multi_update'
+          # post 'multi_update' => 'stories#multi_receiver'
+        end
+      end
+    end
     resources :comments
     resources :bookmarks, except: [:show]
   end
@@ -65,6 +76,9 @@ Rails.application.routes.draw do
   get 'users/:id/subscribe' => 'users#subscribe', as: :subscribe #, constraints: { id: /[^\/]+/ }
   get 'users/:id/unsubscribe' => 'users#unsubscribe', as: :unsubscribe #, constraints: { id: /[^\/]+/ }
   get 'users/subs', as: :subs
+  get 'users/forgot_password' => 'users#forgot', as: :forgot
+  post 'users/forgot_password' => 'users#forgot_receiver'
+  post 'users/:id/:conf' => 'users#reset_receiver', as: :reset_pw
   resources :users, except: [:new], constraints: { id: /[^\/]+/ } do
     member do
       get 'send_confirmation'
