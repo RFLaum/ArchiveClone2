@@ -17,19 +17,12 @@ class ChaptersController < ApplicationController
     # wrong_user(@story.author) && return unless is_correct_user?(@story.author)
     # return unless check_user(@story.user)
     @chapter = @story.chapters.build(chapter_params)
-    # respond_to do |format|
-      if @chapter.save
-        # format.html { redirect_to @story, notice: 'Chapter was successfully created.' }
-        # format.json { render :show, status: :created, location: @story }
-        # format.html { redirect_to @chapter , notice: 'Chapter was successfully created.' }
-        # format.json { render :show, status: :created, location: @chapter }
-        redirect_to @chapter
-      else
-        render :new
-        # format.html { render :new }
-        # format.json { render json: @chapter.errors, status: :unprocessable_entity }
-      end
-    # end
+    # if @chapter.save
+    if @story.insert_chapters([@chapter], @chapter.number)
+      redirect_to @chapter
+    else
+      render :new
+    end
   end
 
   def show

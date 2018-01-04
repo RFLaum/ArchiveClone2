@@ -53,46 +53,7 @@ class Chapter < ApplicationRecord
     answer
   end
 
-  # def split
-  #   return if story.num_chapters > number
-  #   # elts = Nokogiri::HTML.parse(body).at_xpath('//body').children
-  #   # elts.inject([]) do |chapters, elt|
-  #   #
-  #   # end
-  #   # elts.
-  #   doc = Nokogiri::HTML.parse(body)
-  #   headings = doc.css('.chaptertitle')
-  #   # num_chaps = doc.css('.chapterhead').count
-  #   answer = []
-  #   base_this = "//*[not(@class='chaptertitle')]"
-  #   base_cntr = "[count(preceding-sibling::p[@class='chapterhead']) = %d]"
-  #   # base_prec = "preceding-sibling::div[@class='chapterhead'][%d]"
-  #   # base_succ = "following-sibling::div[@class='chapterhead'][%d]"
-  #   # base_cond =
-  #   # (1..headings.count).each do |i|
-  #   headings.count.times do |i|
-  #     # selector = str + "[count(preceding-sibling::)]"
-  #     selector = base_this + (base_cntr % (i + 1))
-  #     node_set = doc.xpath(selector)
-  #     chap = Chapter.new(number: number + i, title: headings[i], body: node_set.to_s)
-  #   end
-  #
-  #   # logger.debug "split test"
-  #   # answer.each do |node_set|
-  #   #   logger.debug "node"
-  #   #   node_set.css('.chaptertitle').each do |ttl|
-  #   #     logger.debug ttl.text
-  #   #   end
-  #   # end
-  # end
-
   def update_counts
-    # logger.debug "update_counts test"
-    # logger.debug story.num_chapters
-    # logger.debug "#{story.title}, #{number}"
-    # first = number + 1
-    # last = story.
-    # ((number + 1)..(story.num_chapters)).each do |i|
     index = number + 1
     while chap = story.get_chapter(index)
       # chap = story.get_chapter(index)

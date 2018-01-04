@@ -177,15 +177,19 @@ class Story < ApplicationRecord
   end
 
   def insert_chapters(chap_arr, pos)
+    # result = true
+    return false if chap_arr.any?(&:invalid?)
+
     nc = num_chapters
     n_add = chap_arr.size
 
     pos = [pos, nc + 1].min
 
     (pos..nc).reverse_each do |i|
-      chap = get_chapter(i)
-      chap.number += n_add
-      chap.save
+      if chap = get_chapter(i)
+        chap.number += n_add
+        chap.save
+      end
     end
 
     chap_arr.each_with_index do |chap, i|
@@ -193,6 +197,7 @@ class Story < ApplicationRecord
       chap.number = i + pos
       chap.save
     end
+    true
   end
 
   def split(body, pos)
