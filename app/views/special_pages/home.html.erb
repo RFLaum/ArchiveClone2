@@ -23,6 +23,6 @@
 <% end %>
 
 
-<% Chapter.find_each do |chap| %>
-  <%= "#{chap.story_id} #{chap.number}" %><br>
+<% Subscription.find_each do |sub| %>
+  <%= "#{sub.writer_name} #{sub.reader_name} <br>" %>
 <% end %>
