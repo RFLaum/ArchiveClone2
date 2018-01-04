@@ -1,0 +1,7 @@
+<% klass = obj.class %>
+<% if [Bookmark, User, Story].include? klass %>
+  <% temp = klass.to_s.downcase.pluralize + '/summary' %>
+  <%= render temp, obj: obj %>
+<% else %>
+  <br> <%= name_link obj %>
+<% end %>

@@ -3,6 +3,7 @@ require 'elasticsearch/model'
 class Source < ApplicationRecord
   include Updateable
   include Storycount
+  # include Impliable
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
@@ -95,23 +96,34 @@ class Source < ApplicationRecord
     []
   end
 
+  def visible_stories(reader)
+    return stories if reader.adult
+    Story.non_adult(stories).or(stories.where(user: reader))
+  end
+
   def self.tr_to_sql(dirty)
     # dirty.downcase
     dirty
   end
 
   def chars_public
-    characters.reduce { |str, char| str + ', ' + char.name }
+    # characters.reduce { |str, char| str + ', ' + char.name }
+    characters.map(&:name).join(', ')
   end
 
   def chars_public=(new_chars)
-    new_chars.split(/,\s+/).each do |char|
+    characters.clear
+    new_chars.split(/,\s*/).each do |char|
       characters << Character.find_or_initialize_by(name: char)
     end
   end
 
   def display_name
     name
+  end
+
+  def self.name_field
+    :name
   end
 
   def type_list_key
@@ -140,4 +152,8 @@ class Source < ApplicationRecord
       find(k.to_i).update(v)
     end
   end
+
+  # def get_descendant_implications
+  #   []
+  # end
 end

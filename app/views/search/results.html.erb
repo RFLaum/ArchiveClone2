@@ -4,8 +4,50 @@
   <%= will_paginate @results %>
   <%= page_entries_info(@results) %>
 <% end %>
+<%
+=begin
+%>
 <table>
   <% @results.each do |result| %>
     <tr><td><%= name_link result %></td></tr>
   <% end %>
 </table>
+<%
+=end
+%>
+<%
+=begin
+%>
+<% path = nil %>
+<% exists = nil %>
+<% @results.each do |result| %>
+  <%# render 'misc/summary', obj: result %>
+  <% path ||= result.class.to_s.downcase.pluralize + '/summary' %>
+  <% if exists == nil %>
+    <% exists = lookup_context.exists?(path, [], true) %>
+  <% end %>
+  <% if exists %>
+    <%= render path, obj: result %>
+  <% else %>
+    <br><%= name_link result %>
+  <% end %>
+<% end %>
+<%
+=end
+%>
+<%
+=begin
+%>
+<% prefix = nil %>
+<% template = nil %>
+<% @results.each do |result| %>
+  <% prefix ||= result.class.to_s.downcase.pluralize %>
+  <% template ||= lookup_context.find('summary', [prefix], true) %>
+  <%= render template, obj: result %>
+<% end %>
+<%
+=end
+%>
+<% @results.each do |result| %>
+  <%= render result, obj: result %>
+<% end %>

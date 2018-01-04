@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110001749) do
+ActiveRecord::Schema.define(version: 20171222171643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,12 @@ ActiveRecord::Schema.define(version: 20171110001749) do
     t.datetime "updated_at", null: false
     t.index ["author"], name: "index_comments_on_author", using: :btree
     t.index ["story_id"], name: "index_comments_on_story_id", using: :btree
+  end
+
+  create_table "fave_tags", id: false, force: :cascade do |t|
+    t.string "user_name"
+    t.string "tag_name"
+    t.index ["user_name", "tag_name"], name: "index_fave_tags_on_user_name_and_tag_name", unique: true, using: :btree
   end
 
   create_table "implications", force: :cascade do |t|
@@ -157,6 +163,13 @@ ActiveRecord::Schema.define(version: 20171110001749) do
     t.string  "name"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.string "writer_name"
+    t.string "reader_name"
+    t.index ["reader_name"], name: "index_subscriptions_on_reader_name", using: :btree
+    t.index ["writer_name"], name: "index_subscriptions_on_writer_name", using: :btree
+  end
+
   create_table "tags", primary_key: "name", id: :string, force: :cascade do |t|
     t.boolean  "adult",         default: false
     t.datetime "created_at",                    null: false
@@ -166,8 +179,7 @@ ActiveRecord::Schema.define(version: 20171110001749) do
     t.index ["stories_count"], name: "index_tags_on_stories_count", using: :btree
   end
 
-  create_table "users", id: false, force: :cascade do |t|
-    t.string   "name",                                                       null: false
+  create_table "users", primary_key: "name", id: :string, force: :cascade do |t|
     t.string   "email",                                                      null: false
     t.string   "password_digest"
     t.string   "confirmation_hash"

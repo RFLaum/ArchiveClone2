@@ -1,11 +1,11 @@
 <dl>
   <dt><%= label_tag(:sort_by, 'Sort by') %></dt>
   <dd>
-    <%= select_tag(:sort_by, options_for_select(Story::SORT_COLUMNS)) %>
+    <%= select_tag(:sort_by, options_for_select(Story::SORT_COLUMNS, params[:sort_by])) %>
   </dd>
   <dt><%= label_tag(:sort_direction, 'Sort direction') %></dt>
   <dd>
     <%= select_tag(:sort_direction,
-    options_for_select([['Ascending', 'asc'], ['Descending', 'desc']])) %>
+    options_for_select([['Ascending', 'asc'], ['Descending', 'desc']], params[:sort_direction])) %>
   </dd>
 </dl>

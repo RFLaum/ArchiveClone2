@@ -2,12 +2,13 @@ require 'elasticsearch/model'
 
 class User < ApplicationRecord
   include Updateable
+  include Nameclean
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
   self.primary_key = :name
   has_many :stories,   foreign_key: 'author', primary_key: 'name',
-                       dependent: :destroy
+                       dependent: :destroy, after_add: :mail_followers
   has_many :comments,  foreign_key: 'author', primary_key: 'name',
                        dependent: :destroy
   has_many :newsposts, foreign_key: 'admin', primary_key: 'name',
@@ -17,12 +18,24 @@ class User < ApplicationRecord
   has_many :faves, through: :bookmarks, source: :story
   has_many :news_comments, foreign_key: 'author', primary_key: 'name',
                            dependent: :destroy
+  has_and_belongs_to_many :tags, join_table: :fave_tags, primary_key: 'name',
+                                 foreign_key: 'user_name',
+                                 association_foreign_key: 'tag_name'
+
+  has_many :sub_reads, class_name: 'Subscription', foreign_key: 'reader_name',
+                       primary_key: 'name'
+  has_many :sub_writes, class_name: 'Subscription', foreign_key: 'writer_name',
+                        primary_key: 'name'
+  has_many :fave_writers, through: :sub_reads, source: :writer
+  has_many :fans, through: :sub_writes, source: :reader
 
   before_save { self.email = email.downcase }
   validates :name,
             presence: { message: " can't be blank." },
             length: { maximum: 50, message: "Name is too long." },
             exclusion: { in: ['guest'] },
+            # format: { with: /[^\/]+/,
+            #           message: " cannot contain the character '/'" },
             uniqueness: true
   EMAIL_REGEX = /\A[\w+\-\.\+]+@[a-z\d\-\.]+\.[a-z]+\z/i
   validates :email, presence: true,
@@ -37,12 +50,23 @@ class User < ApplicationRecord
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
   validates_attachment_size :avatar, less_than: 200.kilobytes
 
+  def self.find_by_name(str)
+    # super(un_param(str))
+    find_by(name: un_param(str))
+  end
+
   def delete_avatar=(del)
     self.avatar = nil if del.to_i == 1
   end
 
   def delete_avatar
     false
+  end
+
+  def mail_followers(story)
+    self.fans.each do |fan|
+      UserMailMailer.story_created(self, fan, story).deliver_now
+    end
   end
 
   def story_permissions(story)
@@ -64,9 +88,22 @@ class User < ApplicationRecord
     self.is_confirmed && !(self.deactivated)
   end
 
-  def num_bookmarks(can_see_private)
-    can_see_private ? bookmarks.count : bookmarks.where(private: false).count
+  def visible_stories(other_user)
+    get_all = (other_user == self) || other_user.adult
+    get_all ? stories : Story.non_adult(stories)
   end
+
+  def visible_bookmarks(other_user)
+    other_user == self ? bookmarks : bookmarks.where(private: false)
+  end
+
+  def to_partial_path
+    'users/summary'
+  end
+
+  # def num_bookmarks(can_see_private)
+  #   can_see_private ? bookmarks.count : bookmarks.where(private: false).count
+  # end
 
   def self.valid_user?(username)
     return false unless self.exists?(username)
@@ -98,6 +135,10 @@ class User < ApplicationRecord
 
   def display_name
     name
+  end
+
+  def self.name_field
+    :name
   end
 
 end

@@ -6,16 +6,25 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.json
   def index
-    if can_see_adult?
-      @tags = Tag.all
-    else
-      @tags = Tag.where(adult: false)
-    end
+    @page_title = "Most Common Tags"
+    # if can_see_adult?
+    #   @tags = Tag.all
+    # else
+    #   @tags = Tag.where(adult: false)
+    # end
+    # @stories = Story.all
+    # @stories = Story.non_adult(stories) unless can_see_adult?
+    # @tags = Tag.most_common(stories, 100).reorder('name ASC')
+    # @tags = cloud_sizer(Tag, stories, Tag.cloud_names)
+    tag_set = can_see_adult? ? Tag.all : Tag.where(adult: false)
+    @tags = Tag.get_top(tag_set)
   end
 
   # GET /tags/1
   # GET /tags/1.json
-  def show; end
+  def show
+    @page_title = @tag.name
+  end
 
   # GET /tags/new
   def new
@@ -23,7 +32,9 @@ class TagsController < ApplicationController
   end
 
   # GET /tags/1/edit
-  def edit; end
+  def edit
+    @oage_title = "Editing #{@tag.name}"
+  end
 
   # POST /tags
   # POST /tags.json
@@ -78,10 +89,27 @@ class TagsController < ApplicationController
     @results = Tag.search(params[:q]).records
   end
 
+  def add_fave
+    faves = current_user_or_guest.tags
+    unless faves.include? @tag
+      faves << @tag
+    end
+    redirect_to session[:return_page]
+  end
+
+  def remove_fave
+    faves = current_user_or_guest.tags
+    if faves.include? @tag
+      faves.delete(@tag)
+    end
+    redirect_to session[:return_page]
+  end
+
   private
 
   def set_tag
-    @tag = Tag.find_by(name: params[:id])
+    # @tag = Tag.find_by(name: params[:id])
+    @tag = Tag.find_by_name(params[:id])
   end
 
   def tag_params

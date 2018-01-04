@@ -11,7 +11,8 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  # TODO: turn this back to false before showing it around
+  config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
 
   # Disable serving static files from the `/public` folder by default since
@@ -58,15 +59,26 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address: 'smtp.gmail.com',
+  #   port: 587,
+  #   domain: 'archiveofourclone.org',
+  #   user_name: ENV['GMAIL_SMTP_USER'],
+  #   password: ENV['GMAIL_SMTP_PASSWORD'],
+  #   authentication: 'login',
+  #   enable_starttls_auto: true
+  # }
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
+    user_name: ENV['SENDGRID_USERNAME'],
+    password: ENV['SENDGRID_PASSWORD'],
+    domain: 'archiveclone.herokuapp.com',
+    address: 'smtp.sendgrid.net',
     port: 587,
-    domain: 'archiveofourclone.org',
-    user_name: 'archiveofourclone',
-    password: 'archivepassword',
-    authentication: 'plain',
+    authentication: :plain,
     enable_starttls_auto: true
   }
+  config.action_mailer.default_url_options = { host: "archiveclone.herokuapp.com" }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -94,4 +106,14 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_credentials: {
+      bucket: ENV.fetch('S3_BUCKET_NAME'),
+      access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+      secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
+      s3_region: ENV.fetch('AWS_REGION'),
+    }
+  }
 end

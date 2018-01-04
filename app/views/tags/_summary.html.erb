@@ -1,0 +1,24 @@
+<%# tag = obj if obj %>
+<% tag = obj if local_assigns[:obj] %>
+<div class = "tag-summary">
+  <h4><%= name_link tag %></h4>
+  <h5>
+    <% cse = can_see_adult? %>
+    <% stories = tag.visible_stories(cse) %>
+    <% kids = cse ? tag.implied_tags : tag.implied_tags.where(adult: false) %>
+    <% parents = cse ? tag.implying_tags : tag.implying_tags.where(adult: false) %>
+    <%= link_to pluralize(stories.count, 'story'), tag_stories_path(tag) %>.
+    Implies <%= pluralize(kids.count, 'other tag') %>.
+    Is implied by <%= pluralize(parents.count, 'other tag') %>.
+    <% if is_admin? %>
+      <%= link_to 'Edit', edit_tag_path(tag) %>
+    <% end %>
+    <% if logged_in? %>
+      <% if current_user.tags.include?(tag) %>
+        <%= link_to 'Remove Favorite', remove_fave_path(tag) %>
+      <% else %>
+        <%= link_to 'Favorite Tag', add_fave_path(tag) %>
+      <% end %>
+    <% end %>
+  </h5>
+</div>

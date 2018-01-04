@@ -18,6 +18,14 @@
   <%= tags_links(@tag.implying_tags, false) %>
 </p>
 
+<% if logged_in? %>
+  <% if current_user.tags.include?(@tag) %>
+    <%= link_to 'Remove Favorite', remove_fave_path(@tag) %>
+  <% else %>
+    <%= link_to 'Favorite Tag', add_fave_path(@tag) %>
+  <% end %>
+   |
+<% end %>
 <%= link_to 'Stories', tag_stories_path(@tag) %> |
 <% if is_admin? %>
 <%= link_to 'Edit', edit_tag_path(@tag) %> |

@@ -9,27 +9,48 @@
         <!-- Logged in as <%= name_link current_user %> -->
          <!-- (<%= link_to('Log out', '/logout') %>) -->
          <div class='dropdown'>
-           <%= name_link current_user %>
-           <ul class='dropdown-hidden'>
-             <li><%= link_to('Settings', edit_user_path(current_user)) %></li>
+           <%= name_link (cu = current_user) %>
+           <ul class='dropdown-hidden on-right'>
+             <li><%= link_to('Settings', edit_user_path(cu)) %></li>
              <li><%= link_to('Post new story', new_story_path) %></li>
-             <li><%= link_to('Log out', '/logout') %></li>
+             <% unless cu.tags.empty? %>
+              <li><%= link_to('Favorite tags', faves_path) %></li>
+             <% end %>
+             <% unless cu.fave_writers.empty? %>
+              <li><%= link_to('Subscriptions', subs_path) %></li>
+             <% end %>
+             <% unless cu.bookmarks.empty? %>
+              <li><%= link_to('Bookmarks', user_bookmarks_path(cu)) %></li>
+             <% end %>
+             <li><%= link_to('Log out', logout_path) %></li>
            </ul>
          </div>
       <% else %>
-        <%= link_to('Log In', '/login') %>
+        <%= link_to('Log In', login_path) %>
          or
-        <%= link_to('Register', '/register') %>
+        <%= link_to('Register', register_path) %>
       <% end %>
     </span>
   </div>
   <div class='full-width' id='navbar'>
     <%# link_to "Home", root_path %>
-    <%= link_to "Home", '/home2' %>
-    <%= link_to 'Users', users_path %>
+    <%= link_to "Home", home_path %>
+    <%= link_to 'Tags', tags_path %>
     <%= link_to 'Stories', stories_path %>
+    <%= link_to 'Users', users_path %>
     <% if is_admin? %>
       <%= link_to 'Banned Addresses', admin_banned_addresses_path %>
+    <% end %>
+    <span class = 'dropdown'>
+      <%= link_to 'Search', search_path %>
+      <ul class = 'dropdown-hidden on-left'>
+        <li><%= link_to 'Stories', story_search_path %></li>
+        <li><%= link_to 'Source Media', source_search_path %></li>
+        <li><%= link_to 'General', search_path %></li>
+      </ul>
+    </span>
+    <% if logged_in? %>
+      <%= link_to('Post Story', new_story_path) %>
     <% end %>
   </div>
 </div>

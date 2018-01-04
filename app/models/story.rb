@@ -6,6 +6,8 @@ class Story < ApplicationRecord
   include Taggable
   include Searchable
   include Commentable
+  # include Elasticsearch::Model
+  # include Elasticsearch::Model::Callbacks
 
   # validates :title, presence: true
   validates :title, length: { in: 5..80,
@@ -22,7 +24,7 @@ class Story < ApplicationRecord
   has_and_belongs_to_many :tags, association_foreign_key: 'name',
                                  after_add: %i[increment_count add_kids],
                                  after_remove: :decrement_count
-  has_many :chapters, dependent: :destroy
+  has_many :chapters, dependent: :destroy #, after_add: :fans_chapter
   has_many :comments, dependent: :destroy
   belongs_to :user, foreign_key: 'author', primary_key: 'name'
   has_and_belongs_to_many :sources, after_add: :increment_count,
@@ -56,6 +58,10 @@ class Story < ApplicationRecord
     end
   end
 
+  def to_partial_path
+    'stories/summary'
+  end
+
   def set_initial_counts
     [tags, sources, characters].each do |coll|
       coll.each do |obj|
@@ -86,6 +92,14 @@ class Story < ApplicationRecord
   #   end
   # end
 
+  # def fans_chapter(chapter)
+  #   unless chapter.number == 1
+  #     self.user.fans.each do |fan|
+  #       UserMailMailer.chapter_added(fan, chapter).deliver_now
+  #     end
+  #   end
+  # end
+
   def num_chapters
     chapters.size
   end
@@ -96,6 +110,21 @@ class Story < ApplicationRecord
 
   def get_chapters
     chapters.order("number ASC")
+  end
+
+  # def delete_chapter(num)
+  #   nc = num_chapters
+  #   return if num > nc
+  #   get_chapter(num).destroy
+  #   (num..nc).each do |i|
+  #     chap = get_chapter(i)
+  #     chap.number = i - 1
+  #     chap.save
+  #   end
+  # end
+
+  def visible_bookmarks(viewing_user)
+    Bookmark.visible_filter(bookmarks, viewing_user)
   end
 
   # def get_comments
@@ -145,6 +174,52 @@ class Story < ApplicationRecord
     # logger.debug "dummy title: #{@dummy_chapter.title}"
     self.chapters << dummy #@dummy_chapter
     # logger.debug "saved"
+  end
+
+  def insert_chapters(chap_arr, pos)
+    # result = true
+    return false if chap_arr.any?(&:invalid?)
+
+    nc = num_chapters
+    n_add = chap_arr.size
+
+    pos = [pos, nc + 1].min
+
+    (pos..nc).reverse_each do |i|
+      if chap = get_chapter(i)
+        chap.number += n_add
+        chap.save
+      end
+    end
+
+    chap_arr.each_with_index do |chap, i|
+      chap.story = self
+      chap.number = i + pos
+      chap.save
+    end
+    true
+  end
+
+  def split(body, pos)
+    doc = Nokogiri::HTML.parse(body)
+    headings = doc.css('.chaptertitle')
+    chap_arr = []
+    base_this = "//*[not(@class='chaptertitle')]" +
+                "[not(@class='chapterhead')]" +
+                "[not(self::hr)]" +
+                "[not(self::h2[child::a])]"
+
+    base_cntr = "[count(preceding-sibling::p[@class='chaptertitle']) = %d]"
+    # logger.debug "split test"
+    headings.count.times do |i|
+      selector = base_this + (base_cntr % (i + 1))
+      # logger.debug "split selector"
+      # logger.debug selector
+      node_set = doc.xpath(selector)
+      # chap = Chapter.new(number: number + i, title: headings[i], body: node_set.to_s)
+      chap_arr << Chapter.new(title: headings[i].text, body: node_set.to_html)
+    end
+    insert_chapters(chap_arr, pos)
   end
 
   def is_adult?
@@ -206,11 +281,28 @@ class Story < ApplicationRecord
   #   answer
   # end
 
+  # def self.convert_elastic(field_name, query)
+  #   logger.debug "convert_elastic a"
+  #   answer = __elasticsearch__.search(
+  #     query: {
+  #       query_string: {
+  #         default_field: field_name,
+  #         default_operator: 'AND',
+  #         query: query
+  #       }
+  #     }
+  #   ).records
+  #   logger.debug "convert_elastic b"
+  #   logger.debug answer.class.to_s
+  #   answer
+  # end
+
   def self.search(query_params)
     query = where('true')
     %i[title author].each do |par|
       if query_params[par].present?
         query = convert_query(query_params[par], 'stories.' + par.to_s, query)
+        # query = query.merge(convert_elastic(par.to_s, query_params[par]))
       end
     end
     %i[updated created].each do |par|
@@ -247,7 +339,8 @@ class Story < ApplicationRecord
     #     end
     #   end
     # end
-    query = tsc_search(query, query_params)
+    # query = tsc_search(query, query_params)
+    query = tsc_wrapper(query, query_params, false)
     # if query_params[:sort_by].present?
     #   order_clause = query_params[:sort_by]
     #   if order_clause == 'num_comments'
@@ -258,7 +351,7 @@ class Story < ApplicationRecord
     #   end
     #   query = query.order(order_clause + ' ' + query_params[:sort_direction])
     # end
-    query = s_sort(query, query_params[:sort_by], query_params[:sort_string])
+    query = s_sort(query, query_params[:sort_by], query_params[:sort_direction])
     if query_params[:show_adult].blank?
       # query = query.reject(&:is_adult?)
       query = non_adult(query)
@@ -346,6 +439,10 @@ class Story < ApplicationRecord
     title
   end
 
+  def self.name_field
+    :title
+  end
+
   def self.get_key_of(tag_sym)
     tag_sym == :tags ? 'name' : 'id'
   end
@@ -353,9 +450,10 @@ class Story < ApplicationRecord
   #story_set is sql query to merge this into; s_hash is hash of search terms,
   #with keys :tags, :sources, :characters
   def self.tsc_search(story_set, s_hash)
-    # s_hash.each do |k, v|
     %i[tags sources characters].each do |k|
       next unless v = s_hash[k]
+      # logger.debug "tsc test #{k}"
+      # logger.debug v
       rflct = reflect_on_association(k)
       table_name = rflct.join_table
       story_key = rflct.foreign_key
@@ -371,9 +469,64 @@ class Story < ApplicationRecord
     story_set
   end
 
+  #exact is a boolean indicating whether this is an exact match on primary key;
+  #if it's false, we do a fuzzy search instead
+  #s_hash is a hash with :tags, :sources, :characters as the keys and the
+  #search query for that type of object as the values
+  def self.tsc_wrapper(story_set, s_hash, exact)
+    %i[tags sources characters].each do |k|
+      next unless v = s_hash[k]
+      if exact
+        story_set = exact_search(story_set, k, v)
+      else
+        #for tags, sources, and characters, the field is always called 'name'
+        story_set = approx_search(story_set, k, v, 'name')
+      end
+    end
+    story_set
+  end
+
+  def self.approx_search(story_set, assoc_sym, queries, field)
+    queries = queries.split(/,\s*/) if queries.is_a?(String)
+    rflct = reflect_on_association(assoc_sym)
+    table_name = rflct.join_table
+    story_key = rflct.foreign_key
+    tag_key = rflct.association_foreign_key
+    klass = rflct.klass
+    queries.each do |query|
+      base_join = "#{table_name} INNER JOIN #{klass.table_name} ON "
+      base_join += "#{table_name}.#{tag_key} = #{klass.pfj}"
+      cond = select('1').from(base_join)
+      cond = cond.where("#{table_name}.#{story_key} = stories.id")
+      cond = convert_query(query, "#{klass.table_name}.#{field}", cond, true)
+      # cond = convert_query(query, "#{table_name}.#{tag_key}", cond, true)
+      story_set = story_set.where("EXISTS (#{cond.to_sql})")
+    end
+    story_set
+  end
+
+  def self.exact_search(story_set, assoc_sym, vals)
+    vals = vals.split(/,\s*/) if vals.is_a?(String)
+    rflct = reflect_on_association(assoc_sym)
+    table_name = rflct.join_table
+    story_key = rflct.foreign_key
+    tag_key = rflct.association_foreign_key
+    vals.each do |val|
+      cond = select('1').from(table_name)
+      cond = cond.where("#{table_name}.#{story_key} = stories.id")
+      cond = cond.where("#{table_name}.#{tag_key} = ?", val)
+      story_set = story_set.where("EXISTS (#{cond.to_sql})")
+    end
+    story_set
+  end
+
   def self.s_sort(story_set, sort_by, sort_dir)
-    sort_by = (sort_by ||= :updated_at).to_sym
-    sort_dir = (sort_dir ||= :desc).to_sym
+    # logger.debug "s_sort #{sort_by}"
+    # logger.debug "s_sort #{sort_dir}"
+    sort_by = (sort_by || :updated_at).to_sym
+    sort_dir = (sort_dir || :desc).to_sym
+    # logger.debug "s_sort #{sort_by}"
+    # logger.debug "s_sort #{sort_dir}"
     if sort_by == :num_comments
       return story_set.left_outer_joins(:comments)
                       .select('stories.*, COUNT(comments.*)')
@@ -396,6 +549,14 @@ class Story < ApplicationRecord
     cond += " = tags.name WHERE tags.adult = 't' AND stories_tags.story_id "
     cond += " = stories.id"
     answer.where.not("EXISTS (#{cond})")
+  end
+
+  #TODO: test
+  def self.visible_filter(story_set, viewing_user)
+    return story_set if viewing_user.adult
+    first = non_adult(story_set)
+    second = story_set.where(user: viewing_user)
+    first.or(second)
   end
 
   private

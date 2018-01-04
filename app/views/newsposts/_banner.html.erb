@@ -1,0 +1,8 @@
+<div id='news-banner'>
+  <%= image_tag 'logos/news_logo.jpg', size: '100x100' %>
+  <div>
+    <h2><%= link_to 'AOOC News', newsposts_path, class: 'no-dec' %></h2>
+    <%= yield %>
+  </div>
+</div>
+<div class = 'clear-bar'></div>

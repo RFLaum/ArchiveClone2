@@ -5,6 +5,7 @@ class Tag < ApplicationRecord
   include Updateable
   include Impliable
   include Storycount
+  include Nameclean
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
@@ -21,8 +22,25 @@ class Tag < ApplicationRecord
                       primary_key: 'name'
   has_many :implying_tags, through: :impliers, source: :spec_tag
 
+  has_and_belongs_to_many :users, join_table: :fave_tags, primary_key: 'name',
+                                  foreign_key: 'tag_name',
+                                  association_foreign_key: 'user_name'
+
   before_destroy :knit_implications
 
+  def self.find_by_name(str)
+    # super(un_param(str))
+    find_by(name: un_param(str))
+  end
+
+  # def to_param
+  #   name.gsub('*', '***')
+  #       .gsub('/', '*s*')
+  #       .gsub('&', '*a*')
+  #       .gsub('.', '*d*')
+  #       .gsub('?', '*q*')
+  #       .gsub('#', '*h*')
+  # end
   # #if A implies B implies C, then deleting B makes A imply c
   # before_destroy do
   #   implying_tags.each do |parent|
@@ -111,6 +129,14 @@ class Tag < ApplicationRecord
     stories
   end
 
+  def visible_stories(adult)
+    adult ? stories : Story.non_adult(stories)
+  end
+
+  def to_partial_path
+    'tags/summary'
+  end
+
   # def story_count
   #   if can_see_adult?
   #     return stories.size
@@ -149,6 +175,10 @@ class Tag < ApplicationRecord
 
   def display_name
     name
+  end
+
+  def self.name_field
+    :name
   end
 
 end

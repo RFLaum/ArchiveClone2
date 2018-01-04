@@ -1,3 +1,4 @@
+<p id="notice"><%= notice %></p>
 <%= render partial: 'misc/error_header' %>
 <p>All fields are case-sensitive.</p>
 <% #todo:https %>
@@ -9,3 +10,5 @@
 <br>
 <%= submit_tag('Log In') %>
 <% end %>
+
+<%= link_to "Forgot password?", :forgot %>

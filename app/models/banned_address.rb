@@ -2,7 +2,10 @@
 #.find, etc.
 class BannedAddress < ApplicationRecord
   include Updateable
+  # include Nameclean
   self.primary_key = :email
+
+  # def self.find_by_email
 
   def self.add_email(address)
     find_or_create_by(email: clean_email(address))
@@ -14,15 +17,21 @@ class BannedAddress < ApplicationRecord
   end
 
   def self.is_banned?(email)
-    exists?(clean_email(email))
+    # exists?(clean_email(email))
+    self.where("email ~* ?", make_regex_str(clean_email(email))).exists?
   end
 
   def self.destroy_users_matching(email)
     User.find_email_by_regex(make_regex_str(email)).each(&:destroy)
   end
 
+  def self.name_field
+    :email
+  end
+
   #assumes raw_address is a valid email address
   def self.clean_email(raw_address)
+    raw_address = raw_address.strip
     raw_address = raw_address.downcase
     raw_address.sub(/\+[^@]*@/, '@')
     # at_loc = raw_address.index('@')
@@ -36,6 +45,10 @@ class BannedAddress < ApplicationRecord
     # raw_address.sub(/^([^\+@]+)((\+[^@]*)?@)(.*$)/, '$1(\)')
     first_part = raw_address[0...raw_address.index(/[@\+]/)]
     second_part = raw_address[raw_address.index('@')..-1]
+    if ['gmail.com', 'googlemail.com'].include? second_part
+      second_part = 'g(oogle)?mail.com'
+      first_part = first_part.remove('.')
+    end
     first_part + '(\+[^@]*)?' + second_part
   end
 

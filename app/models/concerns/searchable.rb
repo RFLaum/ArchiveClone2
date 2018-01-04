@@ -1,16 +1,19 @@
 module Searchable
   extend ActiveSupport::Concern
+  # include Elasticsearch::Model
+  # include Elasticsearch::Model::Callbacks
 
   module ClassMethods
     def convert_query(raw_query, field_name, q = where('true'), complete = false)
-      padder = '(% )?'
-      query = raw_query.downcase.strip
+      # padder = '(% )?'
+      # query = raw_query.downcase.strip
+      query = raw_query.downcase.squish
       #note that the final query uses the SQL standard's definition of a regular
       #expression, which is an unusual one
       query.gsub!(/[\\\[\]\+\{\}\^\$\(\)_%]/, '\\<\1>')
       #squeeze all whitespace; preferable to squeeze! because it handles ALL
       #whitespace, not just spaces
-      query.gsub!(/\s+/, ' ')
+      # query.gsub!(/\s+/, ' ')
       #remove spaces around pipes
       query.gsub!(/\s?\|\s?/, '|')
       #remove spaces after - (negate symbol)
@@ -29,11 +32,13 @@ module Searchable
       terms.each do |term|
         is_negated = term[0] == '-'
         term = term[1..-1] if is_negated
-        this_string = field_name + ' SIMILAR TO ?'
+        # this_string = field_name + ' SIMILAR TO ?'
+        this_string = "LOWER(#{field_name}) SIMILAR TO ?"
         if complete
           cooked_term = term.delete('"')
         else
-          cooked_term = padder + term.delete('"') + padder
+          # cooked_term = padder + term.delete('"') + padder
+          cooked_term = "(% )?#{term.delete('"')}( %)?"
         end
         q = is_negated ? q.where.not(this_string, cooked_term) : q.where(this_string, cooked_term)
         # q = q.where(this_string, '(% )?' + term.delete('"') + '( %)?')
@@ -41,6 +46,19 @@ module Searchable
 
       q
     end
+
+    #field_name and query are strings
+    # def convert_elastic(field_name, query)
+    #   __elasticsearch__.search(
+    #     query: {
+    #       query_string: {
+    #         default_field: field_name,
+    #         default_operator: 'AND',
+    #         query: query
+    #       }
+    #     }
+    #   ).records
+    # end
 
     def convert_time(raw_string)
       cooked = raw_string.gsub('&gt;', '>')

@@ -1,7 +1,9 @@
+<%= render 'misc/search_explanation' %>
+
 <%= form_tag("results", method:"get") do %>
   <%= label_tag(:q, "Search") %>
   <%= text_field_tag(:q) %><br>
   <%= label_tag(:type, "Search Type") %>
-  <%= select_tag(:type, options_for_select(['Tag', 'User', 'Source'])) %>
+  <%= select_tag(:type, options_for_select(['Tag', 'User'])) %>
   <%= submit_tag("Search") %>
 <% end %>

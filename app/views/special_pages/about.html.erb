@@ -2,5 +2,26 @@
   This site is a clone of the fanfiction site
   <%= link_to 'Archive of Our Own', 'http://archiveofourown.org/' %>, made by
   Russell Flaum. I created this site both as a demonstration of my abilities,
-  and to improve those abilities by practice.
+  and to improve those abilities by practice. I originally decided to clone AO3
+  because I was under the impression that its stories were in the public
+  domain, and so I would be able to put them on my own site. I later learned
+  that this was false, so the stories on AOC are not originally from AO3.
+</p>
+<h3 id='source'>Where do the stories come from?</h3>
+<p>
+  There are three types of story on this site. The first of these is
+  public-domain works by long-dead writers, which I copied from
+  <%= link_to 'the Gutenberg Project', 'http://www.gutenberg.org/' %>. You can
+  identify these by the fact that they have a disclaimer and link to the
+  Gutenberg project on them. An example of such a story is TODO: ADD LINK TO
+  A GUTENBERG STORY HERE. The second category is test stories that I wrote;
+  these mostly consist of random gibberish or lorem ipsum. An example is
+  <%= name_link Story.find(Rails.env.production? ? 1 : 2) %>. The final
+  category is user-submitted stories. Any logged-in user can submit a story, so
+  these can be written by anyone who visits this site -- including you, if you
+  choose.
+</p>
+<h3 id='howto'>How to use this site</h3>
+<p>
+  TODO
 </p>

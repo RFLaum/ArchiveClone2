@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   helper_method :is_admin?
   helper_method :is_correct_user?
   helper_method :can_see_adult?
+  helper_method :multi_chapter?
   protect_from_forgery with: :exception
 
   # def default_url_options
@@ -14,6 +15,12 @@ class ApplicationController < ActionController::Base
   # end
 
 
+  #TODO
+  def multi_chapter?
+    Rails.env.development? || ENV["MULTI_CHAPTER_UPDATE"]
+  end
+
+  #TODO: fix these?
   def chapter_path(chapter)
     "/stories/#{chapter.story_id}/chapters/#{chapter.number}"
   end
@@ -45,6 +52,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  #TODO: use an :as in routes.rb
   def resumable_error(attempted_action, error_page)
     session[:left_off] = attempted_action
     render 'errors/' + error_page, status: :forbidden
@@ -113,7 +121,8 @@ class ApplicationController < ActionController::Base
     # end
     # answer
 
-    current_user || User.new(name: 'guest', adult: false)
+    # current_user || User.new(name: 'guest', adult: false)
+    current_user || User.new(name: 'guest', adult: !!(session[:adult]))
   end
 
   def current_user_or_guest_name

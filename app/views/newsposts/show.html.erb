@@ -1,22 +1,23 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Admin name:</strong>
-  <%= name_link(@newspost.user) %>
-</p>
+<%= render 'banner' do %>
+<div class = 'button-row'>
+  <%= link_to('Previous Post', @prev_post) if @prev_post %>
+  <%= link_to('Next Post', @next_post) if @next_post %>
+</div>
+<% end %>
 
-<p>
-  <strong>Title:</strong>
-  <%= @newspost.title %>
-</p>
+<%= render 'display', post: @newspost %>
 
-<p>
-  <strong>Content:</strong>
-  <%= raw @newspost.content %>
-</p>
-
-<%= link_to 'Edit', edit_newspost_path(@newspost) %> |
-<%= link_to 'Back', newsposts_path %>
+<div class='button-row'>
+  <%= link_to(raw('&uarr; Top'), url_for(anchor: 'news-banner')) %>
+  <%= link_to('Previous Post', @prev_post) if @prev_post %>
+  <%= link_to('Next Post', @next_post) if @next_post %>
+  <%= link_to('Newspost Index', newsposts_path) %>
+</div>
+<div class='clear-bar'></div>
+<%# link_to 'Edit', edit_newspost_path(@newspost) %>
+<%# link_to 'Back', newsposts_path %>
 
 <% @parent = @newspost %>
 <%= render partial: 'comments/comment_footer' %>

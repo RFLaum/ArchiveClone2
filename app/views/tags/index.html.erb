@@ -1,7 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Tags</h1>
-
+<h1>100 Most Common Tags</h1>
+<%# raw cloud_sizer(Tag, @stories, Tag.cloud_names).join(' ') %>
+<%= raw cloud_sizer(@tags, Tag.cloud_names).join(' ') %>
+<%
+=begin
+%>
 <table>
   <thead>
     <tr>
@@ -35,3 +39,6 @@
 <br>
 
 <%= link_to 'New Tag', new_tag_path %>
+<%
+=end
+%>

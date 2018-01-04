@@ -10,6 +10,7 @@
       <%= render 'stories/summary', story: story %>
     <% end %>
   </div>
+  <%# target = @pars.present? ? url_for(@pars) : url_for %>
   <%= render 'filter_form', stories: all_stories, target: url_for %>
   </div>
 <% end %>

@@ -1,1 +1,9 @@
-<%= render 'edit_form', this_chapter: @chapter %>
+<%# render 'edit_form', this_chapter: @chapter %>
+<%= simple_form_for [@story, @chapter] do |f| %>
+  <%= f.button :submit %>
+  <% nc = [@story.num_chapters, @chapter.number].max %>
+  <%= f.input(:number, collection: 1..nc, label: 'Chapter Number') %>
+  <%= render 'chapter_body_edit', f: f %>
+  <% #todo: add tags %>
+  <%= f.button :submit %>
+<% end %>

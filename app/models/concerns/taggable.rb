@@ -1,3 +1,5 @@
+#I no longer remember how any of this works
+
 module Taggable
   extend ActiveSupport::Concern
 
@@ -30,7 +32,12 @@ module Taggable
     klass = tag_class(type)
     tag_arr = tag_name_arr.map do |name|
       cooked_name = klass.tr_to_sql(name)
-      klass.find_or_initialize_by(name: cooked_name)
+      row = klass.find_by('LOWER(name) = ?', cooked_name.downcase)
+      unless row
+        row = klass.new(name: cooked_name)
+      end
+      row
+      # klass.find_or_initialize_by(name: cooked_name)
     end
     set_tags_directly(tag_arr, clear_existing, type)
   end

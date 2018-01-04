@@ -16,6 +16,6 @@ disp: 'Chapter title', type: :text_field, errors: errors %>
 <%# render 'special_pages/form_helper_errors', f: f, meth: :body,
 disp: 'Chapter text', type: :text_area, errors: errors,
 options: {class: 'wysiwyg'} %>
-<%= f.input :chapter_title %>
+<%= f.input :chapter_title, label: 'Chapter Title' %>
 <%= f.input :body, label: 'Chapter Text', as: :text,
             input_html: {class: 'wysiwyg'}, required: true %>

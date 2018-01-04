@@ -24,28 +24,42 @@
 <div class = 'button-row'>
   <% if @story.num_chapters > 1 %>
     <% if @chapter.present? %>
-      <%= link_to 'Entire Work', story_all(@story) %>
+      <%= link_to 'Entire Work', story_all_path(@story) %>
       <% if @prev_chapter.present? %>
         <%= link_to raw('&larr; Previous Chapter'), @prev_chapter %>
       <% end %>
       <% if @next_chapter.present? %>
         <%= link_to raw('Next Chapter &rarr;'), @next_chapter %>
       <% end %>
-      <%= link_to 'Chapter Index', url_for(@story) + '/navigate' %>
+      <%# link_to 'Chapter Index', url_for(@story) + '/navigate' %>
+      <%= link_to 'Chapter Index', chap_nav_path(@story) %>
     <% else %>
       <%= link_to 'Chapter by Chapter', @story.first_chapter %>
     <% end %>
   <% end %>
-  <%= link_to 'Comments', '#comment-add-wrapper' %>
+</div>
+<div class = 'button-row'>
   <%# if logged_in? %>
   <% if (usr = current_user) %>
     <%# link_to 'Add Bookmark', story_bookmark(@story) %>
     <% permissions = usr.story_permissions(@story) %>
     <% if permissions[:edit] %>
-      <%= link_to 'Edit', edit_story_path(@story) %>
+      <%= link_to 'Edit Story Metadata', edit_story_path(@story) %>
+      <%= link_to 'Add Chapter', new_story_chapter_path(@story) %>
+      <% if @chapter.present? %>
+        <%= link_to 'Edit Chapter', edit_story_chapter_path(@chapter) %>
+        <%= link_to 'Delete Chapter', @chapter, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% if multi_chapter? %>
+          <%= link_to 'Multiple Chapters', multi_update_story_chapter_path(@story, @chapter) %>
+        <% end %>
+      <% end %>
     <% end %>
     <% if permissions[:delete] %>
-      <%= link_to 'Destroy', @story, method: :delete, data: { confirm: 'Are you sure?' } %>
+      <%= link_to 'Delete Story', @story, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+    <% if permissions[:edit] || permissions[:delete] %>
+</div>
+<div class = 'button-row'>
     <% end %>
     <% if usr.faves.include?(@story) %>
       <%= link_to 'Edit Bookmark', edit_story_bookmark_path(@story) %>
@@ -54,21 +68,22 @@
     <% end %>
   <% end %>
   <%= link_to 'Show Bookmarks', story_bookmarks_path(@story) %>
+  <%= link_to 'Comments', '#comments-wrapper' %>
 </div>
 
 <div class='story-header'>
   <dl>
-    <dt>Sources</dt>
+    <dt>Fandoms</dt>
     <dd>
-      <%= tagesque_links(@story.sources, 'source', true) %>
+      <%= tagesque_links(@story.sources.order(name: :asc), 'source', true) %>
     </dd>
     <dt>Characters</dt>
     <dd>
-      <%= tagesque_links(@story.characters, 'character', true) %>
+      <%= tagesque_links(@story.characters.order(name: :asc), 'character', true) %>
     </dd>
     <dt>Tags</dt>
     <dd>
-      <%= tags_links(@story.tags, true) %>
+      <%= tags_links(@story.tags.order(name: :asc), true) %>
     </dd>
     <dt>Summary</dt>
     <dd>

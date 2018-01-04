@@ -54,6 +54,12 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+group :production do
+  #need an older version because paperclip has a bug with version 3
+  gem 'aws-sdk', '< 3.0'
+  gem 'sendgrid-ruby'
+end
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
@@ -66,6 +72,7 @@ gem 'paperclip', '~> 5.1'
 
 # gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
 
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
+# gem 'elasticsearch-model'
+# gem 'elasticsearch-rails'
+gem 'bonsai-elasticsearch-rails'
 gem 'elasticsearch-dsl'

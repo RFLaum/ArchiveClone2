@@ -3,8 +3,11 @@ class CharactersController < ApplicationController
   skip_before_action :set_character, only: %i[index new create]
 
   def index
-    @page_title = "Characters"
-    @characters = Character.all.paginate(page: params[:page])
+    @page_title = "Most Common Characters"
+    # @characters = Character.all.paginate(page: params[:page])
+    # @stories = Story.all
+    # @stories = Story.non_adult(stories) unless can_see_adult?
+    @chars = Character.get_top
   end
 
   def new

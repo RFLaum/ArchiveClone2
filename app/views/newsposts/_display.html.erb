@@ -1,0 +1,27 @@
+<% #pass in newspost to display as 'post' %>
+<div class = 'newspost'>
+  <div class = 'post-header'>
+    <h3><%= link_to(post.title, post) %></h3>
+    <dl>
+      <dt>Written By</dt>
+      <dd><%= name_link post.user %></dd>
+      <dt>Published</dt>
+      <dd><%= time_format(post.created_at) %></dd>
+      <% if post.updated? %>
+        <dt>Updated</dt>
+        <dd><%= time_format(post.updated_at) %></dd>
+      <% end %>
+      <% if post.news_tags.any? %>
+        <dt>Tags</dt>
+        <dd>
+          <%= raw(post.news_tags.map do |tag|
+            name_link tag
+          end.join(', ')) %>
+        </dd>
+      <% end %>
+    </dl>
+  </div>
+  <div class='news-body'>
+    <%= raw post.content %>
+  </div>
+</div>

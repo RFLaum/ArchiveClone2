@@ -1,0 +1,25 @@
+<%# tag = obj if obj %>
+<% src = obj if local_assigns[:obj] %>
+<div class = "source-summary">
+  <h4>
+    <%= name_link src %>
+    <% types = src.type_list_plur %>
+    <% unless types.empty? %>
+      (<%= types.join(', ') %>)
+    <% end %>
+  </h4>
+  <h5>
+    <% links = [] %>
+    <% stories = src.visible_stories(cu = current_user_or_guest) %>
+    <%# unless (str_num = stories.count) == 0 %>
+    <% link_text = pluralize(stories.count, 'story') %>
+    <% links << link_to(link_text, source_stories_path(src)) %>
+    <%# end %>
+    <% link_text = pluralize(src.characters.count, 'character') %>
+    <% links << link_to(link_text, src, anchor: 'characters') %>
+    <% if is_admin? %>
+      <% links << link_to('Edit', edit_source_path(src)) %>
+    <% end %>
+    <%= raw links.join(', ') %>
+  </h5>
+</div>

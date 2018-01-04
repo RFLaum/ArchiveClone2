@@ -23,6 +23,10 @@ class Newspost < ApplicationRecord
     :edit_newspost_news_comment_path
   end
 
+  def self.name_field
+    :title
+  end
+
   private
 
   def get_tags(type = nil)

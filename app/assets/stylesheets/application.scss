@@ -31,6 +31,9 @@ body {
 
 .main-body {
   padding: 0.5em 2.5em 3.5em;
+  margin-bottom: 5em;
+  //TODO: figure out how to get footnotes to work with this
+  overflow: auto;
 }
 
 dl {
@@ -61,6 +64,10 @@ dd {
 
 .right-box {
   float:right;
+}
+
+.right-text {
+  text-align: right;
 }
 
 .disabled {
@@ -109,9 +116,13 @@ a.top-link {
   border-radius: 0.25em
 }
 
-.no-dec {
+ol.no-dec, ul.no-dec {
   list-style-type: none;
   padding: 0;
+}
+
+a.no-dec {
+  text-decoration: none;
 }
 
 .horizontal-list > li {
@@ -214,4 +225,34 @@ input[type='submit'] {
   font-size: 1rem;
   font-weight: lighter;
   padding: 0.25em 0.75em;
+}
+
+.boxed {
+  border: 2px solid black;
+}
+
+//used for containers to provide a baseline for position: absolute children
+.absolute-holder {
+  position: relative;
+}
+
+.footnote-marker {
+  text-decoration: underline dotted;
+  cursor: pointer;
+}
+
+.footnote-body {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  background-color: white;
+  border: 1px solid black;
+  padding: 5px;
+  left: 0;
+  top: 1em;
+  min-width: 10em;
+}
+
+.in-line {
+  display: inline;
 }

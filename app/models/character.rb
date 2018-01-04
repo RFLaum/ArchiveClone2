@@ -1,6 +1,7 @@
 class Character < ApplicationRecord
   include Updateable
   include Storycount
+  # include Impliable
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
@@ -29,7 +30,17 @@ class Character < ApplicationRecord
   end
 
   def source_name=(src_name)
-    source = Source.find_or_initialize_by(name: src_name)
+    # self.source = Source.find_or_initialize_by(name: src_name)
+    src = Source.find_or_initialize_by(name: src_name)
+    # add_implications([src])
+    self.source = src
+    stories.each do |story|
+      story.add_obj(src)
+    end
+  end
+
+  def self.name_field
+    :name
   end
 end
 

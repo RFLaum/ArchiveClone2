@@ -12,4 +12,8 @@ class SpecialPagesController < ApplicationController
     @page_title = 'About AOC'
   end
 
+  def technical
+    @page_title = 'Technical Details'
+  end
+
 end

@@ -6,20 +6,33 @@ class NewspostsController < ApplicationController
   # GET /newsposts
   # GET /newsposts.json
   def index
+    # redirect_to news_tag_newsposts_path(params[:tag]) if params[:tag]
     # @newsposts = Newspost.all
-    if params[:tag]
-      @tag = NewsTag.find_by_name(params[:tag])
-      @newsposts = @tag.newsposts if @tag
-    else
-      @newsposts = Newspost.all
+    @page_title = 'Newsposts'
+    # if params[:tag]
+    @newsposts = Newspost.all
+    if tag_id = params[:news_tag_id] || params[:tag]
+      # @tag = NewsTag.find_by_name(params[:tag])
+      @tag = NewsTag.find_by(id: tag_id)
+      if @tag
+        @newsposts = @tag.newsposts
+        @page_title += " tagged with \"#{@tag.name}\""
+      end
+    # else
+    #   @newsposts = Newspost.all
     end
-    page_num = params[:page] || 1
-    @newsposts = @newsposts.order(created_at: :desc).paginate(page: page_num)
+    @newsposts = @newsposts.order(created_at: :desc)
+    @page_posts = @newsposts.paginate(page: params[:page])
+    # page_num = params[:page] || 1
+    # @newsposts = @newsposts.order(created_at: :desc).paginate(page: page_num)
   end
 
   # GET /newsposts/1
   # GET /newsposts/1.json
   def show
+    @page_title = @newspost.title
+    @prev_post = Newspost.where('id < ?', @newspost.id).last
+    @next_post = Newspost.where('id > ?', @newspost.id).first
   end
 
   # GET /newsposts/new

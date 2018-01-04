@@ -2,6 +2,7 @@
   <div><%= link_to 'Edit My Profile', edit_user_path(@user) %></div>
 <% end %>
 <%= image_tag @user.avatar.url %>
+<% cu = current_user_or_guest %>
 <dl>
   <dt>Name</dt>
   <dd><%= @user.name %></dd>
@@ -14,15 +15,26 @@
   <dt>Joined</dt>
   <dd><%= time_format(@user.created_at) %></dd>
   <dt><%= link_to 'Bookmarks', user_bookmarks_path(@user) %></dt>
-  <dd><%= @user.num_bookmarks(is_self) %></dd>
+  <dd><%= @user.visible_bookmarks(cu).count %></dd>
 </dl>
-
+<br>
+<% if logged_in? && !is_correct_user?(@user)%>
+  <% if cu.fave_writers.include?(@user) %>
+    <%= link_to 'Unsubscribe', unsubscribe_path(@user) %>
+  <% else %>
+    <%= link_to 'Subscribe', subscribe_path(@user) %>
+  <% end %>
+<% end %>
 <br>
 <% if @user.deactivated %>
 <p>This user is no longer active.</p>
 <% end %>
 
-<h1>Stories:</h1>
-<% @user.stories.each do |story| %>
+<h1 id='user-stories'>Stories:</h1>
+<%# stories = @user.stories %>
+<%# unless is_self || can_see_adult? %>
+  <%# stories = Story.non_adult(stories) %>
+<%# end %>
+<% @user.visible_stories(cu).each do |story| %>
   <%= render 'stories/summary', story: story %>
 <% end %>

@@ -20,16 +20,28 @@ class StoriesController < ApplicationController
     end
     if @obj.present?
       @base_stories = @obj.stories
-      @page_title.prepend(@obj.name + ' ')
+      # @page_title.prepend(@obj.name + ' ')
+      @page_title += " in \"#{@obj.name}\""
     end
 
-    query_params = {
-      tags: params[:other_tags],
-      sources: params[:other_sources],
-      characters: params[:other_characters]
-    }
-    @base_stories = Story.tsc_search(@base_stories, query_params)
-    @base_stories = Story.tsc_search(@base_stories, params)
+    @base_stories = do_filtering(@base_stories)
+    # exact_filters = {}
+    # fuzzy_filters = {}
+    #
+    # %i[tags sources characters].each do |tp|
+    #   exact_filters[tp] = params["filter_#{tp}".to_sym]
+    #   fuzzy_filters[tp] = params["other_#{tp}".to_sym]
+    # end
+    # @base_stories = Story.tsc_wrapper(@base_stories, exact_filters, true)
+    # @base_stories = Story.tsc_wrapper(@base_stories, fuzzy_filters, false)
+
+    # query_params = {
+    #   tags: params[:other_tags],
+    #   sources: params[:other_sources],
+    #   characters: params[:other_characters]
+    # }
+    # @base_stories = Story.tsc_search(@base_stories, query_params)
+    # @base_stories = Story.tsc_search(@base_stories, params)
 
     # sort_by = params[:sort_by] ? params[:sort_by].to_sym : :updated_at
     # sort_dir = params[:sort_direction] ? params[:sort_direction].to_sym : :desc
@@ -48,7 +60,7 @@ class StoriesController < ApplicationController
       @base_stories = Story.non_adult(@base_stories)
     end
 
-    @stories = Story.s_sort(@base_stories, params[:sort_by], params[:sort_dir])
+    @stories = Story.s_sort(@base_stories, params[:sort_by], params[:sort_direction])
 
 
 
@@ -76,11 +88,14 @@ class StoriesController < ApplicationController
 
   # GET /stories/new
   def new
+    @page_title = "New Story"
     @story = Story.new
   end
 
   # GET /stories/1/edit
-  def edit; end
+  def edit
+    @page_title = "Editing " + @story.title
+  end
 
   # POST /stories
   # POST /stories.json
@@ -98,7 +113,6 @@ class StoriesController < ApplicationController
   # PATCH/PUT /stories/1
   # PATCH/PUT /stories/1.json
   def update
-    logger.debug "update test #{params}"
     #we do this here rather than in the model because we don't want timestamps
     #to update when tag implications are changed
     old_holder = {}
@@ -108,10 +122,6 @@ class StoriesController < ApplicationController
       old_holder[assoc] = @story.send((assoc + '_ids').to_sym).sort
     end
 
-    # pars = params.permit(:title, :author, :tags_add, :srcs_add, :tags_public,
-    #                      :sources_public, :chars_public, :chapter_title, :body,
-    #                      :summary, deleted_tags: [], deleted_characters: [],
-    #                      deleted_sources: [])
     pars = story_params
     if @story.update(pars)
       assocs.each do |assoc|
@@ -137,6 +147,7 @@ class StoriesController < ApplicationController
   end
 
   def search
+    @page_title = "Story Search"
     render 'full_search_form'
   end
 
@@ -146,22 +157,43 @@ class StoriesController < ApplicationController
     if !(@pars[:show_adult] || @pars[:show_non_adult])
       @error = "You have chosen to show neither adult nor non-adult stories."
     else
-      @results = Story.search(@pars)
-      @base_results = @results
-      @results = @results.paginate(page: params[:page])
+      @base_results = Story.search(@pars)
+      @base_results = do_filtering(@base_results)
+      @results = @base_results.paginate(page: params[:page])
     end
   end
 
   def navigate
+    @page_title = "#{@story.title}: Chapter Index"
     @chapters = @story.get_chapters
   end
 
+  def multi_update
+    @story.split(params[:body], params[:position].to_i)
+    redirect_to chap_nav_path(@story)
+  end
   #only called for json
   # def tag_list
   #   render json: @story.tags.select('name').map(&:attributes)
   # end
 
   private
+
+  def do_filtering(story_set)
+    exact_filters = {}
+    fuzzy_filters = {}
+
+    %i[tags sources characters].each do |tp|
+      exact_filters[tp] = params["filter_#{tp}".to_sym]
+      fuzzy_filters[tp] = params["other_#{tp}".to_sym]
+    end
+    # logger.debug "do_filtering test"
+    # fuzzy_filters.each do |k, v|
+      # logger.debug "#{k}: #{v}"
+    # end
+    answer = Story.tsc_wrapper(story_set, exact_filters, true)
+    Story.tsc_wrapper(answer, fuzzy_filters, false)
+  end
 
   # todo: do we always need tags?
   def set_story
@@ -173,8 +205,8 @@ class StoriesController < ApplicationController
     params.require(:story)
           .permit(:title, :author, :tags_add, :srcs_add, :chars_add,
                   :tags_public, :sources_public, :chars_public, :chapter_title,
-                  :body, :summary, deleted_tags: [], deleted_characters: [],
-                  deleted_sources: [])
+                  :body, :summary, :adult_override, deleted_tags: [],
+                  deleted_characters: [], deleted_sources: [])
   end
 
   alias :super_check_user :check_user
@@ -189,6 +221,7 @@ class StoriesController < ApplicationController
 
   def search_params
     params.permit(:title, :author, :updated, :created, :show_adult,
-                  :show_non_adult, :tags, :sort_by, :sort_direction)
+                  :show_non_adult, :tags, :sources, :characters, :sort_by,
+                  :sort_direction)
   end
 end

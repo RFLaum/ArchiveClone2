@@ -1,20 +1,32 @@
 class UsersController < ApplicationController
   include ApplicationHelper
   before_action :set_user #, only: %i[show destroy send_confirmation]
-  skip_before_action :set_user, only: %i[register index create logout login]
+  skip_before_action :set_user, only: %i[
+    register index create logout login faves subs forgot
+  ]
   before_action :check_user, only: %i[deactivate edit update]
 
   def register
+    @page_title = "Register new user"
     @user = User.new
   end
 
-  def index
-    @users = User.all
+  def login
+    @page_title = "Log In"
   end
 
-  def show; end
+  def index
+    @page_title = "Users"
+    @users = User.where(is_confirmed: true)
+  end
 
-  def edit; end
+  def show
+    @page_title = @user.name
+  end
+
+  def edit
+    @page_title = "Editing #{@user.name}"
+  end
 
   def update
     pars = params_for_edit
@@ -39,13 +51,21 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params_for_create)
-    if BannedAddress.is_banned?(@user.email)
-      render('errors/generic_error',
-             locals: { message: "That email is banned." }) && return
-    end
+    # if @user.invalid?
+    #   render('errors/generic_error', locals: {message: @user.errors.inspect}) && return
+    # end
+    # if BannedAddress.is_banned?(@user.email)
+    #   render('errors/generic_error',
+    #          locals: { message: "That email is banned." }) && return
+    # end
     @user.confirmation_hash = generate_hash
     if @user.save
-      send_confirmation
+      if BannedAddress.is_banned?(@user.email)
+        render('errors/generic_error',
+               locals: { message: "That email is banned." }) && return
+      else
+        send_confirmation
+      end
       # redirect_to action: index
       # render 'signup_made'
     else
@@ -61,24 +81,29 @@ class UsersController < ApplicationController
   end
 
   def confirm
-    message = ""
+    @message = ""
     begin
       # @user = User.find(params[:user_name])
       # logger.debug "is_confirmed datatype: #{@user.is_confirmed.class}"
-      if @user.is_confirmed
-        message = "Error: user #{@user.name} already active."
-      elsif @user.confirmation_hash != params[:hash]
-        message = "Error: invalid confirmation hash."
+      # if @user.is_confirmed
+      #   message = "Error: user #{@user.name} already active."
+      # elsif @user.confirmation_hash != params[:hash]
+      #   message = "Error: invalid confirmation hash."
+      if @user.confirmation_hash != params[:hash]
+        @message = "Error: invalid confirmation hash."
+      elsif @user.is_confirmed
+        render 'reset_password'
+        # redirect_to action: 'forgot'  && return
       else
-        message = "User account #{@user.name} activated!"
+        @message = "User account #{@user.name} activated!"
         @user.is_confirmed = true
-        message = "Could not save" unless @user.save
+        @message = "Could not save" unless @user.save
         login_internal
       end
     rescue ActiveRecord::RecordNotFound
-      message = "Error: no such user."
+      @message = "Error: no such user."
     end
-    render :user_confirm, locals: { message: message }
+    # render :confirm, locals: { message: message }
   end
 
   def login_receiver
@@ -100,17 +125,24 @@ class UsersController < ApplicationController
   end
 
   def logout
+    @page_title = "Logged Out"
     session[:user] = nil
   end
 
   def destroy
     if is_correct_user?(@user)
       unregister
-    elsif is_admin?
-      ban
+    # elsif is_admin?
+      # ban_internal
     else
-      wrong_user(@user, true)
+      # wrong_user(@user, true)
+      wrong_user(@user)
     end
+  end
+
+  def ban
+    check_admin
+    ban_internal
   end
 
   def deactivate
@@ -123,9 +155,71 @@ class UsersController < ApplicationController
     # end
   end
 
+  def faves
+    anon_cant(faves_path) && return unless logged_in?
+    @user = current_user
+    @page_title = "#{@user}'s Favorite Tags"
+  end
+
+  def subscribe
+    if cu = current_user
+      fvs = cu.fave_writers
+      unless fvs.include?(@user)
+        fvs << @user
+      end
+    end
+    redirect_to session[:return_page]
+  end
+
+  def unsubscribe
+    if cu = current_user
+      fvs = cu.fave_writers
+      if fvs.include?(@user)
+        fvs.delete(@user)
+      end
+    end
+    redirect_to session[:return_page]
+  end
+
+  def subs
+    @page_title = "Subscriptions"
+    anon_cant(subs_path) && return unless logged_in?
+  end
+
+  def forgot
+    @page_title = "Forgot Password"
+  end
+
+  def forgot_receiver
+    @page_title = "Forgot Password"
+    if @user.deactivated
+      render 'errors/generic_error',
+      locals: {message: "Error: Account of user '#{@user.name}' has been deactivated."}
+    elsif !@user.is_confirmed
+      render 'errors/generic_error',
+      locals: {message: "Error: This email address has not yet been confirmed."}
+    else
+      @user.confirmation_hash = generate_hash
+      @user.save
+      UserMailMailer.forgot(@user).deliver_now
+    end
+  end
+
+  def reset_receiver
+    unless params[:conf] == @user.confirmation_hash
+      redirect_to action: 'confirm'
+    end
+    if @user.update(params_for_edit)
+      redirect_to login_path, notice: "Password updated"
+    else
+      render action: 'confirm'
+    end
+
+  end
+
   private
 
-  def ban
+  def ban_internal
     @user_name = @user.name
     BannedAddress.add_email(@user.email)
     UserMailMailer.ban_notification(@user).deliver_now
@@ -152,7 +246,13 @@ class UsersController < ApplicationController
   def set_user
     #do this as find_by rather than find in order to better handle the case
     #where an incorrect username is submitted
-    @user = User.find_by(name: params[:id])
+    # @user = User.find_by(name: params[:id])
+    @user = User.find_by_name(params[:id])
+    unless @user
+      # @username = params[:id]
+      @username = User.un_param(params[:id])
+      render 'errors/no_such_user'
+    end
     # @was_set_user_called = true
   end
 

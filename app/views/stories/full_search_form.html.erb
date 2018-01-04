@@ -7,8 +7,10 @@
 <% end %>
 <%= render partial: 'autocompletes' %>
 
+<%= render 'misc/search_explanation' %>
 
-<%= form_tag(stories_path + '/search_results', class: 'search-form', method: :get) do %>
+<%# form_tag(stories_path + '/search_results', class: 'search-form', method: :get) do %>
+<%= form_tag(story_s_res_path, class: 'search-form', method: :get) do %>
   <fieldset>
     <legend>Work Info</legend>
     <p class='submit'><%= submit_tag 'Search' %></p>
@@ -26,13 +28,25 @@
         <%= text_field_tag(:author) %>
       </dd>
       <dt>
-        <%= label_tag(:created, 'Date Created') %>
+        <%= label_tag(:created, ' Date Created (click for help)',
+                      class: 'click_dropdown_header hide-header') %>
+        <p class='hidden'>
+          Examples: "> 10 days ago" finds stories created more than ten days
+          ago. "5-10 months ago" finds stories created between five and ten
+          months ago.
+        </p>
       </dt>
       <dd>
         <%= text_field_tag(:created) %>
       </dd>
       <dt>
-        <%= label_tag(:updated, 'Date Updated') %>
+        <%= label_tag(:updated, ' Date Updated (click for help)',
+                      class: 'click_dropdown_header hide-header') %>
+        <p class='hidden'>
+          Examples: "> 10 days ago" finds stories last updated more than ten
+          days ago. "5-10 months ago" finds stories that were most recently
+          updated between five and ten months ago.
+        </p>
       </dt>
       <dd>
         <%= text_field_tag(:updated) %>
@@ -42,6 +56,7 @@
 
   <fieldset>
     <legend>Tags</legend>
+    <p class='submit'><%= submit_tag 'Search' %></p>
     <dl>
       <dt>
         Adult
@@ -58,17 +73,22 @@
           </li>
         </ul>
       </dd>
-      <dt>
-        <%= label_tag(:tags, 'Tags') %>
-      </dt>
-      <dd>
-        <%= text_field_tag(:tags, nil, class: 'tag-input') %>
-      </dd>
+      <% ['Tag', 'Source', 'Character'].each do |name| %>
+        <% plural = name + 's' %>
+        <% sym = plural.downcase.to_sym %>
+        <dt>
+          <%= label_tag(sym, plural) %>
+        </dt>
+        <dd>
+          <%= text_field_tag(sym, nil, class: name.downcase + '-input') %>
+        </dd>
+      <% end %>
     </dl>
   </fieldset>
 
   <fieldset>
     <legend>Search</legend>
+    <p class='submit'><%= submit_tag 'Search' %></p>
     <%= render 'sort_dropdown' %>
   </fieldset>
 <% end %>

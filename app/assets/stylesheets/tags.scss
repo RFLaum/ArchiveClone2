@@ -1,3 +1,25 @@
 // Place all the styles related to the Tags controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+@for $i from 1 through 9 {
+  a.cloud_item#{$i} {
+    font-weight: $i * 100;
+    font-size: #{(0.5 + $i/8)}em;
+  }
+}
+
+
+.tag-summary {
+  box-shadow: 1px 1px 5px #aaa;
+  overflow: auto;
+  clear: both;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  // display: flex;
+  padding: 5px;
+  > h4, > h5 {
+    margin-top: 0.375em;
+    margin-bottom: 0;
+  }
+}
