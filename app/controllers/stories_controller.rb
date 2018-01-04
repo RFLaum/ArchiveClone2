@@ -158,8 +158,6 @@ class StoriesController < ApplicationController
       @error = "You have chosen to show neither adult nor non-adult stories."
     else
       @base_results = Story.search(@pars)
-      logger.info "search_results test"
-      logger.info @base_results.to_sql
       @base_results = do_filtering(@base_results)
       @results = @base_results.paginate(page: params[:page])
     end
