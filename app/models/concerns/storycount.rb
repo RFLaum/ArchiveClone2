@@ -36,6 +36,8 @@ module Storycount
       logger.info "most_common"
       logger.info joins(:stories).to_sql
       logger.info story_set.to_sql
+      logger.info joins(:stories).merge(story_set).to_sql
+      logger.info "most_common end"
       joins(:stories).merge(story_set)
                      .select("#{table_name}.*, COUNT(*) AS cnt")
                      .group(pfj)
