@@ -33,11 +33,13 @@ module Storycount
     #finds the most common tags used within a given set of stories. story_set
     #is an ActiveRecord::Relation
     def most_common(story_set, num = 10)
-      joins(:stories).merge(story_set)
+      answer = joins(:stories).merge(story_set)
                      .select("#{table_name}.*, COUNT(*) AS cnt")
                      .group(pfj)
                      .reorder('cnt DESC')
                      .limit(num)
+      logger.info "filter test 2: #{answer.to_sql}"
+      answer
     end
 
     def cloud_names(num = 9)
