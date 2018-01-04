@@ -36,17 +36,17 @@ module Storycount
       i = 0
       logger.info "most_common #{i += 1}"
       answer = joins(:stories)
-      logger.info "most_common #{i += 1}"
+      logger.info "most_common #{i += 1}: #{answer.count}"
       answer = answer.merge(story_set)
-      logger.info "most_common #{i += 1}"
+      logger.info "most_common #{i += 1}: #{answer.count}"
       answer = answer.select("#{table_name}.*, COUNT(*) AS cnt")
-      logger.info "most_common #{i += 1}"
+      logger.info "most_common #{i += 1}: #{answer.count}"
       answer = answer.group(pfj)
-      logger.info "most_common #{i += 1}"
+      logger.info "most_common #{i += 1}: #{answer.count}"
       answer = answer.reorder('cnt DESC')
-      logger.info "most_common #{i += 1}"
+      logger.info "most_common #{i += 1}: #{answer.count}"
       answer = answer.limit(num)
-      logger.info "most_common #{i += 1}"
+      logger.info "most_common #{i += 1}: #{answer.count}"
 
       answer
       # joins(:stories).merge(story_set)
