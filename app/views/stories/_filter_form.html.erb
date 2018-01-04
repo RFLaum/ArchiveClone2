@@ -27,7 +27,6 @@
       <% sp_cl += ' hide-header' unless pars_arr %>
       <span class = '<%= sp_cl %>'>Top 10 <%= plural_name %>:</span>
       <dl class = 'hidden'>
-        <% logger.info "filter test: #{stories.to_sql}" %>
         <% klass.most_common(stories).each do |tag| %>
           <% pv = tag.prim_val %>
           <% checked = pars_arr ? pars_arr.include?(pv.to_s) : false %>
