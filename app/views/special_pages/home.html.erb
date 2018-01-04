@@ -21,8 +21,3 @@
     <% end %>
   <% end %>
 <% end %>
-
-
-<% Subscription.find_each do |sub| %>
-  <%= "#{sub.writer_name} #{sub.reader_name} <br>" %>
-<% end %>
