@@ -57,6 +57,10 @@
     <% if permissions[:delete] %>
       <%= link_to 'Delete Story', @story, method: :delete, data: { confirm: 'Are you sure?' } %>
     <% end %>
+    <% if permissions[:edit] || permissions[:delete] %>
+</div>
+<div class = 'button-row'>
+    <% end %>
     <% if usr.faves.include?(@story) %>
       <%= link_to 'Edit Bookmark', edit_story_bookmark_path(@story) %>
     <% else %>
