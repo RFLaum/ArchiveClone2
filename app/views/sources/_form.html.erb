@@ -1,5 +1,7 @@
 <%= render 'special_pages/autocomplete_script', sing: 'character', coll: @source.characters %>
 
+<%= link_to 'Delete?', @source, method: :delete, data: { confirm: 'Are you sure?' } %>
+
 <%= simple_form_for(@source) do |f| %>
   <%= f.input :name %>
   <%= f.input :chars_public, label: 'Characters', input_html: {class: 'character-input'} %>
