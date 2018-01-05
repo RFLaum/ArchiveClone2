@@ -498,10 +498,12 @@ class Story < ApplicationRecord
       base_join += "#{table_name}.#{tag_key} = #{klass.pfj}"
       cond = select('1').from(base_join)
       cond = cond.where("#{table_name}.#{story_key} = stories.id")
-      cond = convert_query(query, "#{klass.table_name}.#{field}", cond, true)
+      cond = convert_query(query, "#{klass.table_name}.#{field}", cond, false)
       # cond = convert_query(query, "#{table_name}.#{tag_key}", cond, true)
       story_set = story_set.where("EXISTS (#{cond.to_sql})")
     end
+    logger.debug "approx_search #{assoc_sym}"
+    logger.debug "sql: #{story_set.to_sql}"
     story_set
   end
 
