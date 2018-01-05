@@ -20,3 +20,80 @@
 # hg_chr.source = hp_src
 # hp_chr.save
 # hg_chr.save
+
+Source.create(name: 'The Matrix', movies: true)
+
+['Abraham Lincoln',
+'Alexander the Great',
+'Joan of Arc',
+'Humphrey Bogart',
+'Queen Victoria'].each { |person| Source.create(name: person, celeb: true)}
+
+[
+  'The Beatles',
+  'The Rolling Stones',
+  'U2',
+  'Alice\'s Restuarant',
+  'One Tin Soldier'
+].each { |src| Source.create(name: src, music: true)}
+
+[
+  'Half-Life',
+  'Deus Ex',
+  'Nethack',
+  'Mario Bros.',
+  'The Elder Scrolls',
+  'Final Fantasy'
+].each { |src| Source.create(name: src, video_games: true)}
+
+[
+  'Sailor Moon',
+  'Dragonball',
+  'Gundam',
+  'Naruto',
+  'Astro Boy',
+  'Ranma 1/2'
+].each { |src| Source.create(name: src, anime: true)}
+
+[
+  'Superman',
+  'Batman',
+  'Spider-Man',
+  'Wonder Woman',
+  'Peanuts',
+  'Doonesbury'
+].each { |src| Source.create(name: src, comics: true)}
+
+[
+  'Les Miserables',
+  'Wicked',
+  'Oklahoma!',
+  'Hamilton',
+  'King Lear',
+  'Macbeth'
+].each { |src| Source.create(name: src, theater: true)}
+
+[
+  'Citizen Kane',
+  'Star Wars',
+  'The Matrix',
+  'Jurassic Park',
+  'Psycho',
+  'Jaws'
+].each { |src| Source.create(name: src, movies: true)}
+
+[
+  'Buffy the Vampire Slayer',
+  'Happy Days',
+  'Dallas',
+  'Seinfeld',
+  'Gilmore Girls'
+].each { |src| Source.create(name: src, tv: true)}
+
+[
+  'Homestuck',
+  'Amenta',
+  'Monopoly',
+  'We Are Our Avatars',
+  'An Unusually Vivid Dream'
+].each { |src| Source.create(name: src, misc: true)}
