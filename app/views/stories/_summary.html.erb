@@ -13,6 +13,10 @@
     <dd>
       <%= tags_links story.tags.order(name: :asc), true %>
     </dd>
+    <dt>Characters</dt>
+    <dd>
+      <%= tagesque_links(story.characters.order(name: :asc), 'character', true) %>
+    </dd>
     <dt>Summary</dt>
     <dd>
       <%= raw (story.summary || "This story has no blurb.") %>
