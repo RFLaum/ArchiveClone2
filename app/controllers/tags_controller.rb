@@ -31,9 +31,8 @@ class TagsController < ApplicationController
     @tag = Tag.new
   end
 
-  # GET /tags/1/edit
   def edit
-    @oage_title = "Editing #{@tag.name}"
+    @page_title = "Editing #{@tag.name}"
   end
 
   # POST /tags

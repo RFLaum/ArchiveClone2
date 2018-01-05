@@ -60,6 +60,9 @@ dd {
   width: 72.5%;
   float: left;
   margin: 0 0  .643em;
+  > ul, & > ol {
+    margin-top: 0;
+  }
 }
 
 .right-box {

@@ -1,6 +1,10 @@
 .mce-path {
   padding: 0!important;
 }
+
+li > input[type=checkbox] + label {
+  display: inline-block;
+}
 // iframe {
 //   cursor: text!important;
 // }
