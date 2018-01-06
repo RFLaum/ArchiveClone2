@@ -1,39 +1,12 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Users</h1>
-<%
-=begin
-%>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= name_link user %></td>
-        <td><%= user.email %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% if is_correct_user?(user) && !user.deactivated %>
-        <td>
-          <%= button_to 'Deactivate', {action: 'deactivate', id: user.name}, method: 'patch' %>
-        </td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= page_entries_info(@users) %>
+<%= will_paginate(@users, class: 'button-row centered') %>
 
-<br>
-<%
-=end
-%>
 <% @users.each do |user| %>
   <%= render 'users/summary', user: user %>
 <% end %>
+
+<%= will_paginate(@users, class: 'button-row centered') %>

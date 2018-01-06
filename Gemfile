@@ -76,3 +76,6 @@ gem 'paperclip', '~> 5.1'
 # gem 'elasticsearch-rails'
 gem 'bonsai-elasticsearch-rails'
 gem 'elasticsearch-dsl'
+
+gem 'forgery'
+gem 'random-word'

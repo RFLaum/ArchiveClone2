@@ -12,6 +12,8 @@
 <li><%= link_to 'Newsposts', newsposts_path %></li>
 </ul>
 
+
+
 <% #TODO: remove this for production %>
 <% [Tag, Source, Character].each do |klass| %>
   <%# klass.reset_stories_count %>
@@ -23,4 +25,18 @@
 <% end %>
 
 
-<%# Tag.select('answer.*').from('tags AS answer').joins(:stories).to_sql %>
+<%
+=begin
+%>
+<ul>
+<% 10.times do %>
+  <li>
+    <%= raw Forgery(:lorem_ipsum).paragraph(sentences: 20, html: true, random: true) %>
+  </li>
+<% end %>
+</ul>
+<%
+=end
+%>
+
+<%# raw Forgery('lorem_ipsum').paragraphs(5, html: true, sentences: 10) %>

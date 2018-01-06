@@ -5,12 +5,14 @@
   <%= will_paginate(page_stories, class: 'button-row centered') %>
 
   <div>
-  <div class = 'story-summaries'>
-    <% page_stories.each do |story| %>
-      <%= render 'stories/summary', story: story %>
-    <% end %>
+    <div class = 'story-summaries'>
+      <% page_stories.each do |story| %>
+        <%= render 'stories/summary', story: story %>
+      <% end %>
+    </div>
+    <%# target = @pars.present? ? url_for(@pars) : url_for %>
+    <%= render 'filter_form', stories: all_stories, target: url_for %>
   </div>
-  <%# target = @pars.present? ? url_for(@pars) : url_for %>
-  <%= render 'filter_form', stories: all_stories, target: url_for %>
-  </div>
+
+  <%= will_paginate(page_stories, class: 'button-row centered') %>
 <% end %>

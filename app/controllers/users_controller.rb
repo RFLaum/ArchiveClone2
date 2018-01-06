@@ -17,7 +17,8 @@ class UsersController < ApplicationController
 
   def index
     @page_title = "Users"
-    @users = is_admin? ? User.all : User.where(is_confirmed: true) 
+    @users = is_admin? ? User.all : User.where(is_confirmed: true)
+    @users = @users.order(name: :asc).paginate(page: params[:page])
   end
 
   def show
