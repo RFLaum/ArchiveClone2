@@ -17,7 +17,7 @@
 
 #re-enable these when uploading to heroku
 
-=begin
+
 100.times do
   u_name = Forgery('internet').user_name
   next if User.exists?(name: u_name)
@@ -43,7 +43,6 @@ end
   Tag.create(name: t_name, adult: Forgery(:basic).boolean)
 end
 
-=end
 
 500.times do
   s_name = RandomWord.phrases.next.titleize
