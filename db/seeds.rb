@@ -66,6 +66,31 @@ end
 
 #re-enable these when uploading to heroku
 
+%i[book music theater video_games anime comics movies misc tv].each do |type|
+  500.times do
+    src_name = RandomWord.phrases.next.titleize
+    next if Source.exists?(name: src_name)
+    Source.create(name: src_name, type => true)
+  end
+end
+
 500.times do
-  c_name = Forgery(:full_name)
+  src_name = Forgery(:name).full_name
+  next if Source.exists?(name: src_name)
+  Source.create(name: src_name, celeb: true)
+end
+
+30000.times do
+  c_name = Forgery(:name).full_name
+  c_source = Source.order("Random()").first
+  next if Character.where(source: c_source).where(name: c_name).exists?
+  #do it by source_name so the stories are correctly updated
+  Character.create(name: c_name, source_name: c_source.name)
+end
+
+
+Story.find_each do |story|
+  num_chars = Forgery(:basic).number(at_least: 1, at_most: 6)
+  chars = Character.order('Random()').first(num_chars)
+  chars.each { |char| story.add_character(char) }
 end
