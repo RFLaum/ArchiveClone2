@@ -84,7 +84,6 @@ end
   Character.create(name: c_name, source_name: c_source.name)
 end
 
-=end
 30000.times do
   s_name = RandomWord.phrases.next.titleize
   c_name = RandomWord.phrases.next.titleize
@@ -106,9 +105,10 @@ end
     adult_override: s_adult
   )
 end
+=end
 
-# Story.find_each do |story|
-#   num_chars = Forgery(:basic).number(at_least: 1, at_most: 6)
-#   chars = Character.order('Random()').first(num_chars)
-#   chars.each { |char| story.add_character(char) }
-# end
+Story.find_each do |story|
+  num_chars = Forgery(:basic).number(at_least: 1, at_most: 6)
+  chars = Character.order('Random()').first(num_chars)
+  chars.each { |char| story.add_character(char) }
+end
