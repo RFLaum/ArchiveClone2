@@ -13,11 +13,7 @@
 # Source.create(name: 'The Matrix', movies: true)
 # Source.create(name: 'The Identity Matrix', book: true)
 
-
-
-#re-enable these when uploading to heroku
-
-
+=begin
 100.times do
   u_name = Forgery('internet').user_name
   next if User.exists?(name: u_name)
@@ -64,4 +60,12 @@ end
     summary: s_summary,
     adult_override: s_adult
   )
+end
+
+=end
+
+#re-enable these when uploading to heroku
+
+500.times do
+  c_name = Forgery(:full_name)
 end
