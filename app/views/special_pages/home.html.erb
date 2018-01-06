@@ -13,7 +13,9 @@
 </ul>
 
 
-
+<%
+=begin
+%>
 <% #TODO: remove this for production %>
 <% [Tag, Source, Character].each do |klass| %>
   <%# klass.reset_stories_count %>
@@ -23,7 +25,17 @@
     <% end %>
   <% end %>
 <% end %>
+<%
+=end
+%>
 
+<ul>
+<% [Source, Story, Tag, User, Character].each do |klass| %>
+  <li>
+    <%= "#{klass} #{klass.count}" %>
+  </li>
+<% end %>
+</ul>
 
 <%
 =begin
