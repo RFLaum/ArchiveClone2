@@ -85,7 +85,7 @@ end
 end
 
 =end
-3000.times do
+30000.times do
   s_name = RandomWord.phrases.next.titleize
   c_name = RandomWord.phrases.next.titleize
   s_author = User.order("Random()").first
