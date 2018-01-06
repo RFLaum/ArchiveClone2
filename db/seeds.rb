@@ -105,10 +105,11 @@ end
     adult_override: s_adult
   )
 end
-=end
 
 Story.find_each do |story|
   num_chars = Forgery(:basic).number(at_least: 1, at_most: 6)
   chars = Character.order('Random()').first(num_chars)
   chars.each { |char| story.add_character(char) }
 end
+
+=end
