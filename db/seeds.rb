@@ -84,7 +84,8 @@ end
   Character.create(name: c_name, source_name: c_source.name)
 end
 
-50000.times do
+=end
+3000.times do
   s_name = RandomWord.phrases.next.titleize
   c_name = RandomWord.phrases.next.titleize
   s_author = User.order("Random()").first
@@ -106,10 +107,8 @@ end
   )
 end
 
-Story.find_each do |story|
-  num_chars = Forgery(:basic).number(at_least: 1, at_most: 6)
-  chars = Character.order('Random()').first(num_chars)
-  chars.each { |char| story.add_character(char) }
-end
-
-=end
+# Story.find_each do |story|
+#   num_chars = Forgery(:basic).number(at_least: 1, at_most: 6)
+#   chars = Character.order('Random()').first(num_chars)
+#   chars.each { |char| story.add_character(char) }
+# end
