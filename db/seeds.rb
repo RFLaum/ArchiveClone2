@@ -62,10 +62,6 @@ end
   )
 end
 
-=end
-
-#re-enable these when uploading to heroku
-
 %i[book music theater video_games anime comics movies misc tv].each do |type|
   500.times do
     src_name = RandomWord.phrases.next.titleize
@@ -88,6 +84,29 @@ end
   Character.create(name: c_name, source_name: c_source.name)
 end
 
+=end
+
+50000.times do
+  s_name = RandomWord.phrases.next.titleize
+  c_name = RandomWord.phrases.next.titleize
+  s_author = User.order("Random()").first
+  sum_length = Forgery(:basic).number(at_least: 5, at_most: 15)
+  s_summary = Forgery(:lorem_ipsum).paragraph(sentences: sum_length, random: true)
+  s_adult = Forgery(:basic).boolean
+  s_text = ""
+  Forgery(:basic).number(at_least: 20, at_most: 50).times do
+    num_sent = Forgery(:basic).number(at_least: 10, at_most: 30)
+    s_text += Forgery(:lorem_ipsum).paragraph(sentences: num_sent, html: true, random: true)
+  end
+  Story.create(
+    title: s_name,
+    author: s_author.name,
+    chapter_title: c_name,
+    body: s_text,
+    summary: s_summary,
+    adult_override: s_adult
+  )
+end
 
 Story.find_each do |story|
   num_chars = Forgery(:basic).number(at_least: 1, at_most: 6)
