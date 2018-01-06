@@ -84,8 +84,6 @@ end
   Character.create(name: c_name, source_name: c_source.name)
 end
 
-=end
-
 50000.times do
   s_name = RandomWord.phrases.next.titleize
   c_name = RandomWord.phrases.next.titleize
@@ -113,3 +111,5 @@ Story.find_each do |story|
   chars = Character.order('Random()').first(num_chars)
   chars.each { |char| story.add_character(char) }
 end
+
+=end
