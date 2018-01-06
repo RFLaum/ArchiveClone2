@@ -7,15 +7,6 @@ class TagsController < ApplicationController
   # GET /tags.json
   def index
     @page_title = "Most Common Tags"
-    # if can_see_adult?
-    #   @tags = Tag.all
-    # else
-    #   @tags = Tag.where(adult: false)
-    # end
-    # @stories = Story.all
-    # @stories = Story.non_adult(stories) unless can_see_adult?
-    # @tags = Tag.most_common(stories, 100).reorder('name ASC')
-    # @tags = cloud_sizer(Tag, stories, Tag.cloud_names)
     tag_set = can_see_adult? ? Tag.all : Tag.where(adult: false)
     @tags = Tag.get_top(tag_set)
   end
@@ -114,26 +105,4 @@ class TagsController < ApplicationController
   def tag_params
     params.require(:tag).permit(:name, :adult)
   end
-
-  # todo: validate search query, make this safer
-  # def finder(search_string, tbl, field)
-  #   input_query = search_string.downcase.squeeze(' ').strip
-  #   chunks = input_query.scan(/"[^"]+"|\-|\||\w+/)
-  #   query_arr = ['']
-  #   until chunks.empty?
-  #     holder = chunks.shift
-  #     unless query_arr[0].empty?
-  #       query_arr[0] += holder == '|' ? ' or ' : ' and '
-  #     end
-  #     query_arr[0] += field
-  #     query_arr[0] += holder == '-' ? ' not like ?' : ' like ?'
-  #     holder = chunks.shift if '-|'.include?(holder)
-  #     query_arr << '%' + holder.delete('"').tr('*', '%') + '%'
-  #   end
-  #   tbl.where(query_arr)
-  # end
-  #
-  # def find_tags
-  #   @results = finder(params[:q], Tag, 'name')
-  # end
 end
