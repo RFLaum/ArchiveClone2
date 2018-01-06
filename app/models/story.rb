@@ -387,7 +387,7 @@ class Story < ApplicationRecord
   end
 
   def add_source(src)
-    add_unless_present(sources, src)
+    add_unless_present(sources, src) if src
   end
 
   def maybe_remove_source(src)
