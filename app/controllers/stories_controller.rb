@@ -61,9 +61,6 @@ class StoriesController < ApplicationController
     end
 
     @stories = Story.s_sort(@base_stories, params[:sort_by], params[:sort_direction])
-
-
-
     @stories = @stories.paginate(page: params[:page])
   end
 
