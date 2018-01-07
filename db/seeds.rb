@@ -164,8 +164,19 @@ end
 #   end
 # end
 
-num_to_edit = (Comment.count / 3).to_i
-Comment.order("Random()").limit(num_to_edit).each do |comment|
-  edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
-  comment.update(content: comment.content + edit_message)
+# num_to_edit = (Comment.count / 3).to_i
+# Comment.order("Random()").limit(num_to_edit).each do |comment|
+#   edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+#   comment.update(content: comment.content + edit_message)
+# end
+
+# Tag.all.each do |tag|
+#   tag.implied_tags.clear
+# end
+
+Tag.all.each do |tag|
+  next unless Forgery(:basic).number(at_least: 1, at_most: 3) == 1
+  num_to_add = Forgery(:basic).number(at_least: 1, at_most: 3)
+  tags_to_add = Tag.order("Random()").first(num_to_add)
+  tag.add_implications(tags_to_add)
 end

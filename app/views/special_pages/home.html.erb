@@ -50,6 +50,14 @@
   Un-Updated comments: <%= Comment.where('updated_at = created_at').count %>
 </p>
 
+<ul>
+  <% Implication.all.each do |imp| %>
+  <li>
+    <%= "#{imp.implier} #{imp.implied}" %>
+  </li>
+  <% end %>
+</ul>
+
 <%
 =begin
 %>

@@ -4,10 +4,10 @@ class NewsTag < ApplicationRecord
   # self.primary_key = :name
   has_and_belongs_to_many :newsposts
 
-  has_many :implieds, class_name: 'NewsImplication', foreign_key: 'implier_id'
+  has_many :implieds, class_name: 'NewsImplication', foreign_key: 'implier_id', dependent: :destroy
   has_many :implied_tags, through: :implieds, source: :gen_tag
 
-  has_many :impliers, class_name: 'NewsImplication', foreign_key: 'implied_id'
+  has_many :impliers, class_name: 'NewsImplication', foreign_key: 'implied_id', dependent: :destroy
   has_many :implying_tags, through: :impliers, source: :spec_tag
 
   before_destroy :knit_implications
