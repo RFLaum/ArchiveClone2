@@ -174,9 +174,16 @@ end
 #   tag.implied_tags.clear
 # end
 
-Tag.all.each do |tag|
-  next unless Forgery(:basic).number(at_least: 1, at_most: 3) == 1
-  num_to_add = Forgery(:basic).number(at_least: 1, at_most: 3)
-  tags_to_add = Tag.order("Random()").first(num_to_add)
-  tag.add_implications(tags_to_add)
+# Tag.all.each do |tag|
+#   next unless Forgery(:basic).number(at_least: 1, at_most: 3) == 1
+#   num_to_add = Forgery(:basic).number(at_least: 1, at_most: 3)
+#   tags_to_add = Tag.order("Random()").first(num_to_add)
+#   tag.add_implications(tags_to_add)
+# end
+
+Story.find_each do |story|
+  num_tags = Forgery(:basic).number(at_least: 1, at_most: 4)
+  Tag.order("Random()").first(num_tags).each do |tag|
+    story.add_tag(tag)
+  end
 end
