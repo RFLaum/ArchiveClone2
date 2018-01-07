@@ -47,9 +47,8 @@
   Updated comments: <%= Comment.where.not('updated_at = created_at').count %>
 </p>
 <p>
-  Un-Updated comments: <%= Comment.where('updated_at = created_at').count %> 
+  Un-Updated comments: <%= Comment.where('updated_at = created_at').count %>
 </p>
-
 
 <%
 =begin
