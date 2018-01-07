@@ -144,10 +144,10 @@ end
 # sql = "UPDATE comments SET content = content || '<p>a</p>' " +
 #       "WHERE id = 3852"
 # ActiveRecord::Base.connection.execute(sql)
+# Comment.where(id: 3737).update_all(content: '<p>test content</p>')
 
-
-num_to_edit = (Comment.count / 3).to_i
-Comment.order("Random()").limit(num_to_edit).find_each do |comment|
-  edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
-  comment.update(content: comment.content + edit_message)
-end
+# num_to_edit = (Comment.count / 3).to_i
+# Comment.order("Random()").limit(num_to_edit).find_each do |comment|
+#   edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+#   comment.update(content: comment.content + edit_message)
+# end
