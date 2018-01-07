@@ -113,3 +113,9 @@ Story.find_each do |story|
 end
 
 =end
+500.times do
+  t_name = RandomWord.adjs.next
+  t_name.gsub!('_', '')
+  next if Tag.exists?(name: t_name)
+  Tag.create(name: t_name, adult: Forgery(:basic).boolean)
+end
