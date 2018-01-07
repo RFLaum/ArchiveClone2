@@ -29,16 +29,6 @@
 =end
 %>
 
-<ul>
-  <% ActiveRecord::Base.connection.tables.sort.each do |table| %>
-  <li>
-    <% sql = "Select count(*) from #{table}" %>
-    <% num = ActiveRecord::Base.connection.execute(sql) %>
-    <%= "#{table} #{num[0]['count']}" %>
-  </li>
-  <% end %>
-</ul>
-
 <table>
   <% ActiveRecord::Base.connection.tables.sort.each do |table| %>
   <tr>
