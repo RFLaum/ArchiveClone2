@@ -37,11 +37,11 @@
     <% sql = "Select count(*) from #{table}" %>
     <% num = ActiveRecord::Base.connection.execute(sql)[0]['count'] %>
     <% total += num %>
-    <td><%= num %></td>
+    <td><%= number_with_delimiter(num) %></td>
   </tr>
   <% end %>
 </table>
-<%= total %>
+<%= number_with_delimiter(total) %>
 
 <%
 =begin
