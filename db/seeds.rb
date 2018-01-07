@@ -129,8 +129,6 @@ Comment.order("Random()").limit(num_to_edit).find_each do |comment|
   comment.update(content: comment.content + edit_message)
 end
 
-=end
-
 Story.find_each do |story|
   num_comments = Forgery(:basic).number(at_least: 1, at_most:5)
   usrs = User.order("Random()").first(num_comments)
@@ -138,4 +136,18 @@ Story.find_each do |story|
     com_cont = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
     Comment.create(author: usr.name, content: com_cont, story_id: story.id)
   end
+end
+
+=end
+
+#Don't do it this way because it won't update the updated_at column
+# sql = "UPDATE comments SET content = content || '<p>a</p>' " +
+#       "WHERE id = 3852"
+# ActiveRecord::Base.connection.execute(sql)
+
+
+num_to_edit = (Comment.count / 3).to_i
+Comment.order("Random()").limit(num_to_edit).find_each do |comment|
+  edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+  comment.update(content: comment.content + edit_message)
 end
