@@ -122,10 +122,19 @@ Story.find_each do |story|
   end
 end
 
-=end
-
 num_to_edit = (Comment.count / 3).to_i
 edit_message = "<p>Edit comment test: Alpha Beta Gamma.</p>"
 Comment.order("Random()").limit(num_to_edit).find_each do |comment|
   comment.update(content: comment.content + edit_message)
+end
+
+=end
+
+Story.find_each do |story|
+  num_comments = Forgery(:basic).number(at_least: 1, at_most: 5)
+  usrs = User.order("Random()").first(num_comments)
+  usrs.each do |usr|
+    com_cont = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+    Comment.create(author: usr.name, content: com_cont, story_id: story.id)
+  end
 end
