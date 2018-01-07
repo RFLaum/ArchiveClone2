@@ -30,12 +30,25 @@
 %>
 
 <ul>
-<% [Source, Story, Tag, User, Character].each do |klass| %>
+  <% ActiveRecord::Base.connection.tables.sort.each do |table| %>
   <li>
-    <%= "#{klass} #{klass.count}" %>
+    <% sql = "Select count(*) from #{table}" %>
+    <% num = ActiveRecord::Base.connection.execute(sql) %>
+    <%= "#{table} #{num[0]['count']}" %>
   </li>
-<% end %>
+  <% end %>
 </ul>
+
+<table>
+  <% ActiveRecord::Base.connection.tables.sort.each do |table| %>
+  <tr>
+    <td><%= table %></td>
+    <% sql = "Select count(*) from #{table}" %>
+    <% num = ActiveRecord::Base.connection.execute(sql)[0]['count'] %>
+    <td><%= num %></td>
+  </tr>
+  <% end %>
+</table>
 
 <%
 =begin
