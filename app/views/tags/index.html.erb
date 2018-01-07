@@ -2,7 +2,7 @@
 
 <h1>100 Most Common Tags</h1>
 <%# raw cloud_sizer(Tag, @stories, Tag.cloud_names).join(' ') %>
-<%= raw cloud_sizer(@tags, Tag.cloud_names).join(' ') %>
+<%= raw cloud_sizer(@tags, Tag.cloud_names.map { |klass| klass + ' redlink'}).join(' ') %>
 <%
 =begin
 %>
