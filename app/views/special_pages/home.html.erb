@@ -29,16 +29,19 @@
 =end
 %>
 
+<% total = 0 %>
 <table>
   <% ActiveRecord::Base.connection.tables.sort.each do |table| %>
   <tr>
     <td><%= table %></td>
     <% sql = "Select count(*) from #{table}" %>
     <% num = ActiveRecord::Base.connection.execute(sql)[0]['count'] %>
+    <% total += num %>
     <td><%= num %></td>
   </tr>
   <% end %>
 </table>
+<%= total %>
 
 <%
 =begin

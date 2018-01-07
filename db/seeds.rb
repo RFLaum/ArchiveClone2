@@ -113,9 +113,13 @@ Story.find_each do |story|
 end
 
 =end
-500.times do
-  t_name = RandomWord.adjs.next
-  t_name.gsub!('_', '')
-  next if Tag.exists?(name: t_name)
-  Tag.create(name: t_name, adult: Forgery(:basic).boolean)
+
+Story.find_each do |story|
+  num_comments = Forgery(:basic).number(at_least: 1, at_most:5)
+  usrs = User.order("Random()").first(num_comments)
+  usrs.each do |usr|
+    num_sent = Forgery(:basic).number(at_least: 1, at_most: 5)
+    com_cont = Forgery(:lorem_ipsum).paragraph(sentences: num_sent, html: true, random: true)
+    Comment.create(author: usr.name, content: com_cont, story_id: story.id)
+  end
 end
