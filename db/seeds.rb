@@ -251,19 +251,47 @@ end
 # end
 
 
-num_to_add_to = ((Story.count * 4) / 5).to_i
-Story.all.order(created_at: :desc).limit(num_to_add_to).each do |story|
-  next if story.chapters.count > 1
-  c_name = Forgery(:lorem_ipsum).words(3, random: true).titleize
-  s_text = ""
-  Forgery(:basic).number(at_least: 10, at_most: 20).times do
-    num_sent = Forgery(:basic).number(at_least: 10, at_most: 30)
-    s_text += Forgery(:lorem_ipsum).paragraph(sentences: num_sent, html: true, random: true)
+# num_to_add_to = ((Story.count * 4) / 5).to_i
+# Story.all.order(created_at: :desc).limit(num_to_add_to).each do |story|
+#   next if story.chapters.count > 1
+#   c_name = Forgery(:lorem_ipsum).words(3, random: true).titleize
+#   s_text = ""
+#   Forgery(:basic).number(at_least: 10, at_most: 20).times do
+#     num_sent = Forgery(:basic).number(at_least: 10, at_most: 30)
+#     s_text += Forgery(:lorem_ipsum).paragraph(sentences: num_sent, html: true, random: true)
+#   end
+#   chapter = Chapter.new(
+#     body: s_text,
+#     number: 2,
+#     chapter_title: c_name
+#   )
+#   story.chapters << chapter
+# end
+
+
+(2..10).each do |i|
+  content = ""
+  (1..3).each do |para|
+    content += "<p>"
+    (1..20).each do |sentence|
+      content += "This is sentence #{sentence} of paragraph #{para} of newspost #{i}. "
+    end
+    content += "</p>"
   end
-  chapter = Chapter.new(
-    body: s_text,
-    number: 2,
-    chapter_title: c_name
+  post = Newspost.new(
+    admin: 'admin',
+    title: "Test Newpost #{i}",
+    content: content
   )
-  story.chapters << chapter
+  post.save
+end
+
+
+Newspost.all.each do |post|
+  second_num = first_num = Forgery(:basic).number(at_least: 1, at_most: 5)
+  while second_num == first_num
+    second_num = Forgery(:basic).number(at_least: 1, at_most: 5)
+  end
+  post.tags_public = "news tag #{first_num}, news tag #{second_num}"
+  post.save
 end
