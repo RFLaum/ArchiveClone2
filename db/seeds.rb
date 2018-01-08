@@ -268,6 +268,9 @@ end
 #   story.chapters << chapter
 # end
 
+Newspost.all.order(created_at: :desc).first(9).each do |post|
+  post.destroy
+end
 
 (2..10).each do |i|
   content = ""
@@ -280,7 +283,7 @@ end
   end
   post = Newspost.new(
     admin: 'admin',
-    title: "Test Newpost #{i}",
+    title: "Test Newspost #{i}",
     content: content
   )
   post.save
