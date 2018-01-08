@@ -33,7 +33,10 @@
     characters are featured in a fanfic; for instance, if writing a Harry
     Potter fanfic, you might tag it with
     <%= link_name Character, "Harry Potter" %>,
-    <%= link_name Character, "Hermione Granger" %>, et cetera.
+    <%= link_name Character, "Hermione Granger" %>, et cetera. In some cases,
+    multiple characters may have the same name; this is useful because many
+    different fandoms may have a character named "John Smith," and we don't
+    want to confuse these characters with one another.
     <%= link_to 'Source tags', sources_path %> (AKA fandom tags) indicate what fandom a story
     belongs to; in the earlier example of a Harry Potter fanfic, it would be
     tagged with <%= link_name Source, "Harry Potter" %>. Each source may belong
@@ -44,8 +47,10 @@
     <%= link_to 'movie', type_path('movies') %> categories. Note that the three
     types of tags are entirely separate; the Harry Potter character tag is not
     the same as the Harry Potter source tag. Logged-in users can also
-    designate any number of  content tags as "favorite" tags, which will cause
-    those tags to show up on the home page for that user.
+    designate any number of content tags as "favorite" tags, if they check
+    those tags frequently. When you are logged in, the user dropdown menu in
+    the top right will have options for managing your favorite tags, and the
+    home page will display a list of your favorite tags.
   </p></li>
   <li><p>
     <strong>Tag Implications:</strong> Tags can imply other tags. For instance,
@@ -68,14 +73,36 @@
     the perspective of a user who doesn't want to see them, these stories do
     not exist.</p>
     <p>
-      Stories can be considered "adult" in one of two ways. First, certain
+      Stories can be considered "adult" for one of two reasons. First, certain
       content tags are treated as adult, and any story tagged with one is
-      automatically an adult story. (These adult tags are also invisible to
-      users who can't see adult content). Second, the author of a story may
-      manually indicate that it is adult. Note that this override only goes one
+      automatically an adult story.
+      <% adult_tag = Tag.where(adult: true).order("Random()").first %>
+      An example of such a tag is <%= name_link adult_tag %>. (Note that if you
+      try to view the stories in that tag, you may see none listed. This is
+      because adult stories are automatically concealed from users who don't
+      have "see adult stories" enabled in their settings). Just like adult
+      stories, adult tags are concealed from users who don't want to see them;
+      those tags will not be listed on the
+      <%= link_to 'tag cloud page', tags_path %>, will not show up in tag search
+      results, et cetera. Currently, <%= num_adult = Tag.where(adult: true).count %>
+      of the <%= pluralize(Tag.count, 'tag') %> on this site
+      <%= num_adult == 1 ? 'is' : 'are' %> marked as adult.
+    </p>
+    <p>
+      The second reason that a story can be considered adult is that its author
+      has manually indicated that it is adult. Note that this override only goes one
       way: it is possible to indicate that a story with no adult tags is still
       adult, but it is not possible to indicate that a story with adult tags is
-      non-adult.
+      non-adult. An example of such a story is
+      <%= name_link Story.where(adult_override: true).order("Random()").first %>.
+      Currently, of the <%= pluralize(Story.count, 'story') %> on this site,
+      <%= num_over = Story.where(adult_override: true).count %>
+      <%= num_over == 1 ? 'has' : 'have' %> this option enabled.
+      <% num_adult = Story.only_adult(Story.all).count %>
+      In total, there <%= num_adult == 1 ? 'is' : 'are' %>
+      <%= pluralize(num_adult, 'adult story') %> and
+      <%= pluralize(Story.non_adult(Story.all).count, 'non-adult story') %> on this
+      site.
     </p>
   </li>
   <li><p>

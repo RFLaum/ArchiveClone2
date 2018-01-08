@@ -96,10 +96,10 @@ class Source < ApplicationRecord
     []
   end
 
-  def visible_stories(reader)
-    return stories if reader.adult
-    Story.non_adult(stories).or(stories.where(user: reader))
-  end
+  # def visible_stories(reader)
+  #   return stories if reader.adult
+  #   Story.non_adult(stories).or(stories.where(user: reader))
+  # end
 
   def self.tr_to_sql(dirty)
     # dirty.downcase

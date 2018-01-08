@@ -241,6 +241,7 @@ class UsersController < ApplicationController
   end
 
   def login_internal
+    session.delete(:adult)
     session[:user] = @user.name
   end
 

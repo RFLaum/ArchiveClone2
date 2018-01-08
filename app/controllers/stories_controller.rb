@@ -17,9 +17,13 @@ class StoriesController < ApplicationController
       @obj = Source.find(params[:source_id])
     else
       @base_stories = Story.all
+      unless can_see_adult?
+        @base_stories = Story.non_adult(@base_stories)
+                             .or(stories.where(user: current_user_or_guest))
+      end
     end
     if @obj.present?
-      @base_stories = @obj.stories
+      @base_stories = @obj.visible_stories(current_user_or_guest)
       # @page_title.prepend(@obj.name + ' ')
       @page_title += " in \"#{@obj.name}\""
     end
@@ -55,10 +59,10 @@ class StoriesController < ApplicationController
     #   @stories = @base_stories.order(sort_by => sort_dir)
     # end
 
-    unless can_see_adult?
-      # @base_stories = @base_stories.reject(&:is_adult?)
-      @base_stories = Story.non_adult(@base_stories)
-    end
+    # unless can_see_adult?
+    #   # @base_stories = @base_stories.reject(&:is_adult?)
+    #   @base_stories = Story.non_adult(@base_stories)
+    # end
 
     @stories = Story.s_sort(@base_stories, params[:sort_by], params[:sort_direction])
     @stories = @stories.paginate(page: params[:page])

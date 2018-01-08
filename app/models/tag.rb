@@ -135,9 +135,9 @@ class Tag < ApplicationRecord
     stories
   end
 
-  def visible_stories(adult)
-    adult ? stories : Story.non_adult(stories)
-  end
+  # def visible_stories(adult)
+  #   adult ? stories : Story.non_adult(stories)
+  # end
 
   def to_partial_path
     'tags/summary'
