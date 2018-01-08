@@ -54,12 +54,12 @@
   </p></li>
   <li><p>
     <strong>Tag Implications:</strong> Tags can imply other tags. For instance,
-    <%= link_name2(Tag, "dog") %> implies <%= link_name2 Tag, "animal" %>.
+    <%= link_name(Tag, "dog") %> implies <%= link_name Tag, "animal" %>.
     Therefore, any story tagged "dog" will also automatically be tagged
     "animal", and you cannot remove the "animal" tag as long as the "dog" tag
     is present. Similarly, characters can imply sources; a story with the
-    <%= link_name2 Character, "Frodo Baggins" %> character is automatically a
-    part of the <%= link_name2 Source, "Lord of the Rings" %> fandom. Only
+    <%= link_name Character, "Frodo Baggins" %> character is automatically a
+    part of the <%= link_name Source, "Lord of the Rings" %> fandom. Only
     administrators can change implications. Checks exist to make sure that no
     circular implication chains are created.
   </p></li>
