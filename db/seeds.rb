@@ -112,4 +112,78 @@ Story.find_each do |story|
   chars.each { |char| story.add_character(char) }
 end
 
+Story.find_each do |story|
+  num_comments = Forgery(:basic).number(at_least: 1, at_most:5)
+  usrs = User.order("Random()").first(num_comments)
+  usrs.each do |usr|
+    num_sent = Forgery(:basic).number(at_least: 1, at_most: 5)
+    com_cont = Forgery(:lorem_ipsum).paragraph(sentences: num_sent, html: true, random: true)
+    Comment.create(author: usr.name, content: com_cont, story_id: story.id)
+  end
+end
+
+num_to_edit = (Comment.count / 3).to_i
+# edit_message = "<p>Edit comment test: Alpha Beta Gamma.</p>"
+Comment.order("Random()").limit(num_to_edit).find_each do |comment|
+  edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+  comment.update(content: comment.content + edit_message)
+end
+
+Story.find_each do |story|
+  num_comments = Forgery(:basic).number(at_least: 1, at_most:5)
+  usrs = User.order("Random()").first(num_comments)
+  usrs.each do |usr|
+    com_cont = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+    Comment.create(author: usr.name, content: com_cont, story_id: story.id)
+  end
+end
+
 =end
+
+#Don't do it this way because it won't update the updated_at column
+# sql = "UPDATE comments SET content = content || '<p>a</p>' " +
+#       "WHERE id = 3852"
+# ActiveRecord::Base.connection.execute(sql)
+# Comment.where(id: 3737).update_all(content: '<p>test content</p>')
+
+# num_to_edit = (Comment.count / 3).to_i
+# Comment.order("Random()").limit(num_to_edit).find_each do |comment|
+#   edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+#   comment.update(content: comment.content + edit_message)
+# end
+
+
+# Comment.delete_all
+#
+# Story.find_each do |story|
+#   num_comments = Forgery(:basic).number(at_least: 1, at_most: 5)
+#   usrs = User.order("Random()").first(num_comments)
+#   usrs.each do |usr|
+#     com_cont = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+#     Comment.create(author: usr.name, content: com_cont, story_id: story.id)
+#   end
+# end
+
+# num_to_edit = (Comment.count / 3).to_i
+# Comment.order("Random()").limit(num_to_edit).each do |comment|
+#   edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+#   comment.update(content: comment.content + edit_message)
+# end
+
+# Tag.all.each do |tag|
+#   tag.implied_tags.clear
+# end
+
+# Tag.all.each do |tag|
+#   next unless Forgery(:basic).number(at_least: 1, at_most: 3) == 1
+#   num_to_add = Forgery(:basic).number(at_least: 1, at_most: 3)
+#   tags_to_add = Tag.order("Random()").first(num_to_add)
+#   tag.add_implications(tags_to_add)
+# end
+
+# Story.find_each do |story|
+#   num_tags = Forgery(:basic).number(at_least: 1, at_most: 4)
+#   Tag.order("Random()").first(num_tags).each do |tag|
+#     story.add_tag(tag)
+#   end
+# end

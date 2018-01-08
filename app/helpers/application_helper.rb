@@ -7,6 +7,17 @@ module ApplicationHelper
     link_to model.display_name, model, opts
   end
 
+  def name_stories_link(model, html_opts = nil)
+    # opts[:controller] = 'stories'
+    options = {
+      controller: 'stories',
+      action: 'index',
+      "#{model.class.to_s.downcase}_id".to_sym => model
+    }
+    # link_to model.display_name, controller: 'stories', action: 'index', tag_id: model
+    link_to model.display_name, options, html_opts
+  end
+
   def link_name(klass, name, opts = nil)
     link_to name, klass.find_by(klass.name_field => name), opts
   end
@@ -63,8 +74,11 @@ module ApplicationHelper
     tags.map do |tag|
       bucket_num = ((tag.stories_count - min) / bucket_size).to_i
       bucket_num = [bucket_num, num_classes - 1].min
-      name_link(tag, class: classes[bucket_num],
-                     title: pluralize(tag.stories_count, 'story'))
+      # name_stories_link(tag)
+      # name_link(tag, class: classes[bucket_num],
+      #                title: pluralize(tag.stories_count, 'story'))
+      name_stories_link(tag, class: classes[bucket_num],
+                              title: pluralize(tag.stories_count, 'story'))
     end
   end
 end

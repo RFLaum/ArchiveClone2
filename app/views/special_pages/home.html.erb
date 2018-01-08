@@ -29,13 +29,21 @@
 =end
 %>
 
-<ul>
-<% [Source, Story, Tag, User, Character].each do |klass| %>
-  <li>
-    <%= "#{klass} #{klass.count}" %>
-  </li>
-<% end %>
-</ul>
+<% total = 0 %>
+<table>
+  <% ActiveRecord::Base.connection.tables.sort.each do |table| %>
+  <tr>
+    <td><%= table %></td>
+    <% sql = "Select count(*) from #{table}" %>
+    <% num = ActiveRecord::Base.connection.execute(sql)[0]['count'] %>
+    <% total += num %>
+    <td><%= number_with_delimiter(num) %></td>
+  </tr>
+  <% end %>
+</table>
+<%= number_with_delimiter(total) %>
+
+
 
 <%
 =begin

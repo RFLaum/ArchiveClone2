@@ -9,6 +9,7 @@
 
 .comment-heading {
   background: #ddd;
+  margin-bottom: 0;
 }
 
 .comment-heading::after {
@@ -25,4 +26,14 @@ ul#comments {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.comment-body {
+  padding:0.5em;
+  > *:first-child {
+    margin-top: 0;
+  }
+  > *:last-child {
+    margin-bottom: 0;
+  }
 }

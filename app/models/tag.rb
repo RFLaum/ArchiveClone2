@@ -15,18 +15,24 @@ class Tag < ApplicationRecord
   # belongs_to :base_tag, class_name: 'Tag'
 
   has_many :implieds, class_name: 'Implication', foreign_key: 'implier',
-                      primary_key: 'name'
+                      primary_key: 'name' #, dependent: :destroy
   has_many :implied_tags, through: :implieds, source: :gen_tag
 
   has_many :impliers, class_name: 'Implication', foreign_key: 'implied',
-                      primary_key: 'name'
+                      primary_key: 'name' #, dependent: :destroy
   has_many :implying_tags, through: :impliers, source: :spec_tag
 
   has_and_belongs_to_many :users, join_table: :fave_tags, primary_key: 'name',
                                   foreign_key: 'tag_name',
                                   association_foreign_key: 'user_name'
 
-  before_destroy :knit_implications
+  before_destroy :ki_wrapper #:knit_implications
+
+  def ki_wrapper
+    knit_implications
+    implieds.delete_all
+    impliers.delete_all
+  end
 
   def self.find_by_name(str)
     # super(un_param(str))

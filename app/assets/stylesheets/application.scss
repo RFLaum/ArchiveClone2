@@ -259,3 +259,10 @@ input[type='submit'] {
 .in-line {
   display: inline;
 }
+
+a.redlink, .redlink-container > a {
+  color: darkred;
+  // text-decoration: underline 1px dashed darkred;
+  text-decoration: none;
+  border-bottom: 1px dotted darkred;
+}

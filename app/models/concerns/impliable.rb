@@ -6,17 +6,15 @@ module Impliable
   #if A implies B implies C, then deleting B makes A imply c
   # before_destroy do
   def knit_implications
+    logger.debug "entered knit"
+    kid_array = implied_tags.to_a
+    logger.debug "kid_array: #{implied_tags.size}"
     implying_tags.each do |parent|
-      before = parent.implied_tags
-      implied_tags.each do |child|
-        # before << child unless before.include?(child)
-        #TODO: test this
-        add_unless_present(before, child)
-      end
+      parent.add_implications(kid_array)
     end
   end
 
-  def get_descendant_implications
+  def get_desc_imps
     self.class.get_descendant_implications(implied_tags)
   end
 
@@ -27,9 +25,9 @@ module Impliable
     good_kids = []
     children.each do |child|
       #check to make sure we aren't creating any circular implication chains
-      if child == self || child.get_descendant_implications.include?(self)
+      if child == self || child.get_desc_imps.include?(self)
         bad_kids << child.name
-      else
+      elsif !self.implied_tags.include?(child)
         good_kids << child
         implied_tags << child
       end
@@ -51,7 +49,7 @@ module Impliable
   module ClassMethods
     def get_descendant_implications(children)
       answer = Set.new
-      test_tags = children.dup
+      test_tags = children.to_a
       until test_tags.empty?
         tag = test_tags.pop
         test_tags.concat(tag.implied_tags) if answer.add?(tag)
