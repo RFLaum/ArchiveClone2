@@ -1,6 +1,7 @@
 <li class='listbox'>
 <% ui_name = Source.source_plurals[type].titleize %>
-<% ind_url = sources_path + "/#{type}" %>
+<%# ind_url = sources_path + "/#{type}" %>
+<% ind_url = type_path(type) %>
 <h3><%= link_to ui_name, ind_url, class: 'link' %></h3>
 <% top_results = Source.where(type => true).order(stories_count: :desc).limit(5) %>
 <ol class='no-dec'>

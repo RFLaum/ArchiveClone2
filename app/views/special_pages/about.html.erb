@@ -9,13 +9,15 @@
 </p>
 <h3 id='source'>Where do the stories come from?</h3>
 <p>
-  There are three types of story on this site. The first of these is
-  public-domain works by long-dead writers, which I copied from
+  Most of the stories on this site are automtically-generated and filled with
+  random, meaningless text. A couple are public-domain works by long-dead
+  writers, which I copied from
   <%= link_to 'the Gutenberg Project', 'http://www.gutenberg.org/' %>. You can
-  identify these by the fact that they have a disclaimer and link to the
-  Gutenberg project on them. An example of such a story is TODO: ADD LINK TO
-  A GUTENBERG STORY HERE. The second category is test stories that I wrote;
-  these mostly consist of random gibberish or lorem ipsum. An example is
+  identify these by the fact that their summaries include a disclaimer. An
+  example of such a story is
+  <%= "The Tragedy of Pudd'nhead Wilson", story_path(7) %>. The second category
+  is test stories that I or my beta-testers wrote;
+  these mostly consist of random gibberish, and are very short. An example is
   <%= name_link Story.find(Rails.env.production? ? 1 : 2) %>. The final
   category is user-submitted stories. Any logged-in user can submit a story, so
   these can be written by anyone who visits this site -- including you, if you
@@ -23,5 +25,11 @@
 </p>
 <h3 id='howto'>How to use this site</h3>
 <p>
-  TODO
+  Simply <%= link_to 'create an account', register_path %> to get started!
+  After registering, you should receive an email asking you to confirm your
+  email address (if you don't receive one, check your spam folder). Once you've
+  confirmed your address, you can use all the features of the site (except
+  those restricted to administrators). For more details on the features
+  available, including tagging, searching, commenting, subscribing, bookmarking
+  and more, see the <%= link_to 'full feature list', tech_path(anchor: 'feature-list') %>.
 </p>
