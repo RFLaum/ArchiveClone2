@@ -1,8 +1,14 @@
 <p id="notice"><%= notice %></p>
 
 <h1>100 Most Common Tags</h1>
+<p>
+  Tag names are sized according to the popularity of the tag. Hover over a tag
+  name to see how many stories have that tag.
+</p>
+<div class='redlink-container'>
 <%# raw cloud_sizer(Tag, @stories, Tag.cloud_names).join(' ') %>
-<%= raw cloud_sizer(@tags, Tag.cloud_names.map { |klass| klass + ' redlink'}).join(' ') %>
+  <%= raw cloud_sizer(@tags, Tag.cloud_names).join(' ') %>
+</div>
 <%
 =begin
 %>

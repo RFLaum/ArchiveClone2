@@ -260,7 +260,7 @@ input[type='submit'] {
   display: inline;
 }
 
-a.redlink {
+a.redlink, .redlink-container > a {
   color: darkred;
   // text-decoration: underline 1px dashed darkred;
   text-decoration: none;
