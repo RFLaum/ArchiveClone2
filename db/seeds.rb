@@ -187,3 +187,59 @@ end
 #     story.add_tag(tag)
 #   end
 # end
+
+# start_time = Time.now
+#
+# 50000.times do
+#   s_name = RandomWord.phrases.next.titleize
+#   c_name = RandomWord.phrases.next.titleize
+#   s_author = User.order("Random()").first
+#   sum_length = Forgery(:basic).number(at_least: 5, at_most: 15)
+#   s_summary = Forgery(:lorem_ipsum).paragraph(sentences: sum_length, random: true)
+#   s_text = ""
+#   Forgery(:basic).number(at_least: 20, at_most: 50).times do
+#     num_sent = Forgery(:basic).number(at_least: 10, at_most: 30)
+#     s_text += Forgery(:lorem_ipsum).paragraph(sentences: num_sent, html: true, random: true)
+#   end
+#   story = Story.create(
+#     title: s_name,
+#     author: s_author.name,
+#     chapter_title: c_name,
+#     body: s_text,
+#     summary: s_summary,
+#     adult_override: false
+#   )
+#   num_chars = Forgery(:basic).number(at_least: 1, at_most: 6)
+#   chars = Character.order('Random()').first(num_chars)
+#   chars.each { |char| story.add_character(char) }
+#
+#   num_comments = Forgery(:basic).number(at_least: 1, at_most:5)
+#   usrs = User.order("Random()").first(num_comments)
+#   usrs.each do |usr|
+#     num_sent = Forgery(:basic).number(at_least: 1, at_most: 5)
+#     com_cont = Forgery(:lorem_ipsum).paragraph(sentences: num_sent, html: true, random: true)
+#     Comment.create(author: usr.name, content: com_cont, story_id: story.id)
+#   end
+# end
+#
+#
+# num_to_edit = (Comment.count / 3).to_i
+# # edit_message = "<p>Edit comment test: Alpha Beta Gamma.</p>"
+# Comment.order("Random()").limit(num_to_edit).find_each do |comment|
+#   edit_message = Forgery(:lorem_ipsum).paragraph(sentences: 5, html: true, random: true)
+#   comment.update(content: comment.content + edit_message)
+# end
+
+
+sql = "UPDATE stories SET adult_override = 'F'"
+ActiveRecord::Base.connection.execute(sql)
+
+num_stories = (Story.count/10).to_i
+sql = "UPDATE stories SET adult_override = 'T' where id in (" +
+"Select id from stories order by RANDOM() LIMIT #{num_stories})"
+ActiveRecord::Base.connection.execute(sql)
+
+sql = "UPDATE tags SET adult = 'F'"
+ActiveRecord::Base.connection.execute(sql)
+
+Tag.order("Random()").first.update(adult: true)
