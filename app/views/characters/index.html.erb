@@ -16,6 +16,10 @@
 %>
 <%# raw cloud_sizer(Character, @stories, Character.cloud_names).join(' ') %>
 <h1>100 Most Common Characters</h1>
+<p>
+  Character names are sized according to the popularity of the character. Hover
+  over a character name to see how many stories feature that character.
+</p>
 <div class = 'redlink-container'>
   <%= raw cloud_sizer(@chars, Character.cloud_names).join(' ') %>
 </div>

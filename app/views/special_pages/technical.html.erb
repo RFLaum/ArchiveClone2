@@ -6,7 +6,7 @@
 <p>
   I built this site on Ruby on Rails to be a clone of
   <%= link_to 'Archive of our Own', 'http://archiveofourown.org/' %> (also
-  AO3 for short), a
+  called AO3 for short), a
   popular fanfiction <%= render 'misc/fn_a', num: 1 %>
   archive. While
   the original site is also written in Rails, I did not copy any of their code
@@ -33,7 +33,10 @@
     characters are featured in a fanfic; for instance, if writing a Harry
     Potter fanfic, you might tag it with
     <%= link_name Character, "Harry Potter" %>,
-    <%= link_name Character, "Hermione Granger" %>, et cetera.
+    <%= link_name Character, "Hermione Granger" %>, et cetera. In some cases,
+    multiple characters may have the same name; this is useful because many
+    different fandoms may have a character named "John Smith," and we don't
+    want to confuse these characters with one another.
     <%= link_to 'Source tags', sources_path %> (AKA fandom tags) indicate what fandom a story
     belongs to; in the earlier example of a Harry Potter fanfic, it would be
     tagged with <%= link_name Source, "Harry Potter" %>. Each source may belong
@@ -44,17 +47,19 @@
     <%= link_to 'movie', type_path('movies') %> categories. Note that the three
     types of tags are entirely separate; the Harry Potter character tag is not
     the same as the Harry Potter source tag. Logged-in users can also
-    designate any number of  content tags as "favorite" tags, which will cause
-    those tags to show up on the home page for that user.
+    designate any number of content tags as "favorite" tags, if they check
+    those tags frequently. When you are logged in, the user dropdown menu in
+    the top right will have options for managing your favorite tags, and the
+    home page will display a list of your favorite tags.
   </p></li>
   <li><p>
     <strong>Tag Implications:</strong> Tags can imply other tags. For instance,
-    <%= link_name2(Tag, "dog") %> implies <%= link_name2 Tag, "animal" %>.
+    <%= link_name(Tag, "dog") %> implies <%= link_name Tag, "animal" %>.
     Therefore, any story tagged "dog" will also automatically be tagged
     "animal", and you cannot remove the "animal" tag as long as the "dog" tag
     is present. Similarly, characters can imply sources; a story with the
-    <%= link_name2 Character, "Frodo Baggins" %> character is automatically a
-    part of the <%= link_name2 Source, "Lord of the Rings" %> fandom. Only
+    <%= link_name Character, "Frodo Baggins" %> character is automatically a
+    part of the <%= link_name Source, "Lord of the Rings" %> fandom. Only
     administrators can change implications. Checks exist to make sure that no
     circular implication chains are created.
   </p></li>
@@ -66,16 +71,40 @@
     those stories are adult. Non-visible stories won't show up in searches,
     won't be visible in user pages, won't show up in indices, et cetera; from
     the perspective of a user who doesn't want to see them, these stories do
-    not exist.</p>
+    not exist.<%= render 'misc/fn_a', num: 3 %></p>
     <p>
-      Stories can be considered "adult" in one of two ways. First, certain
+      Stories can be considered "adult" for one of two reasons. First, certain
       content tags are treated as adult, and any story tagged with one is
-      automatically an adult story. (These adult tags are also invisible to
-      users who can't see adult content). Second, the author of a story may
-      manually indicate that it is adult. Note that this override only goes one
+      automatically an adult story.
+      <% adult_tag = Tag.where(adult: true).order("Random()").first %>
+      An example of such a tag is <%= name_link adult_tag %>. (Note that if you
+      try to view the stories in that tag, you may see none listed. This is
+      because adult stories are automatically concealed from users who don't
+      have "see adult stories" enabled in their settings). Just like adult
+      stories, adult tags are concealed from users who don't want to see them;
+      those tags will not be listed on the
+      <%= link_to 'tag cloud page', tags_path %>, will not show up in tag search
+      results, et cetera. If a tag is adult, then every tag implied by that tag
+      is also automatically adult. Only administrators can change the adultness
+      of a tag. Currently, <%= num_adult = Tag.where(adult: true).count %>
+      of the <%= pluralize(Tag.count, 'tag') %> on this site
+      <%= num_adult == 1 ? 'is' : 'are' %> marked as adult.
+    </p>
+    <p>
+      The second reason that a story can be considered adult is that its author
+      has manually indicated that it is adult. Note that this override only goes one
       way: it is possible to indicate that a story with no adult tags is still
       adult, but it is not possible to indicate that a story with adult tags is
-      non-adult.
+      non-adult. An example of such a story is
+      <%= name_link Story.where(adult_override: true).order("Random()").first %>.
+      Currently, of the <%= pluralize(Story.count, 'story') %> on this site,
+      <%= num_over = Story.where(adult_override: true).count %>
+      <%= num_over == 1 ? 'has' : 'have' %> this option enabled.
+      <% num_adult = Story.only_adult(Story.all).count %>
+      In total, there <%= num_adult == 1 ? 'is' : 'are' %>
+      <%= pluralize(num_adult, 'adult story') %> and
+      <%= pluralize(Story.non_adult(Story.all).count, 'non-adult story') %> on this
+      site.
     </p>
   </li>
   <li><p>
@@ -89,11 +118,20 @@
     lets you find content tags or users) and
     <%= link_to 'source search', source_search_path %> pages are less powerful,
     mostly because they are searching things that don't have as many fields.
+  </p><p>
+    The search internals work differently than the way I would have done them if
+    this were a real production site. On a real site, I would use a search
+    engine plugin (which is what AO3 does). However, I wanted to brush up on
+    my SQL, so I wrote the <%= link_to 'story search', story_search_path %>
+    functionality myself, including the code to parse user-entered search
+    strings into SQL queries. Once I satisfied myself that I knew how to do
+    this, I did use the Elasticsearch engine to handle
+    <%= 'general searches', search_path %>.
   </p></li>
   <li>
     <p><strong>User Accounts:</strong> Anybody with a valid email address can
     <%= link_to 'create an account', register_path %>. User passwords are
-    stored as a salted hash.IMPORTANT NOTE: many
+    stored as a salted hash. IMPORTANT NOTE: many
     spam filters seem to think our account registration emails are spam. If you
     try to register and don't receive a confirmation email, check your spam
     folder. Having an account allows
@@ -154,6 +192,17 @@
     itself. The home page displays the first paragraph of each of the three
     most recent newsposts. The newspost page displays the entire newspost.
   </p></li>
+  <li><p>
+    <strong>Autocomplete:</strong> In many forms that ask the user to input a
+    content tag, fandom name, or character name, the form will offer
+    suggestions in a dropdown list. The suggestions are existing tags that
+    match what the user has typed. This works by using a
+    modified<%= render 'misc/fn_a', num: 4 %> version of the
+    <%= link_to 'jQuery Tokeninput', 'http://loopj.com/jquery-tokeninput/' %>
+    plugin to send the entered text in JSON format to an engine I created. The
+    engine returns the results in JSON, and these are used to populate the
+    dropdown.
+  </p></li>
 </ul>
 <h3 id='bugs'>Known Issues</h3>
 <ul>
@@ -170,6 +219,11 @@
     by modifying request headers. Similarly to the above issue, this is mostly
     because of lack of time; it wouldn't be very difficult to make it more
     secure, but it would be time-consuming.
+  </p></li>
+  <li><p>
+    An unconfirmed commenting bug has been reported: one of the beta testers
+    said that the contents of old comments would sometimes be deleted. I have
+    been unable to duplicate this problem.
   </p></li>
 </ul>
 <h3 id='non-features'>Unimplemented Features</h3>
@@ -230,11 +284,12 @@
   <li><p>
     <strong>RSS feeds:</strong> I do not provide RSS feeds to let users know
     when a new story matching specified criteria is posted. I don't have this.
-    However, I do provide
   </p></li>
   <li><p>
-  </p></li>
-  <li><p>
+    <strong>Collections:</strong> AO3 lets users make collections of stories.
+    I didn't do this. It wouldn't be hard to implement, but I didn't bother
+    because the purpose of this site is to learn, and collections wouldn't
+    involve any skills I haven't already practiced elsewhere on the site.
   </p></li>
 </ul>
 
@@ -248,6 +303,27 @@
       Categories are not tags, but in some respects act like tags. Users cannot
       create or delete categories, as all ten categories are hardcoded into the
       database structure.
+    <% end %>
+    <%= render layout: 'misc/fn_b', locals: {num: 3} do %>
+      With one exception: story <em>counts</em> on certain pages will include
+      the number of adult stories. For instance, on
+      <%= link_to 'fandom indices', type_path('celeb') %>, each fandom is
+      labeled with the number of stories in that fandom. This number includes
+      adult stories. The reason for this is that, for performance reasons, the
+      number of stories belonging to each fandom is cached. This improves
+      performance; rather than going through each fandom and counting up the
+      number of stories belonging to each, we merely look up the number stored
+      for that fandom. Characters and content tags also keep counter caches.
+      Having separate caches for adult and non-adult stories would be
+      impractical because changing the adult value of a content tag woudl then
+      become extremely resource-intensive.
+    <% end %>
+    <%= render layout: 'misc/fn_b', locals: {num: 4} do %>
+      I made several modifications to the Tokeninput source code, because my
+      requirements are somewhat different from those of the target user. Most
+      significantly, Tokeninput is designed to allow users to enter
+      <em>only</em> entries that already exist; I needed to allow users to
+      enter new tags as well as choose existing ones.
     <% end %>
   </ol>
 </div>

@@ -5,6 +5,11 @@ module Storycount
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+  def visible_stories(reader)
+    return stories if reader.adult
+    Story.non_adult(stories).or(stories.where(user: reader))
+  end
+
   module ClassMethods
 
     def search(query)

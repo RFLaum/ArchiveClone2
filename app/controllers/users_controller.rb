@@ -23,6 +23,10 @@ class UsersController < ApplicationController
 
   def show
     @page_title = @user.name
+    @viewer = current_user_or_guest
+    @stories = @user.visible_stories(@viewer)
+                    .order(updated_at: :desc)
+                    .paginate(page: params[:page], per_page: 10)
   end
 
   def edit
@@ -241,6 +245,7 @@ class UsersController < ApplicationController
   end
 
   def login_internal
+    session.delete(:adult)
     session[:user] = @user.name
   end
 
