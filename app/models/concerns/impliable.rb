@@ -6,13 +6,11 @@ module Impliable
   #if A implies B implies C, then deleting B makes A imply c
   # before_destroy do
   def knit_implications
+    logger.debug "entered knit"
+    kid_array = implied_tags.to_a
+    logger.debug "kid_array: #{implied_tags.size}"
     implying_tags.each do |parent|
-      before = parent.implied_tags
-      implied_tags.each do |child|
-        # before << child unless before.include?(child)
-        #TODO: test this
-        add_unless_present(before, child)
-      end
+      parent.add_implications(kid_array)
     end
   end
 

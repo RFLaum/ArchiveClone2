@@ -181,9 +181,9 @@ end
 #   tag.add_implications(tags_to_add)
 # end
 
-Story.find_each do |story|
-  num_tags = Forgery(:basic).number(at_least: 1, at_most: 4)
-  Tag.order("Random()").first(num_tags).each do |tag|
-    story.add_tag(tag)
-  end
-end
+# Story.find_each do |story|
+#   num_tags = Forgery(:basic).number(at_least: 1, at_most: 4)
+#   Tag.order("Random()").first(num_tags).each do |tag|
+#     story.add_tag(tag)
+#   end
+# end
