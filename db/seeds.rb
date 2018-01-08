@@ -234,7 +234,7 @@ end
 sql = "UPDATE stories SET adult_override = 'F'"
 ActiveRecord::Base.connection.execute(sql)
 
-num_stories = (Story.count/10).to_i
+num_stories = (Story.count / 20).to_i
 sql = "UPDATE stories SET adult_override = 'T' where id in (" +
 "Select id from stories order by RANDOM() LIMIT #{num_stories})"
 ActiveRecord::Base.connection.execute(sql)
@@ -243,3 +243,9 @@ sql = "UPDATE tags SET adult = 'F'"
 ActiveRecord::Base.connection.execute(sql)
 
 Tag.order("Random()").first.update(adult: true)
+
+num_all_stories = Story.count
+target_adult = (num_all_stories / 5).to_i
+while (Story.only_adult(Story.all).count < target_adult)
+  Tag.where(adult: false).order("Random()").first.update(adult: true)
+end
