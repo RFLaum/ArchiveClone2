@@ -6,7 +6,7 @@
 <p>
   I built this site on Ruby on Rails to be a clone of
   <%= link_to 'Archive of our Own', 'http://archiveofourown.org/' %> (also
-  AO3 for short), a
+  called AO3 for short), a
   popular fanfiction <%= render 'misc/fn_a', num: 1 %>
   archive. While
   the original site is also written in Rails, I did not copy any of their code
@@ -197,6 +197,11 @@
     by modifying request headers. Similarly to the above issue, this is mostly
     because of lack of time; it wouldn't be very difficult to make it more
     secure, but it would be time-consuming.
+  </p></li>
+  <li><p>
+    An unconfirmed commenting bug has been reported: one of the beta testers
+    said that the contents of old comments would sometimes be deleted. I have
+    been unable to duplicate this problem.
   </p></li>
 </ul>
 <h3 id='non-features'>Unimplemented Features</h3>
