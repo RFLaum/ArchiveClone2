@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171222171643) do
+ActiveRecord::Schema.define(version: 20180109064739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,12 +155,15 @@ ActiveRecord::Schema.define(version: 20171222171643) do
     t.boolean  "adult_override", default: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.index ["adult_override"], name: "index_stories_on_adult_override", using: :btree
     t.index ["author"], name: "index_stories_on_author", using: :btree
   end
 
   create_table "stories_tags", id: false, force: :cascade do |t|
     t.integer "story_id", null: false
     t.string  "name"
+    t.index ["name"], name: "index_stories_tags_on_name", using: :btree
+    t.index ["story_id"], name: "index_stories_tags_on_story_id", using: :btree
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -175,6 +178,7 @@ ActiveRecord::Schema.define(version: 20171222171643) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.integer  "stories_count", default: 0,     null: false
+    t.index ["adult"], name: "index_tags_on_adult", using: :btree
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
     t.index ["stories_count"], name: "index_tags_on_stories_count", using: :btree
   end
