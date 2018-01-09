@@ -299,23 +299,23 @@ end
 #   post.save
 # end
 
-Newspost.all.each do |post|
-  num_usrs = Forgery(:basic).number(at_least: 5, at_most: 10)
-  usrs = User.order("Random()").first(num_usrs)
-  usrs.each do |usr|
-    content = Forgery(:lorem_ipsum).paragraph(sentences: 4, html: true, random: true)
-    comment = NewsComment.new(content: content)
-    comment.user = usr
-    post.comments << comment
-  end
-
-end
-
-
-start_time = Time.zone.now.beginning_of_day
-NewsComment.where("created_at >= ?", start_time).each do |comment|
-  if Forgery(:basic).number(at_least: 1, at_most: 3) == 1
-    comment.content += Forgery(:lorem_ipsum).paragraph(sentences: 4, html: true, random: true)
-    comment.save
-  end
-end
+# Newspost.all.each do |post|
+#   num_usrs = Forgery(:basic).number(at_least: 5, at_most: 10)
+#   usrs = User.order("Random()").first(num_usrs)
+#   usrs.each do |usr|
+#     content = Forgery(:lorem_ipsum).paragraph(sentences: 4, html: true, random: true)
+#     comment = NewsComment.new(content: content)
+#     comment.user = usr
+#     post.comments << comment
+#   end
+#
+# end
+#
+#
+# start_time = Time.zone.now.beginning_of_day
+# NewsComment.where("created_at >= ?", start_time).each do |comment|
+#   if Forgery(:basic).number(at_least: 1, at_most: 3) == 1
+#     comment.content += Forgery(:lorem_ipsum).paragraph(sentences: 4, html: true, random: true)
+#     comment.save
+#   end
+# end
