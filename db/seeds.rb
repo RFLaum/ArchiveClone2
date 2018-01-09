@@ -319,3 +319,10 @@ end
 #     comment.save
 #   end
 # end
+
+
+start_time = Time.zone.now.beginning_of_week
+Newspost.where("created_at >= ?", start_time).each do |post|
+  post.content = Forgery(:lorem_ipsum).paragraphs(3, html: true, sentences: 15, random: true)
+  post.save
+end
