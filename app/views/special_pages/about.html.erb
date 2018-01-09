@@ -15,7 +15,7 @@
   <%= link_to 'the Gutenberg Project', 'http://www.gutenberg.org/' %>. You can
   identify these by the fact that their summaries include a disclaimer. An
   example of such a story is
-  <%= "The Tragedy of Pudd'nhead Wilson", story_path(7) %>. The second category
+  <%= link_to "The Tragedy of Pudd'nhead Wilson", story_path(7) %>. The second category
   is test stories that I or my beta-testers wrote;
   these mostly consist of random gibberish, and are very short. An example is
   <%= name_link Story.find(Rails.env.production? ? 1 : 2) %>. The final
