@@ -268,33 +268,54 @@ end
 #   story.chapters << chapter
 # end
 
-Newspost.all.order(created_at: :desc).first(9).each do |post|
-  post.destroy
-end
-
-(2..10).each do |i|
-  content = ""
-  (1..3).each do |para|
-    content += "<p>"
-    (1..20).each do |sentence|
-      content += "This is sentence #{sentence} of paragraph #{para} of newspost #{i}. "
-    end
-    content += "</p>"
-  end
-  post = Newspost.new(
-    admin: 'admin',
-    title: "Test Newspost #{i}",
-    content: content
-  )
-  post.save
-end
-
+# Newspost.all.order(created_at: :desc).first(9).each do |post|
+#   post.destroy
+# end
+#
+# (2..10).each do |i|
+#   content = ""
+#   (1..3).each do |para|
+#     content += "<p>"
+#     (1..20).each do |sentence|
+#       content += "This is sentence #{sentence} of paragraph #{para} of newspost #{i}. "
+#     end
+#     content += "</p>"
+#   end
+#   post = Newspost.new(
+#     admin: 'admin',
+#     title: "Test Newspost #{i}",
+#     content: content
+#   )
+#   post.save
+# end
+#
+#
+# Newspost.all.each do |post|
+#   second_num = first_num = Forgery(:basic).number(at_least: 1, at_most: 5)
+#   while second_num == first_num
+#     second_num = Forgery(:basic).number(at_least: 1, at_most: 5)
+#   end
+#   post.tags_public = "news tag #{first_num}, news tag #{second_num}"
+#   post.save
+# end
 
 Newspost.all.each do |post|
-  second_num = first_num = Forgery(:basic).number(at_least: 1, at_most: 5)
-  while second_num == first_num
-    second_num = Forgery(:basic).number(at_least: 1, at_most: 5)
+  num_usrs = Forgery(:basic).number(at_least: 5, at_most: 10)
+  usrs = User.order("Random()").first(num_usrs)
+  usrs.each do |usr|
+    content = Forgery(:lorem_ipsum).paragraph(sentences: 4, html: true, random: true)
+    comment = NewsComment.new(content: content)
+    comment.user = usr
+    post.comments << comment
   end
-  post.tags_public = "news tag #{first_num}, news tag #{second_num}"
-  post.save
+
+end
+
+
+start_time = Time.zone.now.beginning_of_day
+NewsComment.where("created_at >= ?", start_time).each do |comment|
+  if Forgery(:basic).number(at_least: 1, at_most: 3) == 1
+    comment.content += Forgery(:lorem_ipsum).paragraph(sentences: 4, html: true, random: true)
+    comment.save
+  end
 end
