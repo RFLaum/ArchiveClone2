@@ -13,7 +13,7 @@
   <%= render 'banner' do %>
     <%= form_tag newsposts_path, method: 'get', class: 'right-text' do %>
       <%= label_tag(:tag, 'Tag:', class: 'in-line') %>
-      <% drop_items = options_from_collection_for_select(NewsTag.all, :id, :name) %>
+      <% drop_items = options_from_collection_for_select(NewsTag.all.order(name: :asc), :id, :name) %>
       <%= select_tag(:tag, drop_items) %>
       <%= submit_tag('Go') %>
     <% end %>
