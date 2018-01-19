@@ -2,21 +2,18 @@
   This site is a clone of the fanfiction site
   <%= link_to 'Archive of Our Own', 'http://archiveofourown.org/' %>, made by
   Russell Flaum. I created this site both as a demonstration of my abilities,
-  and to improve those abilities by practice. I originally decided to clone AO3
-  because I was under the impression that its stories were in the public
-  domain, and so I would be able to put them on my own site. I later learned
-  that this was false, so the stories on AOC are not originally from AO3.
+  and to improve those abilities by practice.
 </p>
 <h3 id='source'>Where do the stories come from?</h3>
 <p>
-  Most of the stories on this site are automtically-generated and filled with
+  Most of the stories on this site are automatically-generated and filled with
   random, meaningless text. A couple are public-domain works by long-dead
   writers, which I copied from
   <%= link_to 'the Gutenberg Project', 'http://www.gutenberg.org/' %>. You can
   identify these by the fact that their summaries include a disclaimer. An
   example of such a story is
-  <%= link_to "The Tragedy of Pudd'nhead Wilson", story_path(7) %>. The second category
-  is test stories that I or my beta-testers wrote;
+  <%= link_to "The Tragedy of Pudd'nhead Wilson", story_path(7) %>. The third category
+  contains test stories that I or my beta-testers wrote;
   these mostly consist of random gibberish, and are very short. An example is
   <%= name_link Story.find(Rails.env.production? ? 1 : 2) %>. The final
   category is user-submitted stories. Any logged-in user can submit a story, so

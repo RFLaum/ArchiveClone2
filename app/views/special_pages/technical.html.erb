@@ -4,18 +4,24 @@
 </script>
 
 <p>
-  I built this site on Ruby on Rails to be a clone of
+  I built this site with Ruby on Rails to clone the functionality of
   <%= link_to 'Archive of our Own', 'http://archiveofourown.org/' %> (also
   called AO3 for short), a
   popular fanfiction <%= render 'misc/fn_a', num: 1 %>
-  archive. While
-  the original site is also written in Rails, I did not copy any of their code
+  archive. While the original site is also written in Rails, I did not copy
+  any of their code
   when building my own (with one exception: the search page allows you to
   filter by publication date, and this requires the application to parse
   phrases like "three weeks ago" into computer-comprehensible dates. I
   copied part of the code AO3 uses to parse this, although I changed it
-  significantly later on). I did, however, sometimes look at their code to get
-  an idea of the general approach they used, or to see what gems they used.
+  significantly later on).
+</p>
+<p>
+  I use PostgreSQL for the database, which has twenty-one tables. User
+  passwords are stored as a salted hash. The CSS is generated with Sass. I use
+  jQuery to simplify the JavaScript. I used Git for version control when
+  creating the site, and you can see the source on
+  <%= link_to 'Github', 'https://github.com/RFLaum/ArchiveClone2' %>.
 </p>
 <h3 id='feature-list'>Features</h3>
 <ul>
@@ -76,7 +82,8 @@
     <p>
       Stories can be considered "adult" for one of two reasons. First, certain
       content tags are treated as adult, and any story tagged with one is
-      automatically an adult story.
+      automatically an adult story. For demonstration purposes, I simply chose
+      some content tags at random to mark as adult.
       <% adult_tag = Tag.where(adult: true).order("Random()").first %>
       An example of such a tag is <%= name_link adult_tag %>. (Note that if you
       try to view the stories in that tag, you may see none listed. This is
@@ -168,9 +175,9 @@
   </p></li>
   <li><p>
     <strong>Comments:</strong> Users can comment on stories, and the comments
-    will be properly displayed below the story. Users can also edit their own
-    comments; if a comment has been edited, the comment header will indicate
-    this fact.
+    will be displayed below the story in order of creation. Users can also edit
+    their own comments; if a comment has been edited, the comment header will
+    indicate this fact.
   </p></li>
   <li><p>
     <strong>Bookmarks:</strong> Users can bookmark favorite stories. This
@@ -178,7 +185,7 @@
     and to act as a recommendation system. A given bookmark may be either
     private or public. Private bookmarks are only visible to the user who made
     them, while public bookmarks are visible to any user who can see the story
-    bookmarked (bookmarks of adult stories will not be visible to users who
+    that was bookmarked (bookmarks of adult stories will not be visible to users who
     cannot see adult stories). When creating a bookmark, you can optionally add
     a note, either to remind yourself why you bookmarked it or to act as a
     review for others who are using your bookmarks as recommendations.
@@ -187,7 +194,7 @@
     <strong>Newsposts:</strong> Administrators can make newsposts, which are
     visible on the <%= link_to 'home page', home_path %> and on
     <%= link_to 'their own page', newsposts_path %>. Just like stories,
-    newsposts can be tagged, although their tags are a separate set from the
+    newsposts can be tagged, although their tags are separate from the
     tags used by stories. Also like stories, any user can comment on a
     newspost, although only administrators can create or edit the newspost
     itself. The home page displays the first paragraph of each of the three
@@ -208,16 +215,13 @@
 <h3 id='bugs'>Known Issues</h3>
 <ul>
   <li><p>
-    This site requires users to have both JavaScript and CSS enabled. When I
-    started making the site I did try to have it degrade gracefully, but that
-    became too time-consuming, so some features are just flat-out unavailable
-    to users without these.
+    This site requires users to have both JavaScript and CSS enabled.
   </p></li>
   <li><p>
     Security is less than complete. I have guarded against accidental harm,
     but not against malice. While there is no way I know of to cause problems
     by normal use of the site, there are a few cases where a user could do so
-    by modifying request headers. Similarly to the above issue, this is mostly
+    by modifying request headers. This is mostly
     because of lack of time; it wouldn't be very difficult to make it more
     secure, but it would be time-consuming.
   </p></li>
@@ -268,8 +272,7 @@
     relationship tags, which indicate a romantic relationship between two
     characters (e.g., if Alice and Bob are involved in a story, that story
     would have the 'Alice/Bob' tag). If a user of my site wanted to tag a
-    relationship, they would have to use a content tag, rather than having a
-    separate type of tag dedicated to relationships.
+    relationship, they would use a content tag.
   </p></li>
   <li><p>
     <strong>Tag Aliases:</strong> AO3 allows tags to have multiple names, which
@@ -284,7 +287,7 @@
   </p></li>
   <li><p>
     <strong>RSS feeds:</strong> I do not provide RSS feeds to let users know
-    when a new story matching specified criteria is posted. I don't have this.
+    when a new story matching specified criteria is posted.
   </p></li>
   <li><p>
     <strong>Collections:</strong> AO3 lets users make collections of stories.
